@@ -1,0 +1,495 @@
+{
+  "code": "G6",
+  "title": "Create Art Graphics and Sound Effects",
+  "category": "game",
+  "phase": "Development",
+  "purpose": "Describe the core function Create Art Graphics and Sound Effects.",
+  "dependencies": [
+    "G4"
+  ],
+  "guardrails": [
+    "Maintain strict adherence to the established art style guide; no off\u2011brand designs or inconsistent aesthetics",
+    "Use only original or properly licensed assets; avoid copyrighted materials",
+    "Comply with technical specifications for file formats, resolutions, bit depths, and sound levels",
+    "Ensure color palettes meet accessibility and contrast guidelines",
+    "Keep audio levels within specified decibel ranges and avoid clipping or distortion",
+    "Document all changes and version assets clearly to facilitate tracking",
+    "Avoid creating unused assets or over\u2011scoping beyond what is required for this phase",
+    "Stay within the 4\u201310 week development timeframe and flag risks early",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-game-G6-create-art-graphics-and-sound-effects.md",
+  "tasks": [
+    {
+      "id": "G6-T1",
+      "title": "Finalize asset inventory and produce core 2D/3D art, sound, and animation assets.",
+      "description": "Finalize the asset inventory and create the core 2D/3D art, sound, and animation assets necessary for the vertical slice.",
+      "deliverables": [
+        {
+          "id": "G6-T1-D1",
+          "filename": "asset-inventory.xlsx",
+          "aliases": [
+            "G6-T1-asset_inventory.xlsx",
+            "asset_inventory.xlsx",
+            "G6-T1-D1",
+            "G6-T1-asset-inventory.xlsx",
+            "asset-inventory.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Spreadsheet listing all required assets with categories, descriptions, statuses, and assigned artists.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Inventory covers all assets planned for the vertical slice."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes categories (2D, 3D, audio, animation), descriptions, status, and owner."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by art and audio leads."
+            }
+          ]
+        },
+        {
+          "id": "G6-T1-D2",
+          "filename": "core-art-assets.zip",
+          "aliases": [
+            "G6-T1-core_art_assets.zip",
+            "core_art_assets.zip",
+            "G6-T1-D2",
+            "G6-T1-core-art-assets.zip",
+            "core-art-assets.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Zipped package containing finalized core 2D sprites, textures, and 3D models ready for integration.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Sprites, textures, and 3D models conform to the art style guide."
+            },
+            {
+              "id": "AC-2",
+              "text": "Files are organized and named according to conventions."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by art director."
+            }
+          ]
+        },
+        {
+          "id": "G6-T1-D3",
+          "filename": "core-audio-assets.zip",
+          "aliases": [
+            "G6-T1-core_audio_assets.zip",
+            "core_audio_assets.zip",
+            "G6-T1-D3",
+            "G6-T1-core-audio-assets.zip",
+            "core-audio-assets.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Zipped package of final sound effects and music loops for the core gameplay.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Audio files adhere to licensed or original content and meet technical specifications."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes all required sound effects and loops for the vertical slice."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by audio lead."
+            }
+          ]
+        },
+        {
+          "id": "G6-T1-D4",
+          "filename": "core-animation-assets.zip",
+          "aliases": [
+            "G6-T1-core_animation_assets.zip",
+            "core_animation_assets.zip",
+            "G6-T1-D4",
+            "G6-T1-core-animation-assets.zip",
+            "core-animation-assets.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Zipped package containing finalized animation files and riggings for characters and environmental effects.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Animations meet style and technical guidelines."
+            },
+            {
+              "id": "AC-2",
+              "text": "Files are properly formatted and labeled."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by animation lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G6-T2",
+      "title": "Optimize assets (file size, levels of detail) and integrate into engine.",
+      "description": "Optimize the newly created assets for file size and LOD and test their integration in the engine.",
+      "deliverables": [
+        {
+          "id": "G6-T2-D1",
+          "filename": "optimized-assets.zip",
+          "aliases": [
+            "G6-T2-optimized_assets.zip",
+            "optimized_assets.zip",
+            "G6-T2-D1",
+            "G6-T2-optimized-assets.zip",
+            "optimized-assets.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Zipped package of optimized assets (2D, 3D, audio, animation) reducing file sizes and providing multiple levels of detail (LODs).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Assets meet file size targets for target hardware."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes at least two LODs for 3D models."
+            },
+            {
+              "id": "AC-3",
+              "text": "Quality preserved while optimizing."
+            }
+          ]
+        },
+        {
+          "id": "G6-T2-D2",
+          "filename": "engine-test.zip",
+          "aliases": [
+            "G6-T2-engine_test_build.zip",
+            "engine_test_build.zip",
+            "G6-T2-D2",
+            "G6-T2-engine-test.zip",
+            "engine-test.zip",
+            "engine_test.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Prototype game build demonstrating that optimized assets load correctly and function properly within the game engine.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Build loads and displays all optimized assets correctly."
+            },
+            {
+              "id": "AC-2",
+              "text": "No missing textures or audio clips."
+            },
+            {
+              "id": "AC-3",
+              "text": "Performance remains within acceptable ranges."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G6-T3",
+      "title": "Perform QA checks and update documentation/style guide.",
+      "description": "Conduct quality assurance reviews of all assets and update the art style guide accordingly.",
+      "deliverables": [
+        {
+          "id": "G6-T3-D1",
+          "filename": "qa-checklist.xlsx",
+          "aliases": [
+            "G6-T3-qa_checklist.xlsx",
+            "qa_checklist.xlsx",
+            "G6-T3-D1",
+            "G6-T3-qa-checklist.xlsx",
+            "qa-checklist.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Checklist used to verify each asset against quality criteria, including completion status, naming conventions, and technical compliance.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Checklist covers all assets and quality criteria."
+            },
+            {
+              "id": "AC-2",
+              "text": "Entries indicate review status (pass/fail) and notes for fixes."
+            },
+            {
+              "id": "AC-3",
+              "text": "Completed and signed by QA lead."
+            }
+          ]
+        },
+        {
+          "id": "G6-T3-D2",
+          "filename": "revised-art-style-guide.pdf",
+          "aliases": [
+            "G6-T3-revised_art_style_guide.pdf",
+            "revised_art_style_guide.pdf",
+            "G6-T3-D2",
+            "G6-T3-revised-art-style-guide.pdf",
+            "revised-art-style-guide.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Updated version of the art style guide reflecting any adjustments based on QA findings and asset creation learnings.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Incorporates lessons learned from QA."
+            },
+            {
+              "id": "AC-2",
+              "text": "Updates guidelines where necessary."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by art director before finalization."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G6-T4",
+      "title": "Package asset bundles and produce an index file.",
+      "description": "Bundle the assets into a distribution package and produce an index for easy reference and integration.",
+      "deliverables": [
+        {
+          "id": "G6-T4-D1",
+          "filename": "asset.zip",
+          "aliases": [
+            "G6-T4-asset_bundle.zip",
+            "asset_bundle.zip",
+            "G6-T4-D1",
+            "G6-T4-asset.zip",
+            "asset.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Compressed archive of all prepared assets packaged for distribution and integration.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Archive decompresses without errors."
+            },
+            {
+              "id": "AC-2",
+              "text": "Contains all assets needed for vertical slice."
+            },
+            {
+              "id": "AC-3",
+              "text": "Follows directory structure conventions."
+            }
+          ]
+        },
+        {
+          "id": "G6-T4-D2",
+          "filename": "asset-index.csv",
+          "aliases": [
+            "G6-T4-asset_index.csv",
+            "asset_index.csv",
+            "G6-T4-D2",
+            "G6-T4-asset-index.csv",
+            "asset-index.csv"
+          ],
+          "filetype": "csv",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "CSV file indexing each asset with its filename, type, category, version, and relative path in the bundle.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists every asset in the bundle with fields for name, type, category, version, and path."
+            },
+            {
+              "id": "AC-2",
+              "text": "No missing or duplicate entries."
+            },
+            {
+              "id": "AC-3",
+              "text": "Parsable by asset management tools."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G6-T5",
+      "title": "Gather cross-disciplinary feedback on assets and resolve issues.",
+      "description": "Collect and document feedback from other disciplines and resolve asset-related issues accordingly.",
+      "deliverables": [
+        {
+          "id": "G6-T5-D1",
+          "filename": "feedback.md",
+          "aliases": [
+            "G6-T5-feedback_notes.md",
+            "feedback_notes.md",
+            "G6-T5-D1",
+            "G6-T5-feedback.md",
+            "feedback.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Document summarizing feedback from design, engineering, and production stakeholders on assets and the resolution steps taken.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Feedback notes capture comments from multiple disciplines with date/time stamps."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes resolution status for each issue."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and confirmed by asset owners."
+            }
+          ]
+        },
+        {
+          "id": "G6-T5-D2",
+          "filename": "updated-asset.zip",
+          "aliases": [
+            "G6-T5-updated_asset_library.zip",
+            "updated_asset_library.zip",
+            "G6-T5-D2",
+            "G6-T5-updated-asset.zip",
+            "updated-asset.zip",
+            "updated_asset.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Updated asset library reflecting changes made in response to feedback, ready for final integration.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Updated library addresses all significant feedback items."
+            },
+            {
+              "id": "AC-2",
+              "text": "Contains only approved assets."
+            },
+            {
+              "id": "AC-3",
+              "text": "Organized and ready for integration."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G6-T6",
+      "title": "Document changes/version assets clearly for tracking.",
+      "description": "Create a versioning log to track modifications to each asset for accountability and future reference.",
+      "deliverables": [
+        {
+          "id": "G6-T6-D1",
+          "filename": "asset-versioning-log.xlsx",
+          "aliases": [
+            "G6-T6-asset_versioning_log.xlsx",
+            "asset_versioning_log.xlsx",
+            "G6-T6-D1",
+            "G6-T6-asset-versioning-log.xlsx",
+            "asset-versioning-log.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Spreadsheet tracking versions of each asset with change descriptions, dates, and author details.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Versioning log lists each asset with version numbers, change descriptions, dates, and authors."
+            },
+            {
+              "id": "AC-2",
+              "text": "Shows a clear history of modifications for each asset."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by asset management lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G6-T7",
+      "title": "Finalize and sign off the asset library for production use.",
+      "description": "Deliver the final asset library with sign-offs from leads, signaling readiness for production.",
+      "deliverables": [
+        {
+          "id": "G6-T7-D1",
+          "filename": "asset.zip",
+          "aliases": [
+            "G6-T7-final_asset_library.zip",
+            "final_asset_library.zip",
+            "G6-T7-D1",
+            "G6-T7-asset.zip",
+            "asset.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Final, verified asset library ready for production use after QA and feedback iterations.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains all assets in their final approved form."
+            },
+            {
+              "id": "AC-2",
+              "text": "No duplicate or unused assets."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ready for integration into the next development phase."
+            }
+          ]
+        },
+        {
+          "id": "G6-T7-D2",
+          "filename": "signoff.md",
+          "aliases": [
+            "G6-T7-signoff_notes.md",
+            "signoff_notes.md",
+            "G6-T7-D2",
+            "G6-T7-signoff.md",
+            "signoff.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G6/",
+          "description": "Record of final approvals and sign-offs from art, audio, and design leads confirming readiness for production integration.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Sign-off notes include signatures/approvals from all relevant leads."
+            },
+            {
+              "id": "AC-2",
+              "text": "Document any outstanding issues or caveats."
+            },
+            {
+              "id": "AC-3",
+              "text": "Stored in project repository."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

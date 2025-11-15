@@ -1,0 +1,413 @@
+{
+  "code": "G4",
+  "title": "Build Basic Prototype",
+  "category": "game",
+  "phase": "R&D",
+  "purpose": "Describe the core function Build Basic Prototype.",
+  "dependencies": [
+    "G2",
+    "G3"
+  ],
+  "guardrails": [
+    "Focus on demonstrating the core gameplay loop without implementing full game features or polish",
+    "Use only placeholder or temporary assets; do not invest time in final art, audio, or effects",
+    "Keep code modular and easy to discard or refactor; avoid complex architectures or deep integrations",
+    "Document all assumptions, limitations, and unresolved issues clearly in the scope and playtest reports",
+    "Limit playtesting to internal stakeholders; no external distribution or public release",
+    "Respect data privacy in logs and feedback; anonymize any personally identifying information",
+    "Avoid performance or network optimization beyond what is necessary to run the prototype",
+    "Keep the effort within a 4\u20138 week R&D timeframe and communicate risks promptly",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-game-G4-build-basic-prototype.md",
+  "tasks": [
+    {
+      "id": "G4-T1",
+      "title": "Define prototype scope, goals, and set up repository/environment.",
+      "description": "Define the scope and goals of the prototype and set up the development environment and repository.",
+      "deliverables": [
+        {
+          "id": "G4-T1-D1",
+          "filename": "scope.docx",
+          "aliases": [
+            "G4-T1-prototype_scope.docx",
+            "prototype_scope.docx",
+            "G4-T1-D1",
+            "G4-T1-scope.docx",
+            "scope.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Document that defines the scope, goals, core mechanics, and high-level design of the prototype including in/out-of-scope features and success criteria.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Defines core loop and mechanics clearly."
+            },
+            {
+              "id": "AC-2",
+              "text": "Lists in-scope and out-of-scope features."
+            },
+            {
+              "id": "AC-3",
+              "text": "Agreed and approved by product and technical leads."
+            }
+          ]
+        },
+        {
+          "id": "G4-T1-D2",
+          "filename": "repository-setup.zip",
+          "aliases": [
+            "G4-T1-repository_setup.zip",
+            "repository_setup.zip",
+            "G4-T1-D2",
+            "G4-T1-repository-setup.zip",
+            "repository-setup.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Archive of the initialized repository with project skeleton, build scripts, and environment configuration files.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Repository builds successfully using provided instructions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes README with setup instructions."
+            },
+            {
+              "id": "AC-3",
+              "text": "Initial commit tagged and versioned."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4-T2",
+      "title": "Implement stub mechanics, basic loop, controls, and placeholder assets (art, UI, audio).",
+      "description": "Develop and integrate stub mechanics, basic loop, controls, and placeholder assets into a functional prototype.",
+      "deliverables": [
+        {
+          "id": "G4-T2-D1",
+          "filename": "code-modules.zip",
+          "aliases": [
+            "G4-T2-prototype_code_modules.zip",
+            "prototype_code_modules.zip",
+            "G4-T2-D1",
+            "G4-T2-code-modules.zip",
+            "code-modules.zip",
+            "code_modules.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Zipped source code implementing stub mechanics, control schemes, and placeholder assets for the basic gameplay loop.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Implements start, play, and end states with responsive input."
+            },
+            {
+              "id": "AC-2",
+              "text": "Loads placeholder assets correctly without errors."
+            },
+            {
+              "id": "AC-3",
+              "text": "Code is modular and well-documented."
+            }
+          ]
+        },
+        {
+          "id": "G4-T2-D2",
+          "filename": "integrated.zip",
+          "aliases": [
+            "G4-T2-integrated_prototype_build.zip",
+            "integrated_prototype_build.zip",
+            "G4-T2-D2",
+            "G4-T2-integrated.zip",
+            "integrated.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Runnable build of the prototype integrating stub mechanics and placeholder assets for testing.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Build runs without crashes on target hardware."
+            },
+            {
+              "id": "AC-2",
+              "text": "Demonstrates the basic loop, controls, and placeholder assets."
+            },
+            {
+              "id": "AC-3",
+              "text": "Playable start-to-finish according to scope."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4-T3",
+      "title": "Add instrumentation for playtest logging.",
+      "description": "Implement instrumentation to collect playtest data including player interactions and timestamps.",
+      "deliverables": [
+        {
+          "id": "G4-T3-D1",
+          "filename": "playtest-logging.py",
+          "aliases": [
+            "G4-T3-playtest_logging_module.py",
+            "playtest_logging_module.py",
+            "G4-T3-D1",
+            "G4-T3-playtest-logging.py",
+            "playtest-logging.py",
+            "playtest_logging.py"
+          ],
+          "filetype": "py",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Module that captures and logs gameplay events with timestamps, anonymized player identifiers, and interaction details for analysis.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Records at least 90% of interactions with accurate timestamps."
+            },
+            {
+              "id": "AC-2",
+              "text": "Data is anonymized and stored securely."
+            },
+            {
+              "id": "AC-3",
+              "text": "Module integrates seamlessly with the prototype."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4-T4",
+      "title": "Conduct internal playtest and gather structured feedback.",
+      "description": "Plan and conduct internal playtests with structured feedback collection.",
+      "deliverables": [
+        {
+          "id": "G4-T4-D1",
+          "filename": "playtest.md",
+          "aliases": [
+            "G4-T4-playtest_plan.md",
+            "playtest_plan.md",
+            "G4-T4-D1",
+            "G4-T4-playtest.md",
+            "playtest.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Plan detailing objectives, participant selection, session structure, tasks, and metrics for internal playtesting.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Specifies objectives, participant criteria, playtest tasks, metrics, and timeline."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed by playtest coordinator."
+            },
+            {
+              "id": "AC-3",
+              "text": "Matches scope of prototype."
+            }
+          ]
+        },
+        {
+          "id": "G4-T4-D2",
+          "filename": "feedback-forms.xlsx",
+          "aliases": [
+            "G4-T4-feedback_forms.xlsx",
+            "feedback_forms.xlsx",
+            "G4-T4-D2",
+            "G4-T4-feedback-forms.xlsx",
+            "feedback-forms.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Spreadsheet template used to collect structured feedback from playtest participants, covering qualitative and quantitative responses.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Form includes both qualitative questions and quantitative rating scales."
+            },
+            {
+              "id": "AC-2",
+              "text": "Used by at least three testers to record feedback."
+            },
+            {
+              "id": "AC-3",
+              "text": "Completed forms are stored securely."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4-T5",
+      "title": "Analyze playtest feedback, prioritize issues, and iterate prototype.",
+      "description": "Evaluate playtest data, prioritize issues, implement improvements, and produce an updated build.",
+      "deliverables": [
+        {
+          "id": "G4-T5-D1",
+          "filename": "prioritized-issues.md",
+          "aliases": [
+            "G4-T5-prioritized_issues.md",
+            "prioritized_issues.md",
+            "G4-T5-D1",
+            "G4-T5-prioritized-issues.md",
+            "prioritized-issues.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Document summarizing playtest findings, prioritizing at least the top five issues, and outlining recommended improvements.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Identifies and prioritizes the top five issues affecting gameplay."
+            },
+            {
+              "id": "AC-2",
+              "text": "Recommends mitigation steps for each issue."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by design lead."
+            }
+          ]
+        },
+        {
+          "id": "G4-T5-D2",
+          "filename": "updated.zip",
+          "aliases": [
+            "G4-T5-updated_prototype_build.zip",
+            "updated_prototype_build.zip",
+            "G4-T5-D2",
+            "G4-T5-updated.zip",
+            "updated.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Updated prototype build reflecting changes based on prioritized feedback and fixes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Addresses at least 80% of critical issues identified."
+            },
+            {
+              "id": "AC-2",
+              "text": "Build runs without new critical bugs."
+            },
+            {
+              "id": "AC-3",
+              "text": "Changes documented in changelog."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4-T6",
+      "title": "Document assumptions, risks, limitations, and unresolved issues.",
+      "description": "Document assumptions, risks, limitations, and unresolved issues encountered in the prototype.",
+      "deliverables": [
+        {
+          "id": "G4-T6-D1",
+          "filename": "assumptions-limitations.md",
+          "aliases": [
+            "G4-T6-assumptions_and_limitations.md",
+            "assumptions_and_limitations.md",
+            "G4-T6-D1",
+            "G4-T6-assumptions-limitations.md",
+            "assumptions-limitations.md",
+            "assumptions_limitations.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Comprehensive document capturing all assumptions, known limitations, risks, and unresolved issues encountered during prototype development.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all assumptions, limitations, risks, and unresolved issues with context."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides potential mitigation or next steps for each item."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and acknowledged by project leads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G4-T7",
+      "title": "Compile final prototype build and playtest report.",
+      "description": "Produce the final prototype build and compile a comprehensive playtest report summarizing findings and recommendations.",
+      "deliverables": [
+        {
+          "id": "G4-T7-D1",
+          "filename": "final-prototype-build.zip",
+          "aliases": [
+            "G4-T7-final_prototype_build.zip",
+            "final_prototype_build.zip",
+            "G4-T7-D1",
+            "G4-T7-final-prototype-build.zip",
+            "final-prototype-build.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Playable build of the final prototype with integrated improvements and bug fixes ready for handoff to the next phase.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Build runs end-to-end with no critical defects."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes release notes and instructions for launching."
+            },
+            {
+              "id": "AC-3",
+              "text": "Packaged in ZIP format with clear structure."
+            }
+          ]
+        },
+        {
+          "id": "G4-T7-D2",
+          "filename": "playtest.pdf",
+          "aliases": [
+            "G4-T7-playtest_report.pdf",
+            "playtest_report.pdf",
+            "G4-T7-D2",
+            "G4-T7-playtest.pdf",
+            "playtest.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G4/",
+          "description": "Report summarizing playtest sessions, data analysis, user feedback, issues encountered, and recommended actions for the next phase.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Summarizes findings from all playtest sessions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Presents quantitative metrics and qualitative insights."
+            },
+            {
+              "id": "AC-3",
+              "text": "Offers recommendations for future development."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

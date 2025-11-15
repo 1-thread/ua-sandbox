@@ -1,0 +1,220 @@
+{
+  "code": "E2",
+  "title": "Create Development Storyboards",
+  "category": "entertainment",
+  "phase": "R&D",
+  "purpose": "Describe the core function Create Development Storyboards.",
+  "dependencies": [
+    "E1"
+  ],
+  "guardrails": [
+    "Focus on narrative clarity and camera planning; avoid detailed artwork or final textures",
+    "Use sketches or rough digital panels; do not invest in polished concept art during storyboarding",
+    "Keep panel sizes and formats consistent to ensure readability",
+    "Do not introduce new scenes without script approval from the narrative team",
+    "Maintain confidentiality of script content and restrict distribution to authorized personnel",
+    "Use consistent naming conventions for shots and panels throughout all documents",
+    "Document feedback and decisions transparently to track changes over time",
+    "Keep work within the R&D timeframe",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E2-create-development-storyboards.md",
+  "tasks": [
+    {
+      "id": "E2-T1",
+      "title": "Analyze script and identify scenes for storyboarding",
+      "description": "Execute the task: Analyze script and identify scenes for storyboarding.",
+      "deliverables": [
+        {
+          "id": "E2-T1-D1",
+          "filename": "scene-list.xlsx",
+          "aliases": [
+            "scene_list.xlsx",
+            "E2-T1-D1",
+            "E2-T1-scene-list.xlsx",
+            "scene-list.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E2/",
+          "description": "A spreadsheet listing potential scenes to storyboard with notes on new scene ideas and recommendations.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all scenes identified from the script or outline."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes new scene suggestions with justification."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed against the narrative script or outline."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E2-T2",
+      "title": "Develop a shot list",
+      "description": "Execute the task: Develop a shot list.",
+      "deliverables": [
+        {
+          "id": "E2-T2-D1",
+          "filename": "shot-list.xlsx",
+          "aliases": [
+            "shot_list.xlsx",
+            "E2-T2-D1",
+            "E2-T2-shot-list.xlsx",
+            "shot-list.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E2/",
+          "description": "A detailed shot list specifying lens, framing and sequential visual descriptions for each shot.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains lens, framing, and description for each shot."
+            },
+            {
+              "id": "AC-2",
+              "text": "Shots are ordered sequentially."
+            },
+            {
+              "id": "AC-3",
+              "text": "Cross\u2011references scene outlines and style references."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E2-T3",
+      "title": "Draft rough thumbnails",
+      "description": "Execute the task: Draft rough thumbnails.",
+      "deliverables": [
+        {
+          "id": "E2-T3-D1",
+          "filename": "rough-thumbnails.pdf",
+          "aliases": [
+            "rough_thumbnails.pdf",
+            "E2-T3-D1",
+            "E2-T3-rough-thumbnails.pdf",
+            "rough-thumbnails.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E2/",
+          "description": "A collection of rough thumbnail sketches showing each shot in sequence, illustrating basic composition and blocking.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes thumbnails for every shot from the shot list."
+            },
+            {
+              "id": "AC-2",
+              "text": "Sequence matches the shot order."
+            },
+            {
+              "id": "AC-3",
+              "text": "Sketches are legible and indicate composition clearly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E2-T4",
+      "title": "Create detailed storyboard",
+      "description": "Execute the task: Create detailed storyboard.",
+      "deliverables": [
+        {
+          "id": "E2-T4-D1",
+          "filename": "storyboard-panels.pdf",
+          "aliases": [
+            "storyboard_panels.pdf",
+            "E2-T4-D1",
+            "E2-T4-storyboard-panels.pdf",
+            "storyboard-panels.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E2/",
+          "description": "Detailed storyboard panels for the selected scenes, compiled into a PDF with annotations for camera, action and dialogue.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each panel includes camera, action and dialogue annotations."
+            },
+            {
+              "id": "AC-2",
+              "text": "Panels follow the rough thumbnails and narrative outline."
+            },
+            {
+              "id": "AC-3",
+              "text": "Artwork is consistent with the project\u2019s mood and style guidelines."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E2-T5",
+      "title": "Clean storyboards",
+      "description": "Execute the task: Clean storyboards.",
+      "deliverables": [
+        {
+          "id": "E2-T5-D1",
+          "filename": "clean-storyboards.pdf",
+          "aliases": [
+            "clean_storyboards.pdf",
+            "E2-T5-D1",
+            "E2-T5-clean-storyboards.pdf",
+            "clean-storyboards.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E2/",
+          "description": "Polished storyboard panels with clean lines and final annotations prepared for production.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All panels are refined to production\u2011ready quality."
+            },
+            {
+              "id": "AC-2",
+              "text": "Annotations are clear and complete."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the approved story and tone."
+            }
+          ]
+        },
+        {
+          "id": "E2-T5-D2",
+          "filename": "animatic.mp4",
+          "aliases": [
+            "animatic.mp4",
+            "E2-T5-D2",
+            "E2-T5-animatic.mp4"
+          ],
+          "filetype": "mp4",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E2/",
+          "description": "An animatic video built from the clean storyboard panels, timed to visualize pacing and flow.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Combines panels with timing to match the script."
+            },
+            {
+              "id": "AC-2",
+              "text": "Duration and pacing align with scene requirements."
+            },
+            {
+              "id": "AC-3",
+              "text": "Plays smoothly at the target frame rate."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "code": "P3",
+  "title": "Generate and Refine Concepts",
+  "category": "product",
+  "phase": "R&D",
+  "purpose": "Describe the core function CO\u2013product\u2013P3\u2013generate-and-refine-concepts.",
+  "dependencies": [],
+  "guardrails": [
+    "Follow the approved IP and design guidelines.",
+    "Ensure all deliverables meet quality and licensing standards.",
+    "Document assumptions and unknowns explicitly."
+  ],
+  "source_md": "ua/function_core/CO-product-P3-generate-and-refine-concepts.md",
+  "tasks": [
+    {
+      "id": "P3-T1",
+      "title": "Generate at least 10 concept directions guided by the Design Brief and archetype priorities.",
+      "description": "Perform the task 'Generate at least 10 concept directions guided by the Design Brief and archetype priorities.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P3-T1-D1",
+          "filename": "10-concept-sheets.xlsx",
+          "aliases": [
+            "10-concept-sheets.xlsx",
+            "10_concept_sheets.xlsx",
+            "P3-T1-D1",
+            "P3-T1-10-concept-sheets.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P3/",
+          "description": "10+ concept sheets (sketches, short descriptions).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All concepts reference Design Brief guardrails."
+            },
+            {
+              "id": "AC-2",
+              "text": "\u226510 distinct directions documented."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3-T2",
+      "title": "For each concept, validate in-world fit and IP guardrails compliance (optionally illustrate with a story-moment simulation when helpful).",
+      "description": "Perform the task 'For each concept, validate in-world fit and IP guardrails compliance (optionally illustrate with a story-moment simulation when helpful).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P3-T2-D1",
+          "filename": "file.docx",
+          "aliases": [
+            "file.docx",
+            "P3-T2-D1",
+            "P3-T2-file.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P3/",
+          "description": "File",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "The deliverable is complete and accurate."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3-T3",
+      "title": "Define performance expectations (play loop clarity, repeatability, narrative resonance; target KPIs).",
+      "description": "Perform the task 'Define performance expectations (play loop clarity, repeatability, narrative resonance; target KPIs).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P3-T3-D1",
+          "filename": "performance-expectations-per-concept.xlsx",
+          "aliases": [
+            "performance-expectations-sheet-per-concept.xlsx",
+            "performance_expectations_sheet_per_concept.xlsx",
+            "P3-T3-D1",
+            "P3-T3-performance-expectations-per-concept.xlsx",
+            "performance-expectations-per-concept.xlsx",
+            "performance_expectations_per_concept.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P3/",
+          "description": "Performance expectations sheet per concept.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each sheet contains at least 3 KPIs."
+            },
+            {
+              "id": "AC-2",
+              "text": "KPIs measurable in later playtests."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3-T4",
+      "title": "Apply a feasibility overlay (cost, complexity, hurdles, packaging fit).",
+      "description": "Perform the task 'Apply a feasibility overlay (cost, complexity, hurdles, packaging fit).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P3-T4-D1",
+          "filename": "feasibility-overlay-per-concept.xlsx",
+          "aliases": [
+            "feasibility-overlay-matrix-per-concept-including.xlsx",
+            "feasibility_overlay_matrix_per_concept_including.xlsx",
+            "P3-T4-D1",
+            "P3-T4-feasibility-overlay-per-concept.xlsx",
+            "feasibility-overlay-per-concept.xlsx",
+            "feasibility_overlay_per_concept.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P3/",
+          "description": "Feasibility overlay matrix per concept, including:",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All 10+ concepts scored across all four feasibility dimensions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3-T5",
+      "title": "Conduct stakeholder review; document decisions and rationale.",
+      "description": "Perform the task 'Conduct stakeholder review; document decisions and rationale.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P3-T5-D1",
+          "filename": "stakeholder-decision-log.pdf",
+          "aliases": [
+            "stakeholder-decision-log.pdf",
+            "stakeholder_decision_log.pdf",
+            "P3-T5-D1",
+            "P3-T5-stakeholder-decision-log.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P3/",
+          "description": "Stakeholder decision log.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each concept assigned status (Advance / Iterate / Drop) with rationale."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3-T6",
+      "title": "Advance at least 3 concepts as candidates for prototyping.",
+      "description": "Perform the task 'Advance at least 3 concepts as candidates for prototyping.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P3-T6-D1",
+          "filename": "shortlist-of-3.pdf",
+          "aliases": [
+            "shortlist-of-3-advanced-concepts.pdf",
+            "shortlist_of_3_advanced_concepts.pdf",
+            "P3-T6-D1",
+            "P3-T6-shortlist-of-3.pdf",
+            "shortlist-of-3.pdf",
+            "shortlist_of_3.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P3/",
+          "description": "Shortlist of \u22653 advanced concepts.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Minimum of 3 concepts approved for P4."
+            },
+            {
+              "id": "AC-2",
+              "text": "Approval signatures logged."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

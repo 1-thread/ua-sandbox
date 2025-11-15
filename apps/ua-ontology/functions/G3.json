@@ -1,0 +1,412 @@
+{
+  "code": "G3",
+  "title": "Create Art Style Guide",
+  "category": "game",
+  "phase": "R&D",
+  "purpose": "Describe the core function Create Art Style Guide.",
+  "dependencies": [
+    "G1"
+  ],
+  "guardrails": [
+    "Maintain exploratory scope; do not produce production\u2011ready assets.",
+    "Use only royalty\u2011free or internally owned reference materials.",
+    "Document decisions and rationales for each aesthetic choice.",
+    "Keep iteration loops time\u2011boxed to avoid perfectionism.",
+    "Ensure accessibility considerations (e.g., color blindness) are acknowledged.",
+    "Align visual style with the game's concept and target audience.",
+    "Avoid overcomplicating guidelines; strive for clarity and conciseness.",
+    "Maintain organized file structure and naming conventions for assets.",
+    "Solicit feedback from cross\u2011disciplinary teams (audio, design).",
+    "Secure sign\u2011offs before finalizing to prevent later rework.",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-game-G3-create-art-style-guide.md",
+  "tasks": [
+    {
+      "id": "G3-T1",
+      "title": "Research visual inspirations and define aesthetic pillars (color, typography, shapes, textures).",
+      "description": "Collect visual inspirations and references to establish the aesthetic direction and document key pillars such as color, typography, shapes, and textures, ensuring consistency with the game's concept and audience.",
+      "deliverables": [
+        {
+          "id": "G3-T1-D1",
+          "filename": "mood-reference-board.pdf",
+          "aliases": [
+            "G3-T1-mood_reference_board.pdf",
+            "mood_reference_board.pdf",
+            "G3-T1-D1",
+            "G3-T1-mood-reference-board.pdf",
+            "mood-reference-board.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "PDF board compiling at least five annotated visual references that represent the desired mood and style for the game.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains at least five annotated reference images describing why each was chosen."
+            },
+            {
+              "id": "AC-2",
+              "text": "Sources are properly licensed or owned."
+            },
+            {
+              "id": "AC-3",
+              "text": "Annotations link the image to aesthetic pillars."
+            }
+          ]
+        },
+        {
+          "id": "G3-T1-D2",
+          "filename": "aesthetic-pillars.docx",
+          "aliases": [
+            "G3-T1-aesthetic_pillars.docx",
+            "aesthetic_pillars.docx",
+            "G3-T1-D2",
+            "G3-T1-aesthetic-pillars.docx",
+            "aesthetic-pillars.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Document detailing at least four aesthetic pillars (color, typography, shapes, textures) with narrative rationale, visual examples, and guidelines for implementation.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists at least four aesthetic pillars."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides rationale and visual examples for each pillar."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by art director and aligns with game concept."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3-T2",
+      "title": "Develop color palettes, typography samples, and exploratory sketches.",
+      "description": "Create and document color palettes, typography treatments, and exploratory sketches to build a cohesive visual language.",
+      "deliverables": [
+        {
+          "id": "G3-T2-D1",
+          "filename": "color-palettes.pdf",
+          "aliases": [
+            "G3-T2-color_palettes.pdf",
+            "color_palettes.pdf",
+            "G3-T2-D1",
+            "G3-T2-color-palettes.pdf",
+            "color-palettes.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "PDF containing at least three distinct color palettes, each with swatch samples and corresponding hex/RGB values.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes at least three color palettes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each palette lists colors with hex codes."
+            },
+            {
+              "id": "AC-3",
+              "text": "Explains the purpose or mood associated with each palette."
+            }
+          ]
+        },
+        {
+          "id": "G3-T2-D2",
+          "filename": "typography-samples.pdf",
+          "aliases": [
+            "G3-T2-typography_samples.pdf",
+            "typography_samples.pdf",
+            "G3-T2-D2",
+            "G3-T2-typography-samples.pdf",
+            "typography-samples.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Document showcasing samples of at least two font families with hierarchy examples (headings, body text, captions) tailored for the game's UI and narrative elements.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Shows samples of at least two font families with heading, subheading, and body styles."
+            },
+            {
+              "id": "AC-2",
+              "text": "Explains the use case of each font."
+            },
+            {
+              "id": "AC-3",
+              "text": "Fonts are legible across screen sizes."
+            }
+          ]
+        },
+        {
+          "id": "G3-T2-D3",
+          "filename": "sketch-sheets.pdf",
+          "aliases": [
+            "G3-T2-sketch_sheets.pdf",
+            "sketch_sheets.pdf",
+            "G3-T2-D3",
+            "G3-T2-sketch-sheets.pdf",
+            "sketch-sheets.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Collection of at least five exploratory sketches demonstrating style variations, silhouettes, and concept layouts.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains at least five sketches exploring character and environment silhouettes or compositions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Annotations explain key design ideas."
+            },
+            {
+              "id": "AC-3",
+              "text": "Scanned or exported at a readable resolution."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3-T3",
+      "title": "Produce sample environment art and draft composition/lighting/texture guidelines.",
+      "description": "Produce a sample environment artwork and derive guidelines for composition, lighting, and texture to guide production artists.",
+      "deliverables": [
+        {
+          "id": "G3-T3-D1",
+          "filename": "environment-concept-art.png",
+          "aliases": [
+            "G3-T3-environment_concept_art.png",
+            "environment_concept_art.png",
+            "G3-T3-D1",
+            "G3-T3-environment-concept-art.png",
+            "environment-concept-art.png"
+          ],
+          "filetype": "png",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "High-resolution concept art piece depicting a representative environment with attention to composition, lighting, and texturing.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Environment concept art approved by art lead."
+            },
+            {
+              "id": "AC-2",
+              "text": "Demonstrates the intended composition, lighting, and texture style."
+            }
+          ]
+        },
+        {
+          "id": "G3-T3-D2",
+          "filename": "composition-lighting-texture.docx",
+          "aliases": [
+            "G3-T3-composition_lighting_texture_guidelines.docx",
+            "composition_lighting_texture_guidelines.docx",
+            "G3-T3-D2",
+            "G3-T3-composition-lighting-texture.docx",
+            "composition-lighting-texture.docx",
+            "composition_lighting_texture.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Document outlining guidelines for composition, lighting, and texture application derived from the sample concept art.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists at least five guidelines covering composition, lighting, and texture."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides examples or references for each guideline."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by art director."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3-T4",
+      "title": "Draft notes on audio-visual synergy and accessibility considerations.",
+      "description": "Document how audio and visuals work together harmoniously and ensure the aesthetic choices accommodate accessibility guidelines.",
+      "deliverables": [
+        {
+          "id": "G3-T4-D1",
+          "filename": "audio-visual-synergy.pdf",
+          "aliases": [
+            "G3-T4-audio_visual_synergy_notes.pdf",
+            "audio_visual_synergy_notes.pdf",
+            "G3-T4-D1",
+            "G3-T4-audio-visual-synergy.pdf",
+            "audio-visual-synergy.pdf",
+            "audio_visual_synergy.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "PDF summarizing how audio elements complement visual cues, with at least three examples of sound/visual pairings across interactions or scenes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Describes at least three sound/visual pairings."
+            },
+            {
+              "id": "AC-2",
+              "text": "Explains how each pairing enhances immersion and feedback."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by audio and art leads."
+            }
+          ]
+        },
+        {
+          "id": "G3-T4-D2",
+          "filename": "accessibility-considerations.md",
+          "aliases": [
+            "G3-T4-accessibility_considerations.md",
+            "accessibility_considerations.md",
+            "G3-T4-D2",
+            "G3-T4-accessibility-considerations.md",
+            "accessibility-considerations.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Markdown document enumerating considerations and guidelines to ensure the art style remains accessible (e.g., color-blind palettes, legible fonts, contrast ratios).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Addresses at least three accessibility topics such as color blindness, font legibility, and UI contrast."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides guidelines or resources for each topic."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligned with accessibility standards (WCAG)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3-T5",
+      "title": "Compile all elements into a cohesive draft art style guide.",
+      "description": "Assemble the collected elements into a cohesive draft art style guide.",
+      "deliverables": [
+        {
+          "id": "G3-T5-D1",
+          "filename": "art-style-guide.pdf",
+          "aliases": [
+            "G3-T5-draft_art_style_guide.pdf",
+            "draft_art_style_guide.pdf",
+            "G3-T5-D1",
+            "G3-T5-art-style-guide.pdf",
+            "art-style-guide.pdf",
+            "art_style_guide.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Draft of the art style guide compiling pillars, color palettes, typography, sketches, environment art, guidelines, synergy notes, and accessibility considerations into a cohesive document.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Integrates all earlier deliverables into a cohesive guide."
+            },
+            {
+              "id": "AC-2",
+              "text": "Maintains consistent formatting and structure."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ready for team review."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3-T6",
+      "title": "Hold a review session and collect feedback.",
+      "description": "Conduct a review session with stakeholders and capture actionable feedback to inform revisions.",
+      "deliverables": [
+        {
+          "id": "G3-T6-D1",
+          "filename": "review-feedback.md",
+          "aliases": [
+            "G3-T6-review_feedback_notes.md",
+            "review_feedback_notes.md",
+            "G3-T6-D1",
+            "G3-T6-review-feedback.md",
+            "review-feedback.md",
+            "review_feedback.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Notes capturing feedback from cross-disciplinary review sessions, including at least five actionable suggestions and decisions.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes at least five actionable suggestions from reviewers."
+            },
+            {
+              "id": "AC-2",
+              "text": "Documents decisions and next steps for each suggestion."
+            },
+            {
+              "id": "AC-3",
+              "text": "Shared with all stakeholders within 24 hours of the session."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G3-T7",
+      "title": "Revise and finalize the art style guide for production handoff.",
+      "description": "Revise the draft art style guide based on feedback and finalize it for production handoff.",
+      "deliverables": [
+        {
+          "id": "G3-T7-D1",
+          "filename": "art-style-guide.pdf",
+          "aliases": [
+            "G3-T7-final_art_style_guide.pdf",
+            "final_art_style_guide.pdf",
+            "G3-T7-D1",
+            "G3-T7-art-style-guide.pdf",
+            "art-style-guide.pdf",
+            "art_style_guide.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G3/",
+          "description": "Finalized art style guide incorporating feedback, with layout and content suitable for production artists, including sign-off records from leadership.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Incorporates all agreed-upon feedback."
+            },
+            {
+              "id": "AC-2",
+              "text": "Signed off by art director and production leads."
+            },
+            {
+              "id": "AC-3",
+              "text": "Stored in version control with appropriate naming."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

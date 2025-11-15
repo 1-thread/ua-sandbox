@@ -1,0 +1,353 @@
+{
+  "code": "P1",
+  "title": "Define Opportunity",
+  "category": "product",
+  "phase": "R&D",
+  "purpose": "Define the initial product opportunity informed by the Entertainment Standards from E1, ensuring product concepts align with the approved IP premise, tone, and key visual cues.",
+  "dependencies": [
+    "E1"
+  ],
+  "guardrails": [
+    "Product directions must not contradict E1\u2019s approved variables without a logged exception.",
+    "Maintain non\u2011redundancy with planned game assets where feasible (note potential shared assets)."
+  ],
+  "source_md": "ua/function_core/CO-product-P1-define-opportunity.md",
+  "tasks": [
+    {
+      "id": "P1-T1",
+      "title": "Capture Market Space & Customer Need",
+      "description": "Perform the task 'Capture Market Space & Customer Need' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P1-T1-D1",
+          "filename": "short-market-brief.docx",
+          "aliases": [
+            "short_market_brief.docx",
+            "P1-T1-D1",
+            "P1-T1-short-market-brief.docx",
+            "short-market-brief.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Short market brief",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Defines segment, need, and success hypotheses."
+            },
+            {
+              "id": "AC-2",
+              "text": "Aligns with IP tone/premise from **E1**."
+            }
+          ]
+        },
+        {
+          "id": "P1-T1-D2",
+          "filename": "problem-statement.pdf",
+          "aliases": [
+            "problem_statement.pdf",
+            "P1-T1-D2",
+            "P1-T1-problem-statement.pdf",
+            "problem-statement.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Problem statement",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Defines segment, need, and success hypotheses."
+            },
+            {
+              "id": "AC-2",
+              "text": "Aligns with IP tone/premise from **E1**."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1-T2",
+      "title": "Translate E1 Variables into Product Guardrails",
+      "description": "Perform the task 'Translate E1 Variables into Product Guardrails' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P1-T2-D1",
+          "filename": "product-guardrails-derived.pdf",
+          "aliases": [
+            "product_guardrails_derived_from_premise.pdf",
+            "P1-T2-D1",
+            "P1-T2-product-guardrails-derived.pdf",
+            "product-guardrails-derived.pdf",
+            "product_guardrails_derived.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Product guardrails derived from premise",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Guardrails are specific, testable, and traceable to E1\u2019s audit log."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        },
+        {
+          "id": "P1-T2-D2",
+          "filename": "elevator-pitch.pdf",
+          "aliases": [
+            "elevator_pitch.pdf",
+            "P1-T2-D2",
+            "P1-T2-elevator-pitch.pdf",
+            "elevator-pitch.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Elevator pitch",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Guardrails are specific, testable, and traceable to E1\u2019s audit log."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        },
+        {
+          "id": "P1-T2-D3",
+          "filename": "story-arcs.pdf",
+          "aliases": [
+            "story_arcs.pdf",
+            "P1-T2-D3",
+            "P1-T2-story-arcs.pdf",
+            "story-arcs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Story arcs",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Guardrails are specific, testable, and traceable to E1\u2019s audit log."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        },
+        {
+          "id": "P1-T2-D4",
+          "filename": "primary-characters.pdf",
+          "aliases": [
+            "primary_characters.pdf",
+            "P1-T2-D4",
+            "P1-T2-primary-characters.pdf",
+            "primary-characters.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Primary characters",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Guardrails are specific, testable, and traceable to E1\u2019s audit log."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        },
+        {
+          "id": "P1-T2-D5",
+          "filename": "concept-art.pdf",
+          "aliases": [
+            "concept_art.pdf",
+            "P1-T2-D5",
+            "P1-T2-concept-art.pdf",
+            "concept-art.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Concept art",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Guardrails are specific, testable, and traceable to E1\u2019s audit log."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        },
+        {
+          "id": "P1-T2-D6",
+          "filename": "mood-boards.pdf",
+          "aliases": [
+            "mood_boards.pdf",
+            "P1-T2-D6",
+            "P1-T2-mood-boards.pdf",
+            "mood-boards.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Mood boards",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Guardrails are specific, testable, and traceable to E1\u2019s audit log."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1-T3",
+      "title": "Opportunity Concepts (MSC)",
+      "description": "Perform the task 'Opportunity Concepts (MSC)' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P1-T3-D1",
+          "filename": "2-3-opportunity.pdf",
+          "aliases": [
+            "2_3_opportunity_directions_with_must_should_could_notes.pdf",
+            "P1-T3-D1",
+            "P1-T3-2-3-opportunity.pdf",
+            "2-3-opportunity.pdf",
+            "2_3_opportunity.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "2 3 opportunity directions with must should could notes",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Directions adhere to guardrails."
+            },
+            {
+              "id": "AC-2",
+              "text": "Conflicts with E1 called out."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1-T4",
+      "title": "Feasibility & Risk Scan",
+      "description": "Perform the task 'Feasibility & Risk Scan' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P1-T4-D1",
+          "filename": "risk-log-top-risks.pdf",
+          "aliases": [
+            "risk_log_with_top_risks.pdf",
+            "P1-T4-D1",
+            "P1-T4-risk-log-top-risks.pdf",
+            "risk-log-top-risks.pdf",
+            "risk_log_top_risks.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Risk log with top risks",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Clear mitigation paths."
+            },
+            {
+              "id": "AC-2",
+              "text": "Dependencies identified."
+            }
+          ]
+        },
+        {
+          "id": "P1-T4-D2",
+          "filename": "mitigations.pdf",
+          "aliases": [
+            "mitigations.pdf",
+            "P1-T4-D2",
+            "P1-T4-mitigations.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Mitigations",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Clear mitigation paths."
+            },
+            {
+              "id": "AC-2",
+              "text": "Dependencies identified."
+            }
+          ]
+        },
+        {
+          "id": "P1-T4-D3",
+          "filename": "owners.pdf",
+          "aliases": [
+            "owners.pdf",
+            "P1-T4-D3",
+            "P1-T4-owners.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "Owners",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Clear mitigation paths."
+            },
+            {
+              "id": "AC-2",
+              "text": "Dependencies identified."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1-T5",
+      "title": "Decision Brief",
+      "description": "Perform the task 'Decision Brief' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P1-T5-D1",
+          "filename": "one-pager-recommended.docx",
+          "aliases": [
+            "one_pager_summarizing_recommended_opportunity_with_links_to_sources.docx",
+            "P1-T5-D1",
+            "P1-T5-one-pager-recommended.docx",
+            "one-pager-recommended.docx",
+            "one_pager_recommended.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P1/",
+          "description": "One pager summarizing recommended opportunity with links to sources",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Stakeholder review complete."
+            },
+            {
+              "id": "AC-2",
+              "text": "Decision recorded."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

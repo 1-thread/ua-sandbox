@@ -1,0 +1,90 @@
+{
+  "code": "P5",
+  "title": "Physical Prototype and Refined Costing",
+  "category": "product",
+  "phase": "Development",
+  "purpose": "Describe the core function CO\u2013product\u2013P5\u2013physical-prototype-and-refined-costing.",
+  "dependencies": [],
+  "guardrails": [
+    "Follow the approved IP and design guidelines.",
+    "Ensure all deliverables meet quality and licensing standards.",
+    "Document assumptions and unknowns explicitly."
+  ],
+  "source_md": "ua/function_core/CO-product-P5-physical-prototype-and-refined-costing.md",
+  "tasks": [
+    {
+      "id": "P5-T1",
+      "title": "Select prototyping method(s) with comparison of cost/time/resources.",
+      "description": "Perform the task 'Select prototyping method(s) with comparison of cost/time/resources.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P5-T1-D1",
+          "filename": "comparing-at-least.docx",
+          "aliases": [
+            "prototype-build-plan-comparing-at-least-3-methods.docx",
+            "prototype_build_plan_comparing_at_least_3_methods.docx",
+            "P5-T1-D1",
+            "P5-T1-comparing-at-least.docx",
+            "comparing-at-least.docx",
+            "comparing_at_least.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P5/",
+          "description": "Prototype build plan comparing at least 3 methods:",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Rationale for chosen method documented."
+            },
+            {
+              "id": "AC-2",
+              "text": "Cost/time/resource comparison table completed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P5-T2",
+      "title": "Build physical prototype(s) and test ergonomics, durability, and basic mechanism reliability.",
+      "description": "Perform the task 'Build physical prototype(s) and test ergonomics, durability, and basic mechanism reliability.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P5-T2-D1",
+          "filename": "physical-test.zip",
+          "aliases": [
+            "physical-prototype-with-test-notes.zip",
+            "physical_prototype_with_test_notes.zip",
+            "P5-T2-D1",
+            "P5-T2-physical-test.zip",
+            "physical-test.zip",
+            "physical_test.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/product/P5/",
+          "description": "Physical prototype(s) with test notes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "At least 1 prototype per shortlisted concept completed."
+            },
+            {
+              "id": "AC-2",
+              "text": "Ergonomics test completed."
+            },
+            {
+              "id": "AC-3",
+              "text": "Mechanism functions reliably in \u22653 repeated trials."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P5-T3",
+      "title": "Update unit cost and preliminary tooling",
+      "description": "Perform the task 'Update unit cost and preliminary tooling' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": []
+    }
+  ]
+}

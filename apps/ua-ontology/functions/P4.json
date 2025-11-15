@@ -1,0 +1,172 @@
+{
+  "code": "P4",
+  "title": "Prototype and Test",
+  "category": "product",
+  "phase": "R&D",
+  "purpose": "Describe the core function CO\u2013product\u2013P4\u2013prototype-and-test.",
+  "dependencies": [],
+  "guardrails": [
+    "Follow the approved IP and design guidelines.",
+    "Ensure all deliverables meet quality and licensing standards.",
+    "Document assumptions and unknowns explicitly."
+  ],
+  "source_md": "ua/function_core/CO-product-P4-prototype-and-test.md",
+  "tasks": [
+    {
+      "id": "P4-T1",
+      "title": "Build proof-of-concept prototypes (animatics, 3D mockups, lightweight sims, or low-fidelity mock-ups).",
+      "description": "Perform the task 'Build proof-of-concept prototypes (animatics, 3D mockups, lightweight sims, or low-fidelity mock-ups).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P4-T1-D1",
+          "filename": "files.zip",
+          "aliases": [
+            "prototype-files.zip",
+            "prototype_files.zip",
+            "P4-T1-D1",
+            "P4-T1-files.zip",
+            "files.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/product/P4/",
+          "description": "Prototype files (digital or physical mockups).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "At least 1 prototype per advanced concept created."
+            },
+            {
+              "id": "AC-2",
+              "text": "Fidelity sufficient to test play loop."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4-T2",
+      "title": "Run usability/playtesting (virtual or in-person \u2014 specify mode) with \u22655 evaluators (kids panels, internal proxies, or stakeholder panels).",
+      "description": "Perform the task 'Run usability/playtesting (virtual or in-person \u2014 specify mode) with \u22655 evaluators (kids panels, internal proxies, or stakeholder panels).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P4-T2-D1",
+          "filename": "file.docx",
+          "aliases": [
+            "file.docx",
+            "P4-T2-D1",
+            "P4-T2-file.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P4/",
+          "description": "File",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "The deliverable is complete and accurate."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4-T3",
+      "title": "Capture performance metrics (loop clarity, time-to-fun, effect reliability, ergonomic fit).",
+      "description": "Perform the task 'Capture performance metrics (loop clarity, time-to-fun, effect reliability, ergonomic fit).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P4-T3-D1",
+          "filename": "metrics-quantitative-qualitative-data.pdf",
+          "aliases": [
+            "metrics-report-with-quantitative-qualitative-data.pdf",
+            "metrics_report_with_quantitative_qualitative_data.pdf",
+            "P4-T3-D1",
+            "P4-T3-metrics-quantitative-qualitative-data.pdf",
+            "metrics-quantitative-qualitative-data.pdf",
+            "metrics_quantitative_qualitative_data.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P4/",
+          "description": "Metrics report with quantitative/qualitative data.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Metrics cover all 4 categories."
+            },
+            {
+              "id": "AC-2",
+              "text": "\u226570% of evaluators demonstrate positive resonance."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4-T4",
+      "title": "Produce early BOM/cost estimates and update the feasibility overlay.",
+      "description": "Perform the task 'Produce early BOM/cost estimates and update the feasibility overlay.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P4-T4-D1",
+          "filename": "preliminary-bom-updated.docx",
+          "aliases": [
+            "preliminary-bom-and-updated-feasibility-overlay.docx",
+            "preliminary_bom_and_updated_feasibility_overlay.docx",
+            "P4-T4-D1",
+            "P4-T4-preliminary-bom-updated.docx",
+            "preliminary-bom-updated.docx",
+            "preliminary_bom_updated.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P4/",
+          "description": "Preliminary BOM and updated feasibility overlay.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "BOM within \u00b120% of cost guardrails."
+            },
+            {
+              "id": "AC-2",
+              "text": "Overlay updated with new data."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4-T5",
+      "title": "Make gate recommendation (advance/iterate/stop) and specify required changes if iterating.",
+      "description": "Perform the task 'Make gate recommendation (advance/iterate/stop) and specify required changes if iterating.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P4-T5-D1",
+          "filename": "gate-decision-note-rationale.docx",
+          "aliases": [
+            "gate-decision-note-with-rationale.docx",
+            "gate_decision_note_with_rationale.docx",
+            "P4-T5-D1",
+            "P4-T5-gate-decision-note-rationale.docx",
+            "gate-decision-note-rationale.docx",
+            "gate_decision_note_rationale.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P4/",
+          "description": "Gate decision note with rationale (Advance, Iterate, Stop).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each prototype assigned clear decision."
+            },
+            {
+              "id": "AC-2",
+              "text": "Iterations include a change list."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

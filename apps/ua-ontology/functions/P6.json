@@ -1,0 +1,200 @@
+{
+  "code": "P6",
+  "title": "Functional Prototype and Packaging Design",
+  "category": "product",
+  "phase": "Development",
+  "purpose": "Describe the core function CO\u2013product\u2013P6\u2013functional-prototype-and-packaging-design.",
+  "dependencies": [],
+  "guardrails": [
+    "Follow the approved IP and design guidelines.",
+    "Ensure all deliverables meet quality and licensing standards.",
+    "Document assumptions and unknowns explicitly."
+  ],
+  "source_md": "ua/function_core/CO-product-P6-functional-prototype-and-packaging-design.md",
+  "tasks": [
+    {
+      "id": "P6-T1",
+      "title": "Refine prototype to functional standard (reliable play loop).",
+      "description": "Perform the task 'Refine prototype to functional standard (reliable play loop).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P6-T1-D1",
+          "filename": "functional.zip",
+          "aliases": [
+            "functional-prototype.zip",
+            "functional_prototype.zip",
+            "P6-T1-D1",
+            "P6-T1-functional.zip",
+            "functional.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/product/P6/",
+          "description": "Functional prototype(s).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Play loop repeatable \u22655 consecutive times without failure."
+            },
+            {
+              "id": "AC-2",
+              "text": "Ergonomics and safety standards met."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6-T2",
+      "title": "Create a Packaging Brief.",
+      "description": "Perform the task 'Create a Packaging Brief.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P6-T2-D1",
+          "filename": "packaging-brief.pdf",
+          "aliases": [
+            "packaging-brief-including.pdf",
+            "packaging_brief_including.pdf",
+            "P6-T2-D1",
+            "P6-T2-packaging-brief.pdf",
+            "packaging-brief.pdf",
+            "packaging_brief.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P6/",
+          "description": "Packaging Brief including:",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "The deliverable is complete and accurate."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        },
+        {
+          "id": "P6-T2-D2",
+          "filename": "updated-cost-model.xlsx",
+          "aliases": [
+            "updated-cost-model-including-bom-packout-assumptions-freight-duties-and-retailer-margin-scenarios-sensitivity-table-across-2-3-material-form-factor-options.xlsx",
+            "updated_cost_model_including_bom_packout_assumptions_freight_duties_and_retailer_margin_scenarios_sensitivity_table_across_2_3_material_form_factor_options.xlsx",
+            "P6-T2-D2",
+            "P6-T2-updated-cost-model.xlsx",
+            "updated-cost-model.xlsx",
+            "updated_cost_model.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P6/",
+          "description": "Updated cost model including BOM (product + packaging), packout assumptions, freight, duties, and retailer margin scenarios; sensitivity table across 2\u20133 material/form-factor options.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "The deliverable is complete and accurate."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and approved by the project lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6-T3",
+      "title": "Design packaging concepts/dielines/comps; verify shelf fit and planogram compliance.",
+      "description": "Perform the task 'Design packaging concepts/dielines/comps; verify shelf fit and planogram compliance.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P6-T3-D1",
+          "filename": "packaging-design-comps.md",
+          "aliases": [
+            "packaging-design-comps-dielines-and-compliance-notes.md",
+            "packaging_design_comps_dielines_and_compliance_notes.md",
+            "P6-T3-D1",
+            "P6-T3-packaging-design-comps.md",
+            "packaging-design-comps.md",
+            "packaging_design_comps.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/product/P6/",
+          "description": "Packaging design comps, dielines, and compliance notes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "At least 2 design concepts created."
+            },
+            {
+              "id": "AC-2",
+              "text": "At least 1 verified as planogram-compliant."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6-T4",
+      "title": "Identify and justify any exceptions (oversize/novel formats) with ROI rationale; obtain approvals.",
+      "description": "Perform the task 'Identify and justify any exceptions (oversize/novel formats) with ROI rationale; obtain approvals.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P6-T4-D1",
+          "filename": "exception-roi-rationale.pdf",
+          "aliases": [
+            "exception-report-with-roi-rationale-and-stakeholder-approvals.pdf",
+            "exception_report_with_roi_rationale_and_stakeholder_approvals.pdf",
+            "P6-T4-D1",
+            "P6-T4-exception-roi-rationale.pdf",
+            "exception-roi-rationale.pdf",
+            "exception_roi_rationale.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P6/",
+          "description": "Exception report with ROI rationale and stakeholder approvals.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Exceptions logged with ROI calculations."
+            },
+            {
+              "id": "AC-2",
+              "text": "Approvals from product, IP, and marketing leads documented."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P6-T5",
+      "title": "Conduct reviews with product, marketing, IP, and (when possible) retail stakeholders.",
+      "description": "Perform the task 'Conduct reviews with product, marketing, IP, and (when possible) retail stakeholders.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P6-T5-D1",
+          "filename": "review-meeting-sign.md",
+          "aliases": [
+            "review-meeting-notes-and-sign-off-record.md",
+            "review_meeting_notes_and_sign_off_record.md",
+            "P6-T5-D1",
+            "P6-T5-review-meeting-sign.md",
+            "review-meeting-sign.md",
+            "review_meeting_sign.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/product/P6/",
+          "description": "Review meeting notes and sign-off record.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All core stakeholders reviewed and signed off."
+            },
+            {
+              "id": "AC-2",
+              "text": "Retail stakeholder feedback integrated where available."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

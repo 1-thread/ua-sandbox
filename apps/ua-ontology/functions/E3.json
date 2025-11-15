@@ -1,0 +1,197 @@
+{
+  "code": "E3",
+  "title": "Create Script and Define Cast Of Characters",
+  "category": "entertainment",
+  "phase": "R&D",
+  "purpose": "Describe the core function Create Script and Define Cast Of Characters.",
+  "dependencies": [
+    "E1"
+  ],
+  "guardrails": [
+    "Do not select or negotiate with actual talent; only define role specifications and desired characteristics",
+    "Maintain confidentiality of character information and plot details",
+    "Ensure the script adheres to content guidelines",
+    "Keep drafts versioned and track changes for transparency",
+    "Avoid over\u2011writing; maintain concise dialogue and narrative aligned with the premise",
+    "Use standard screenplay formatting throughout all drafts",
+    "Document influences and sources ethically and avoid plagiarism",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E3-create-script-and-define-cast-of-characters.md",
+  "tasks": [
+    {
+      "id": "E3-T1",
+      "title": "Expand the premise into a full narrative outline",
+      "description": "Execute the task: Expand the premise into a full narrative outline.",
+      "deliverables": [
+        {
+          "id": "E3-T1-D1",
+          "filename": "narrative-outline.docx",
+          "aliases": [
+            "narrative_outline.docx",
+            "E3-T1-D1",
+            "E3-T1-narrative-outline.docx",
+            "narrative-outline.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E3/",
+          "description": "A comprehensive narrative outline detailing scene beats, setups, anticipations, reversals and transitions.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Covers all major plot points and scene beats."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes notes on setups, anticipations, reversals and transitions."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the approved premise from E1."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E3-T2",
+      "title": "Write the script",
+      "description": "Execute the task: Write the script.",
+      "deliverables": [
+        {
+          "id": "E3-T2-D1",
+          "filename": "script.docx",
+          "aliases": [
+            "script_draft.docx",
+            "E3-T2-D1",
+            "E3-T2-script.docx",
+            "script.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E3/",
+          "description": "The initial full script written in standard screenplay format, including scenes and dialogues.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Completes the full narrative in standard screenplay formatting."
+            },
+            {
+              "id": "AC-2",
+              "text": "Scenes and dialogue reflect the narrative outline."
+            },
+            {
+              "id": "AC-3",
+              "text": "Includes descriptions of world and characters."
+            },
+            {
+              "id": "AC-4",
+              "text": "Reviewed for content guideline compliance."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E3-T3",
+      "title": "Organize the writing process",
+      "description": "Execute the task: Organize the writing process.",
+      "deliverables": [
+        {
+          "id": "E3-T3-D1",
+          "filename": "beat-outline-progress.xlsx",
+          "aliases": [
+            "beat_outline_progress.xlsx",
+            "E3-T3-D1",
+            "E3-T3-beat-outline-progress.xlsx",
+            "beat-outline-progress.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E3/",
+          "description": "A beat outline document tracking each story beat and mapping to finished pages, capturing version history.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists each story beat and corresponding draft pages."
+            },
+            {
+              "id": "AC-2",
+              "text": "Tracks version revisions and status of each beat."
+            },
+            {
+              "id": "AC-3",
+              "text": "Organized for easy updates and retrieval."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E3-T4",
+      "title": "Character Bios",
+      "description": "Execute the task: Character Bios.",
+      "deliverables": [
+        {
+          "id": "E3-T4-D1",
+          "filename": "character-bios.xlsx",
+          "aliases": [
+            "character_bios.xlsx",
+            "E3-T4-D1",
+            "E3-T4-character-bios.xlsx",
+            "character-bios.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E3/",
+          "description": "A sheet containing bios for each major character, summarizing personality, story purpose and number of appearances.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each character includes personality summary, story purpose and appearance count."
+            },
+            {
+              "id": "AC-2",
+              "text": "Bios align with the narrative outline."
+            },
+            {
+              "id": "AC-3",
+              "text": "Format is consistent across all entries."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E3-T5",
+      "title": "Define potential casting profiles and specifications",
+      "description": "Execute the task: Define potential casting profiles and specifications.",
+      "deliverables": [
+        {
+          "id": "E3-T5-D1",
+          "filename": "casting-profiles.xlsx",
+          "aliases": [
+            "casting_profiles.xlsx",
+            "E3-T5-D1",
+            "E3-T5-casting-profiles.xlsx",
+            "casting-profiles.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E3/",
+          "description": "A list of potential actors for each role, with casting criteria and brief justification.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Provides at least three candidate actors per role."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes casting criteria such as age, look, talent and budget."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with character descriptions and production budget."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

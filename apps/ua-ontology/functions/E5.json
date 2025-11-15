@@ -1,0 +1,318 @@
+{
+  "code": "E5",
+  "title": "Build Technical Pipeline",
+  "category": "entertainment",
+  "phase": "Development",
+  "purpose": "Describe the core function Build Technical Pipeline.",
+  "dependencies": [
+    "E2",
+    "E3",
+    "E4"
+  ],
+  "guardrails": [
+    "Utilize industry\u2011standard tools where feasible and avoid bespoke solutions that are difficult to maintain",
+    "Ensure cross\u2011platform compatibility if required by production environments",
+    "Maintain version control and implement backup strategies to protect assets",
+    "Keep the pipeline modular so components can be upgraded or replaced easily",
+    "Document all dependencies, environment requirements, and assumptions clearly",
+    "Do not integrate features that are outside the scope requested by stakeholders",
+    "Implement proper security and access controls for sensitive assets and data",
+    "Stay within the development phase timeline and focus on readiness rather than indefinite optimization",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E5-build-technical-pipeline.md",
+  "tasks": [
+    {
+      "id": "E5-T1",
+      "title": "Gather requirements from creative and technical leads",
+      "description": "Execute the task: Gather requirements from creative and technical leads.",
+      "deliverables": [
+        {
+          "id": "E5-T1-D1",
+          "filename": "pipeline-requirements.docx",
+          "aliases": [
+            "pipeline_requirements.docx",
+            "E5-T1-D1",
+            "E5-T1-pipeline-requirements.docx",
+            "pipeline-requirements.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Document compiling creative and technical requirements for the production pipeline collected from leads.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all requirements with clear categories (asset management, rendering, export, etc.)."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reviewed and validated by creative and technical leads."
+            },
+            {
+              "id": "AC-3",
+              "text": "Traceable to source discussions or documents."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E5-T2",
+      "title": "Design pipeline architecture including asset workflows and render processes",
+      "description": "Execute the task: Design pipeline architecture including asset workflows and render processes.",
+      "deliverables": [
+        {
+          "id": "E5-T2-D1",
+          "filename": "pipeline-architecture.pdf",
+          "aliases": [
+            "pipeline_architecture.pdf",
+            "E5-T2-D1",
+            "E5-T2-pipeline-architecture.pdf",
+            "pipeline-architecture.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Architecture diagram and design specification describing asset workflows, versioning, rendering and export processes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Diagram covers all stages from asset ingestion to export."
+            },
+            {
+              "id": "AC-2",
+              "text": "Design specification details processes and data flow."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the pipeline architect."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E5-T3",
+      "title": "Select and configure tools and software platforms",
+      "description": "Execute the task: Select and configure tools and software platforms.",
+      "deliverables": [
+        {
+          "id": "E5-T3-D1",
+          "filename": "toolset-configuration-guide.md",
+          "aliases": [
+            "toolset_configuration_guide.md",
+            "E5-T3-D1",
+            "E5-T3-toolset-configuration-guide.md",
+            "toolset-configuration-guide.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Guide documenting selected tools, versions, installation steps and configuration settings.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists chosen tools with versions and reasons for selection."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides step\u2011by\u2011step installation and configuration instructions."
+            },
+            {
+              "id": "AC-3",
+              "text": "Validated by IT or technical leads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E5-T4",
+      "title": "Implement initial modules for asset ingestion and management",
+      "description": "Execute the task: Implement initial modules for asset ingestion and management.",
+      "deliverables": [
+        {
+          "id": "E5-T4-D1",
+          "filename": "asset-ingestion-modules.zip",
+          "aliases": [
+            "asset_ingestion_modules.zip",
+            "E5-T4-D1",
+            "E5-T4-asset-ingestion-modules.zip",
+            "asset-ingestion-modules.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Prototype modules implementing initial asset ingestion and management functionality.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Modules import, catalog and manage assets from storyboards and concept art."
+            },
+            {
+              "id": "AC-2",
+              "text": "Include documentation for usage and integration."
+            },
+            {
+              "id": "AC-3",
+              "text": "Pass basic functional tests in the pipeline environment."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E5-T5",
+      "title": "Develop rendering and export pipeline stages",
+      "description": "Execute the task: Develop rendering and export pipeline stages.",
+      "deliverables": [
+        {
+          "id": "E5-T5-D1",
+          "filename": "render-pipeline-scripts.zip",
+          "aliases": [
+            "render_pipeline_scripts.zip",
+            "E5-T5-D1",
+            "E5-T5-render-pipeline-scripts.zip",
+            "render-pipeline-scripts.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Scripts and configuration files for the rendering and export pipeline stages.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Processes test assets into required formats and resolutions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Configurations are parameterized and documented."
+            },
+            {
+              "id": "AC-3",
+              "text": "Verified to output sample assets correctly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E5-T6",
+      "title": "Iterate on the pipeline based on user feedback",
+      "description": "Execute the task: Iterate on the pipeline based on user feedback.",
+      "deliverables": [
+        {
+          "id": "E5-T6-D1",
+          "filename": "pipeline-revision-log.md",
+          "aliases": [
+            "pipeline_revision_log.md",
+            "E5-T6-D1",
+            "E5-T6-pipeline-revision-log.md",
+            "pipeline-revision-log.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Document detailing changes made to the pipeline based on user feedback, including rationales.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Describes issues identified and corresponding fixes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Records dates and version numbers for each change."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by relevant stakeholders."
+            }
+          ]
+        },
+        {
+          "id": "E5-T6-D2",
+          "filename": "revised-pipeline.zip",
+          "aliases": [
+            "revised_pipeline.zip",
+            "E5-T6-D2",
+            "E5-T6-revised-pipeline.zip",
+            "revised-pipeline.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Updated pipeline modules reflecting changes from feedback sessions.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Addresses the top issues identified during testing and feedback sessions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Passes functional tests and integration checks."
+            },
+            {
+              "id": "AC-3",
+              "text": "Includes release notes summarizing updates."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E5-T7",
+      "title": "Finalize production\u2011ready pipeline and schedule for the next phase",
+      "description": "Execute the task: Finalize production\u2011ready pipeline and schedule for the next phase.",
+      "deliverables": [
+        {
+          "id": "E5-T7-D1",
+          "filename": "production-pipeline-release.zip",
+          "aliases": [
+            "production_pipeline_release.zip",
+            "E5-T7-D1",
+            "E5-T7-production-pipeline-release.zip",
+            "production-pipeline-release.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Packaged production\u2011ready pipeline including all modules and documentation for release to production teams.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Signed off for production use by stakeholders."
+            },
+            {
+              "id": "AC-2",
+              "text": "Contains a changelog and version number."
+            },
+            {
+              "id": "AC-3",
+              "text": "Verified to integrate with the master production schedule."
+            }
+          ]
+        },
+        {
+          "id": "E5-T7-D2",
+          "filename": "pipeline-schedule.xlsx",
+          "aliases": [
+            "pipeline_schedule.xlsx",
+            "E5-T7-D2",
+            "E5-T7-pipeline-schedule.xlsx",
+            "pipeline-schedule.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E5/",
+          "description": "Detailed schedule and timeline for pipeline integration and maintenance tasks in the next phase.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes tasks, durations, and dependencies for pipeline work."
+            },
+            {
+              "id": "AC-2",
+              "text": "Aligns with the broader production schedule."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the production and technical leads."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

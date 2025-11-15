@@ -1,0 +1,471 @@
+{
+  "code": "G7",
+  "title": "Build Vertical Slice",
+  "category": "game",
+  "phase": "Development",
+  "purpose": "Describe the core function Build Vertical Slice.",
+  "dependencies": [
+    "G5",
+    "G6"
+  ],
+  "guardrails": [
+    "Keep the vertical slice strictly scoped; do not add unapproved features or levels",
+    "Align UI designs with established art and UX guidelines to ensure consistency",
+    "Do not attempt to implement the full game; only include features necessary for the demonstration",
+    "Ensure accessibility features such as color contrast and scalable text are implemented where applicable",
+    "Limit playtesting participants to internal or NDA\u2011bound testers; no public release",
+    "Track and meet performance metrics; avoid sacrificing stability for visual polish",
+    "Document known issues, limitations, and workarounds clearly in the handoff materials",
+    "Seek approval before sharing the vertical slice outside the project team",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-game-G7-build-vertical-slice.md",
+  "tasks": [
+    {
+      "id": "G7-T1",
+      "title": "Define vertical slice scope, goals, and performance targets.",
+      "description": "Set the scope and goals of the vertical slice and define performance targets for the demonstration.",
+      "deliverables": [
+        {
+          "id": "G7-T1-D1",
+          "filename": "vertical-slice-scope.docx",
+          "aliases": [
+            "G7-T1-vertical_slice_scope.docx",
+            "vertical_slice_scope.docx",
+            "G7-T1-D1",
+            "G7-T1-vertical-slice-scope.docx",
+            "vertical-slice-scope.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Document detailing the scope, goals, features, scenes, and performance targets (FPS, resolution, load times) for the vertical slice agreed upon by stakeholders.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all features and scenes included in the vertical slice."
+            },
+            {
+              "id": "AC-2",
+              "text": "Defines performance targets such as FPS and load times for target hardware."
+            },
+            {
+              "id": "AC-3",
+              "text": "Signed by stakeholders."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G7-T2",
+      "title": "Design and implement UI (mockups, HUD, integrated components).",
+      "description": "Design and implement user interface components, including mockups and an integrated module ready for the vertical slice.",
+      "deliverables": [
+        {
+          "id": "G7-T2-D1",
+          "filename": "ui-mockups.pdf",
+          "aliases": [
+            "G7-T2-ui_mockups.pdf",
+            "ui_mockups.pdf",
+            "G7-T2-D1",
+            "G7-T2-ui-mockups.pdf",
+            "ui-mockups.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "High-fidelity mockups of user interface screens and HUD elements for the vertical slice.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Mockups adhere to established UX and art guidelines."
+            },
+            {
+              "id": "AC-2",
+              "text": "Covers all UI screens required for the slice."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by UX designer and art director."
+            }
+          ]
+        },
+        {
+          "id": "G7-T2-D2",
+          "filename": "integrated-ui.zip",
+          "aliases": [
+            "G7-T2-integrated_ui_module.zip",
+            "integrated_ui_module.zip",
+            "G7-T2-D2",
+            "G7-T2-integrated-ui.zip",
+            "integrated-ui.zip",
+            "integrated_ui.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Integrated UI module containing implemented UI elements ready for the vertical slice build.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "UI components compile and function correctly within the engine."
+            },
+            {
+              "id": "AC-2",
+              "text": "Matches the design specified in mockups."
+            },
+            {
+              "id": "AC-3",
+              "text": "Tested for responsiveness and scalability."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G7-T3",
+      "title": "Integrate narrative cutscenes/cinematics and polish presentation elements.",
+      "description": "Integrate narrative cutscenes and polish presentation elements, culminating in a demo video of the vertical slice.",
+      "deliverables": [
+        {
+          "id": "G7-T3-D1",
+          "filename": "cutscene-assets.zip",
+          "aliases": [
+            "G7-T3-cutscene_assets.zip",
+            "cutscene_assets.zip",
+            "G7-T3-D1",
+            "G7-T3-cutscene-assets.zip",
+            "cutscene-assets.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Asset package containing visual and audio assets for narrative cutscenes and cinematics used in the vertical slice.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Assets include animations, backgrounds, character art, and audio."
+            },
+            {
+              "id": "AC-2",
+              "text": "All assets sync properly with cutscene scripts."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by narrative and animation leads."
+            }
+          ]
+        },
+        {
+          "id": "G7-T3-D2",
+          "filename": "cutscene-scripts.md",
+          "aliases": [
+            "G7-T3-cutscene_scripts.md",
+            "cutscene_scripts.md",
+            "G7-T3-D2",
+            "G7-T3-cutscene-scripts.md",
+            "cutscene-scripts.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Markdown scripts detailing timing, dialogue, and triggers for each cutscene.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Scripts outline timing, triggers, and dialogue for each cutscene."
+            },
+            {
+              "id": "AC-2",
+              "text": "Scripts align with game narrative and design."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by narrative designer."
+            }
+          ]
+        },
+        {
+          "id": "G7-T3-D3",
+          "filename": "vertical-slice-demo-video.mp4",
+          "aliases": [
+            "G7-T3-vertical_slice_demo_video.mp4",
+            "vertical_slice_demo_video.mp4",
+            "G7-T3-D3",
+            "G7-T3-vertical-slice-demo-video.mp4",
+            "vertical-slice-demo-video.mp4"
+          ],
+          "filetype": "mp4",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Polished demonstration video showcasing the vertical slice, including cutscenes, gameplay, and UI flow.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Video captures the full vertical slice with high-quality visuals and audio."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes cutscenes, gameplay, and UI interactions."
+            },
+            {
+              "id": "AC-3",
+              "text": "Used for internal and external presentations."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G7-T4",
+      "title": "Optimize performance for target hardware and document results.",
+      "description": "Optimize the vertical slice for target hardware and document the results in a performance report.",
+      "deliverables": [
+        {
+          "id": "G7-T4-D1",
+          "filename": "vertical-slice-performance.pdf",
+          "aliases": [
+            "G7-T4-vertical_slice_performance_report.pdf",
+            "vertical_slice_performance_report.pdf",
+            "G7-T4-D1",
+            "G7-T4-vertical-slice-performance.pdf",
+            "vertical-slice-performance.pdf",
+            "vertical_slice_performance.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Report detailing performance metrics (FPS, load times, memory usage) for the vertical slice across all target hardware with optimization steps and results.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Provides performance data for each target platform."
+            },
+            {
+              "id": "AC-2",
+              "text": "Shows optimization steps and resulting improvements."
+            },
+            {
+              "id": "AC-3",
+              "text": "Confirms targets have been met or highlights shortfalls with plans."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G7-T5",
+      "title": "Conduct user playtests, analyze feedback, and iterate slice.",
+      "description": "Run user playtests on the vertical slice, analyze feedback, and iterate on the build to address issues.",
+      "deliverables": [
+        {
+          "id": "G7-T5-D1",
+          "filename": "vertical-slice-playtest.pdf",
+          "aliases": [
+            "G7-T5-vertical_slice_playtest_report.pdf",
+            "vertical_slice_playtest_report.pdf",
+            "G7-T5-D1",
+            "G7-T5-vertical-slice-playtest.pdf",
+            "vertical-slice-playtest.pdf",
+            "vertical_slice_playtest.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Report summarizing findings from user playtests, including quantitative metrics and qualitative feedback, along with recommended improvements.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes data from at least five playtesters."
+            },
+            {
+              "id": "AC-2",
+              "text": "Summarizes issues and suggestions, prioritizes critical issues."
+            },
+            {
+              "id": "AC-3",
+              "text": "Recommends improvements and actions for next iteration."
+            }
+          ]
+        },
+        {
+          "id": "G7-T5-D2",
+          "filename": "updated-vertical-slice.zip",
+          "aliases": [
+            "G7-T5-updated_vertical_slice_build.zip",
+            "updated_vertical_slice_build.zip",
+            "G7-T5-D2",
+            "G7-T5-updated-vertical-slice.zip",
+            "updated-vertical-slice.zip",
+            "updated_vertical_slice.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Updated build of the vertical slice reflecting changes and fixes based on playtest feedback.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Implements improvements addressing at least 80% of critical issues identified."
+            },
+            {
+              "id": "AC-2",
+              "text": "Build runs without new critical defects."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ready for another test or sign-off."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G7-T6",
+      "title": "Compile UI asset pack and documentation for distribution.",
+      "description": "Prepare a distributable UI asset pack along with documentation for use in subsequent development phases.",
+      "deliverables": [
+        {
+          "id": "G7-T6-D1",
+          "filename": "ui-asset-pack.zip",
+          "aliases": [
+            "G7-T6-ui_asset_pack.zip",
+            "ui_asset_pack.zip",
+            "G7-T6-D1",
+            "G7-T6-ui-asset-pack.zip",
+            "ui-asset-pack.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Packaged collection of UI assets (textures, prefabs, scripts) ready for distribution and integration into future builds.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains all finalized UI assets used in the vertical slice."
+            },
+            {
+              "id": "AC-2",
+              "text": "Organized in a clean folder structure with names and versioning."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ready for integration into downstream development."
+            }
+          ]
+        },
+        {
+          "id": "G7-T6-D2",
+          "filename": "ui-documentation.md",
+          "aliases": [
+            "G7-T6-ui_documentation.md",
+            "ui_documentation.md",
+            "G7-T6-D2",
+            "G7-T6-ui-documentation.md",
+            "ui-documentation.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Documentation describing the UI assets, usage instructions, and integration guidelines.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Documents each UI asset and its intended usage."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides instructions for import and integration."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by UI engineer and designer."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G7-T7",
+      "title": "Finalize vertical slice build and handoff materials.",
+      "description": "Deliver the finalized vertical slice build along with handoff documentation and a known issues list.",
+      "deliverables": [
+        {
+          "id": "G7-T7-D1",
+          "filename": "vertical-slice.zip",
+          "aliases": [
+            "G7-T7-final_vertical_slice_build.zip",
+            "final_vertical_slice_build.zip",
+            "G7-T7-D1",
+            "G7-T7-vertical-slice.zip",
+            "vertical-slice.zip",
+            "vertical_slice.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Final build of the vertical slice complete with all polished features, optimized performance, and fixed issues ready for handoff.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Build passes QA with no critical or blocking defects."
+            },
+            {
+              "id": "AC-2",
+              "text": "Implements all scoped features and content."
+            },
+            {
+              "id": "AC-3",
+              "text": "Tagged and archived in version control."
+            }
+          ]
+        },
+        {
+          "id": "G7-T7-D2",
+          "filename": "handoff-documentation.pdf",
+          "aliases": [
+            "G7-T7-handoff_documentation.pdf",
+            "handoff_documentation.pdf",
+            "G7-T7-D2",
+            "G7-T7-handoff-documentation.pdf",
+            "handoff-documentation.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "Comprehensive documentation for the final vertical slice build including installation instructions, known issues, and points of contact.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Documents installation/setup, features included, known issues, and points of contact."
+            },
+            {
+              "id": "AC-2",
+              "text": "Clear and formatted for handoff to downstream teams."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by leads."
+            }
+          ]
+        },
+        {
+          "id": "G7-T7-D3",
+          "filename": "known-issues.md",
+          "aliases": [
+            "G7-T7-known_issues.md",
+            "known_issues.md",
+            "G7-T7-D3",
+            "G7-T7-known-issues.md",
+            "known-issues.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G7/",
+          "description": "List of minor known issues and workarounds for the final vertical slice build.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists known issues with severity and suggested workarounds."
+            },
+            {
+              "id": "AC-2",
+              "text": "No critical or high-severity issues remain."
+            },
+            {
+              "id": "AC-3",
+              "text": "Published alongside final build."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
