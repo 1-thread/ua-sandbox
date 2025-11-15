@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import PasswordGate from "../components/PasswordGate";
 
 type Profile = {
   id: string;
@@ -87,16 +88,17 @@ export default function HomePage() {
   }, [profiles, query, sort]);
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        fontFamily:
-          'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-        padding: "32px",
-        background: "#0f172a",
-        color: "#f9fafb",
-      }}
-    >
+    <PasswordGate>
+      <main
+        style={{
+          minHeight: "100vh",
+          fontFamily:
+            'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+          padding: "32px",
+          background: "#0f172a",
+          color: "#f9fafb",
+        }}
+      >
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <header style={{ marginBottom: 24 }}>
           <h1 style={{ fontSize: 32, marginBottom: 8 }}>UA Contributors (demo)</h1>
@@ -210,6 +212,7 @@ export default function HomePage() {
         )}
       </div>
     </main>
+    </PasswordGate>
   );
 }
 
