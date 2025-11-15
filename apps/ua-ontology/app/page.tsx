@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import PasswordGate from '../components/PasswordGate'
 
 type Function = {
   id: string
@@ -36,13 +37,6 @@ type AcceptanceCriterion = {
   id: string
   criterion_id: string
   text: string
-}
-
-function esc(x: string | null | undefined): string {
-  if (x === null || x === undefined) return ''
-  const div = document.createElement('div')
-  div.textContent = x
-  return div.innerHTML
 }
 
 export default function Home() {
@@ -213,7 +207,7 @@ export default function Home() {
   const visibleCount = filteredFunctions.reduce((sum, [_, funcs]) => sum + funcs.length, 0)
 
   return (
-    <>
+    <PasswordGate>
       <header>
         <h1>
           Core Functions Viewer <span className="pill" id="count">{visibleCount} functions</span>
@@ -296,7 +290,7 @@ export default function Home() {
           Generated from {functions.length} function(s).
         </div>
       </div>
-    </>
+    </PasswordGate>
   )
 }
 

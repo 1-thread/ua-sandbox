@@ -9,6 +9,7 @@ A Next.js application that displays core function definitions from a Supabase da
 - Collapsible hierarchy: Functions → Tasks → Deliverables → Acceptance Criteria
 - Organized by phase (R&D, Development, Production, etc.)
 - Modern dark theme UI
+- Password protection for secure access
 
 ## Setup
 
@@ -111,6 +112,7 @@ ua-ontology/
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | App runtime, Migration |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/public key | App runtime, Migration |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key | Migration only |
+| `NEXT_PUBLIC_APP_PASSWORD` | Password to access the application | App runtime (optional, defaults to "demo123") |
 
 ## Updating Data
 
