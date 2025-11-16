@@ -15,7 +15,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   const [isChecking, setIsChecking] = useState(true);
 
   const correctPassword =
-    process.env.NEXT_PUBLIC_APP_PASSWORD || "demo123";
+    process.env.NEXT_PUBLIC_APP_PASSWORD || "demo12345";
 
   useEffect(() => {
     const authStatus = localStorage.getItem(STORAGE_KEY);
