@@ -133,7 +133,7 @@ export default function LandingPage() {
           <button className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-[#c9c9c9] text-sm font-medium">
             <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-white/60">
               <img
-                src="/Sticker.svg"
+                src="/sticker.svg"
                 alt="DW Chat"
                 className="block h-4 w-4"
               />
