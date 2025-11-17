@@ -48,7 +48,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
 
   if (isChecking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white text-black">
+      <div className="min-h-screen flex items-center justify-center bg-white text-black" style={{ backgroundColor: '#ffffff' }}>
         <div>Loading...</div>
       </div>
     );
@@ -56,8 +56,8 @@ export default function PasswordGate({ children }: PasswordGateProps) {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-8">
-        <div className="w-full max-w-[400px] p-10 rounded-lg border border-[#e0e0e0] bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-white p-8" style={{ backgroundColor: '#ffffff' }}>
+        <div className="w-full max-w-[400px] p-10 rounded-lg border border-[#e0e0e0] bg-white" style={{ backgroundColor: '#ffffff' }}>
           <h1 className="text-2xl font-semibold mb-2 text-black text-center">
             Password Required
           </h1>
