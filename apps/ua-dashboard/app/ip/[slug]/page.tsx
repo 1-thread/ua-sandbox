@@ -219,6 +219,33 @@ export default function IPDetailPage() {
             ← Back
           </button>
         </div>
+
+        {/* Main nav */}
+        <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
+          {/* Workflows */}
+          <button className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+              <img
+                src="/list.svg"
+                alt="Workflows"
+                className="block h-4 w-4"
+              />
+            </span>
+            <span className="truncate">Workflows</span>
+          </button>
+
+          {/* Assets */}
+          <button className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+              <img
+                src="/photo.svg"
+                alt="Assets"
+                className="block h-4 w-4"
+              />
+            </span>
+            <span className="truncate">Assets</span>
+          </button>
+        </nav>
       </aside>
 
       {/* Main content */}
