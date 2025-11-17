@@ -1,0 +1,356 @@
+{
+  "code": "G2",
+  "title": "Create Game Design Document",
+  "category": "game",
+  "phase": "R&D",
+  "purpose": "Describe the core function Create Game Design Document.",
+  "dependencies": [
+    "G1"
+  ],
+  "guardrails": [
+    "Maintain R&D scope: no full feature implementation or final art.",
+    "Use clear structure and headings to organize the GDD.",
+    "Cite assumptions and unknowns within each section.",
+    "Keep prototypes minimal, focusing on mechanics rather than polish.",
+    "Avoid over\u2011specifying systems not validated by concept phase.",
+    "Ensure all deliverables are accessible (e.g., PDFs) and version\u2011controlled.",
+    "Respect intellectual property when using external references; attribute sources.",
+    "Adhere to the timeline; revisions should not exceed two iterations.",
+    "Engage cross\u2011discipline feedback early to avoid rework.",
+    "Keep documentation objective and measurable to support downstream teams.",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-game-G2-create-game-design-document.md",
+  "tasks": [
+    {
+      "id": "G2-T1",
+      "title": "Analyze comparable design documents and extract best practices.",
+      "description": "Review at least three comparable game design documents to extract best practices on structure, mechanics, and presentation. Summarize lessons learned to inform the new GDD.",
+      "deliverables": [
+        {
+          "id": "G2-T1-D1",
+          "filename": "comparative.pdf",
+          "aliases": [
+            "G2-T1-comparative_analysis_report.pdf",
+            "comparative_analysis_report.pdf",
+            "G2-T1-D1",
+            "G2-T1-comparative.pdf",
+            "comparative.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "A report summarizing the structure, mechanics, narrative style, user interface, and lessons learned from at least three comparable game design documents with critical analysis and reflections on best practices.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Reviews at least three comparable game design documents."
+            },
+            {
+              "id": "AC-2",
+              "text": "Analyzes structure, mechanics, narrative, user interface, and presentation for each."
+            },
+            {
+              "id": "AC-3",
+              "text": "Identifies best practices, pitfalls, and recommendations."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2-T2",
+      "title": "Define the high-level vision and design pillars for the target game.",
+      "description": "Capture the high-level vision and design pillars that will guide all subsequent decisions, ensuring alignment across art, design, and engineering.",
+      "deliverables": [
+        {
+          "id": "G2-T2-D1",
+          "filename": "design-pillars.docx",
+          "aliases": [
+            "G2-T2-design_pillars.docx",
+            "design_pillars.docx",
+            "G2-T2-D1",
+            "G2-T2-design-pillars.docx",
+            "design-pillars.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Document listing three to five design pillars that articulate the high-level vision, goals, and constraints of the target game, with succinct descriptions and rationale.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists three to five concise design pillars."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides rationale and example scenarios for each pillar."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by creative lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2-T3",
+      "title": "Draft the core mechanics, rules, and gameplay flow charts.",
+      "description": "Define the game's core mechanics and rules, accompanied by flow charts that illustrate state transitions and user interactions.",
+      "deliverables": [
+        {
+          "id": "G2-T3-D1",
+          "filename": "mechanics-rules-spec.xlsx",
+          "aliases": [
+            "G2-T3-mechanics_rules_spec.xlsx",
+            "mechanics_rules_spec.xlsx",
+            "G2-T3-D1",
+            "G2-T3-mechanics-rules-spec.xlsx",
+            "mechanics-rules-spec.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Spreadsheet specifying at least three core mechanics with rule definitions, state transitions, and gameplay flow diagrams or references.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Documents at least three core mechanics including inputs, outcomes, and failure states."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides rule tables and flow diagrams for each mechanic."
+            },
+            {
+              "id": "AC-3",
+              "text": "All mechanics align with the defined design pillars."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2-T4",
+      "title": "Outline narrative arcs, character bios, and level progression framework.",
+      "description": "Outline the overall narrative arcs, develop character biographies, and define level progression structures to provide context for gameplay and art.",
+      "deliverables": [
+        {
+          "id": "G2-T4-D1",
+          "filename": "narrative-level-outline.docx",
+          "aliases": [
+            "G2-T4-narrative_and_level_outline.docx",
+            "narrative_and_level_outline.docx",
+            "G2-T4-D1",
+            "G2-T4-narrative-level-outline.docx",
+            "narrative-level-outline.docx",
+            "narrative_level_outline.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Document outlining the game's narrative structure (beginning, middle, end), character biographies for at least three primary characters, and a level progression framework with archetypes and pacing rationale.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Narrative section includes a clear beginning, middle, and end."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides biographies for at least three primary characters with motivations and arcs."
+            },
+            {
+              "id": "AC-3",
+              "text": "Describes level progression framework with at least three archetypes and pacing guidelines."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2-T5",
+      "title": "Develop UI/UX wireframes and stub prototypes to validate feasibility.",
+      "description": "Create wireframes and small stub prototypes to validate the feasibility of the proposed user interface and interactions.",
+      "deliverables": [
+        {
+          "id": "G2-T5-D1",
+          "filename": "ui-wireframes.pdf",
+          "aliases": [
+            "G2-T5-ui_wireframes.pdf",
+            "ui_wireframes.pdf",
+            "G2-T5-D1",
+            "G2-T5-ui-wireframes.pdf",
+            "ui-wireframes.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "High-fidelity wireframe designs for core menus, HUD, and navigation flows.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes wireframes for at least the main menu, options menu, and HUD overlays."
+            },
+            {
+              "id": "AC-2",
+              "text": "Demonstrates navigation flow between screens."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by UX designer and art director."
+            }
+          ]
+        },
+        {
+          "id": "G2-T5-D2",
+          "filename": "stub-prototypes.zip",
+          "aliases": [
+            "G2-T5-stub_prototypes.zip",
+            "stub_prototypes.zip",
+            "G2-T5-D2",
+            "G2-T5-stub-prototypes.zip",
+            "stub-prototypes.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Zipped archive containing at least two stub prototypes implementing UI/UX flows and core mechanics for feasibility testing.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes at least two runnable prototypes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Prototypes run without major errors in target engine."
+            },
+            {
+              "id": "AC-3",
+              "text": "Implements key UI flows outlined in wireframes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2-T6",
+      "title": "Compose an instrumentation and analytics plan.",
+      "description": "Define a comprehensive instrumentation strategy including what data to collect, how to capture it, and how to use metrics for iteration.",
+      "deliverables": [
+        {
+          "id": "G2-T6-D1",
+          "filename": "instrumentation.docx",
+          "aliases": [
+            "G2-T6-instrumentation_plan.docx",
+            "instrumentation_plan.docx",
+            "G2-T6-D1",
+            "G2-T6-instrumentation.docx",
+            "instrumentation.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Detailed plan documenting analytics events, triggers, data fields, metrics definitions, and privacy considerations for at least five instrumentation events.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists at least five instrumentation events with definitions, triggers, and data fields."
+            },
+            {
+              "id": "AC-2",
+              "text": "Specifies metrics, dashboards, and reporting cadence."
+            },
+            {
+              "id": "AC-3",
+              "text": "Addresses privacy and data storage requirements."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G2-T7",
+      "title": "Assemble the draft GDD and conduct peer review.",
+      "description": "Compile a full draft of the GDD, facilitate a peer review session, capture feedback, and update the document accordingly.",
+      "deliverables": [
+        {
+          "id": "G2-T7-D1",
+          "filename": "gdd.docx",
+          "aliases": [
+            "G2-T7-draft_gdd.docx",
+            "draft_gdd.docx",
+            "G2-T7-D1",
+            "G2-T7-gdd.docx",
+            "gdd.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Comprehensive draft of the game design document including all sections such as pillars, mechanics, narrative, UI, instrumentation, and appendices.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Covers all required sections including pillars, mechanics, narrative, UI, instrumentation."
+            },
+            {
+              "id": "AC-2",
+              "text": "Uses clear headings and consistent formatting."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ready for peer review."
+            }
+          ]
+        },
+        {
+          "id": "G2-T7-D2",
+          "filename": "review.md",
+          "aliases": [
+            "G2-T7-review_notes.md",
+            "review_notes.md",
+            "G2-T7-D2",
+            "G2-T7-review.md",
+            "review.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Structured markdown document capturing peer feedback, questions, and decisions from the review session.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Captures at least five actionable feedback points."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes decisions and owners for each action item."
+            },
+            {
+              "id": "AC-3",
+              "text": "Published within 24 hours of the review meeting."
+            }
+          ]
+        },
+        {
+          "id": "G2-T7-D3",
+          "filename": "updated-gdd.docx",
+          "aliases": [
+            "G2-T7-updated_gdd.docx",
+            "updated_gdd.docx",
+            "G2-T7-D3",
+            "G2-T7-updated-gdd.docx",
+            "updated-gdd.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/game/G2/",
+          "description": "Revised game design document incorporating feedback, clarifications, and updates based on the peer review.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Addresses all feedback items listed in review notes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Updates relevant sections while maintaining structure."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by leads after revisions."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

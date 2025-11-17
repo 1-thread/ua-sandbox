@@ -1,0 +1,176 @@
+{
+  "code": "P7",
+  "title": "Final Design and Item Cost Lock",
+  "category": "product",
+  "phase": "Development",
+  "purpose": "Describe the core function CO\u2013product\u2013P7\u2013final-design-and-item-cost-lock.",
+  "dependencies": [],
+  "guardrails": [
+    "Follow the approved IP and design guidelines.",
+    "Ensure all deliverables meet quality and licensing standards.",
+    "Document assumptions and unknowns explicitly."
+  ],
+  "source_md": "ua/function_core/CO-product-P7-final-design-and-item-cost-lock.md",
+  "tasks": [
+    {
+      "id": "P7-T1",
+      "title": "Apply design lock across product and packaging; finalize CAD, CMF, and graphics.",
+      "description": "Perform the task 'Apply design lock across product and packaging; finalize CAD, CMF, and graphics.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P7-T1-D1",
+          "filename": "cad-files-cmf.docx",
+          "aliases": [
+            "final-cad-files-cmf-specs-and-graphics-package.docx",
+            "final_cad_files_cmf_specs_and_graphics_package.docx",
+            "P7-T1-D1",
+            "P7-T1-cad-files-cmf.docx",
+            "cad-files-cmf.docx",
+            "cad_files_cmf.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P7/",
+          "description": "Final CAD files, CMF (color, material, finish) specs, and graphics package.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Design elements locked."
+            },
+            {
+              "id": "AC-2",
+              "text": "No further changes without formal change order."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P7-T2",
+      "title": "Lock BOM and item cost (unit, tooling, packaging) with manufacturer; define variance thresholds.",
+      "description": "Perform the task 'Lock BOM and item cost (unit, tooling, packaging) with manufacturer; define variance thresholds.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P7-T2-D1",
+          "filename": "locked-bom-item.xlsx",
+          "aliases": [
+            "locked-bom-and-item-cost-sheet-including-tooling-packaging-costs.xlsx",
+            "locked_bom_and_item_cost_sheet_including_tooling_packaging_costs.xlsx",
+            "P7-T2-D1",
+            "P7-T2-locked-bom-item.xlsx",
+            "locked-bom-item.xlsx",
+            "locked_bom_item.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P7/",
+          "description": "Locked BOM and item cost sheet including tooling + packaging costs.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Variance thresholds (\u00b1X%) defined."
+            },
+            {
+              "id": "AC-2",
+              "text": "Manufacturer approval logged."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P7-T3",
+      "title": "Run DFM and compliance checks (safety/regulatory) and address findings.",
+      "description": "Perform the task 'Run DFM and compliance checks (safety/regulatory) and address findings.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P7-T3-D1",
+          "filename": "compliance-checklist-dfm.pdf",
+          "aliases": [
+            "compliance-checklist-and-dfm-report.pdf",
+            "compliance_checklist_and_dfm_report.pdf",
+            "P7-T3-D1",
+            "P7-T3-compliance-checklist-dfm.pdf",
+            "compliance-checklist-dfm.pdf",
+            "compliance_checklist_dfm.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P7/",
+          "description": "Compliance checklist and DFM report.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All critical safety and regulatory issues resolved."
+            },
+            {
+              "id": "AC-2",
+              "text": "Compliance approvals documented."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P7-T4",
+      "title": "Document cost vs. fidelity trade-offs with impact statements; obtain approvals per exception rubric.",
+      "description": "Perform the task 'Document cost vs. fidelity trade-offs with impact statements; obtain approvals per exception rubric.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P7-T4-D1",
+          "filename": "trade-off-exception.docx",
+          "aliases": [
+            "trade-off-exception-registry-with-impact-statements.docx",
+            "trade_off_exception_registry_with_impact_statements.docx",
+            "P7-T4-D1",
+            "P7-T4-trade-off-exception.docx",
+            "trade-off-exception.docx",
+            "trade_off_exception.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P7/",
+          "description": "Trade-off/exception registry with impact statements.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All trade-offs logged with rationale."
+            },
+            {
+              "id": "AC-2",
+              "text": "\u22651 stakeholder sign-off per major exception."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P7-T5",
+      "title": "Run final stakeholder sign-off across product, IP, marketing, and manufacturing; issue release package.",
+      "description": "Perform the task 'Run final stakeholder sign-off across product, IP, marketing, and manufacturing; issue release package.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P7-T5-D1",
+          "filename": "release-all-files.zip",
+          "aliases": [
+            "release-package-including-all-final-files-bom-compliance-checklist-and-approvals.zip",
+            "release_package_including_all_final_files_bom_compliance_checklist_and_approvals.zip",
+            "P7-T5-D1",
+            "P7-T5-release-all-files.zip",
+            "release-all-files.zip",
+            "release_all_files.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/product/P7/",
+          "description": "Release package including all final files, BOM, compliance checklist, and approvals.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All stakeholders signed off."
+            },
+            {
+              "id": "AC-2",
+              "text": "Release package archived in official repository."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

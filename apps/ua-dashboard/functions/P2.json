@@ -1,0 +1,238 @@
+{
+  "code": "P2",
+  "title": "Define Guardrails and Design Brief",
+  "category": "product",
+  "phase": "R&D",
+  "purpose": "Describe the core function CO\u2013product\u2013P2\u2013define-guardrails-and-design-brief.",
+  "dependencies": [],
+  "guardrails": [
+    "Follow the approved IP and design guidelines.",
+    "Ensure all deliverables meet quality and licensing standards.",
+    "Document assumptions and unknowns explicitly."
+  ],
+  "source_md": "ua/function_core/CO-product-P2-define-guardrails-and-design-brief.md",
+  "tasks": [
+    {
+      "id": "P2-T1",
+      "title": "Establish cost guardrails (target retail bands, BOM/margin targets).",
+      "description": "Perform the task 'Establish cost guardrails (target retail bands, BOM/margin targets).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T1-D1",
+          "filename": "cost-guardrails.docx",
+          "aliases": [
+            "cost-guardrails-document.docx",
+            "cost_guardrails_document.docx",
+            "P2-T1-D1",
+            "P2-T1-cost-guardrails.docx",
+            "cost-guardrails.docx",
+            "cost_guardrails.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "Cost guardrails document (bands, BOM targets, margin thresholds).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "At least 3 retail price bands defined with BOM/margin assumptions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Approved by product lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2-T2",
+      "title": "Define primary/secondary categories and success measures.",
+      "description": "Perform the task 'Define primary/secondary categories and success measures.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T2-D1",
+          "filename": "category-success-measure.xlsx",
+          "aliases": [
+            "category-success-measure-table.xlsx",
+            "category_success_measure_table.xlsx",
+            "P2-T2-D1",
+            "P2-T2-category-success-measure.xlsx",
+            "category-success-measure.xlsx",
+            "category_success_measure.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "Category & success measure table (primary, secondary, measurable KPIs).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each category has \u22652 measurable KPIs."
+            },
+            {
+              "id": "AC-2",
+              "text": "Categories consistent with P1 outputs."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2-T3",
+      "title": "Record force-ranked archetypes from P1 in the brief background/guardrails.",
+      "description": "Perform the task 'Record force-ranked archetypes from P1 in the brief background/guardrails.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T3-D1",
+          "filename": "archetype-reference-section.pdf",
+          "aliases": [
+            "archetype-reference-section-integrated-into-design-brief.pdf",
+            "archetype_reference_section_integrated_into_design_brief.pdf",
+            "P2-T3-D1",
+            "P2-T3-archetype-reference-section.pdf",
+            "archetype-reference-section.pdf",
+            "archetype_reference_section.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "Archetype reference section integrated into Design Brief.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Archetype ranks match P1 output."
+            },
+            {
+              "id": "AC-2",
+              "text": "Rationale carried forward without change."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2-T4",
+      "title": "Document IP do\u2019s/don\u2019ts (tone, story constraints, likeness accuracy).",
+      "description": "Perform the task 'Document IP do\u2019s/don\u2019ts (tone, story constraints, likeness accuracy).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T4-D1",
+          "filename": "ip-constraint-checklist.md",
+          "aliases": [
+            "ip-constraint-checklist.md",
+            "ip_constraint_checklist.md",
+            "P2-T4-D1",
+            "P2-T4-ip-constraint-checklist.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "IP constraint checklist (do\u2019s/don\u2019ts).",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "At least 5 do\u2019s and 5 don\u2019ts listed."
+            },
+            {
+              "id": "AC-2",
+              "text": "Validated with IP stakeholders."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2-T5",
+      "title": "Add technical feasibility notes (materials, safety, battery rules).",
+      "description": "Perform the task 'Add technical feasibility notes (materials, safety, battery rules).' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T5-D1",
+          "filename": "technical-feasibility-material.xlsx",
+          "aliases": [
+            "technical-feasibility-sheet-with-material-safety-and-regulatory-notes.xlsx",
+            "technical_feasibility_sheet_with_material_safety_and_regulatory_notes.xlsx",
+            "P2-T5-D1",
+            "P2-T5-technical-feasibility-material.xlsx",
+            "technical-feasibility-material.xlsx",
+            "technical_feasibility_material.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "Technical feasibility sheet with material, safety, and regulatory notes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All relevant constraints listed."
+            },
+            {
+              "id": "AC-2",
+              "text": "\u22652 safety standards cited (ASTM, EN71, etc.)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2-T6",
+      "title": "Define creative lanes (Expected vs Breakthrough) and exception rubric.",
+      "description": "Perform the task 'Define creative lanes (Expected vs Breakthrough) and exception rubric.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T6-D1",
+          "filename": "creative-lanes-diagram.docx",
+          "aliases": [
+            "creative-lanes-diagram-exception-rubric-document.docx",
+            "creative_lanes_diagram_exception_rubric_document.docx",
+            "P2-T6-D1",
+            "P2-T6-creative-lanes-diagram.docx",
+            "creative-lanes-diagram.docx",
+            "creative_lanes_diagram.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "Creative lanes diagram + exception rubric document.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Both lanes documented."
+            },
+            {
+              "id": "AC-2",
+              "text": "Rubric defines at least 3 criteria for exceptions."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2-T7",
+      "title": "Retail/packaging stance: planogram-friendly default plus exception path with approval criteria.",
+      "description": "Perform the task 'Retail/packaging stance: planogram-friendly default plus exception path with approval criteria.' by creating the deliverables specified for this task and ensuring they meet the acceptance criteria.",
+      "deliverables": [
+        {
+          "id": "P2-T7-D1",
+          "filename": "retail-packaging-stance.docx",
+          "aliases": [
+            "retail-packaging-stance-memo-with-exception-criteria.docx",
+            "retail_packaging_stance_memo_with_exception_criteria.docx",
+            "P2-T7-D1",
+            "P2-T7-retail-packaging-stance.docx",
+            "retail-packaging-stance.docx",
+            "retail_packaging_stance.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/product/P2/",
+          "description": "Retail/packaging stance memo with exception criteria.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Default stance documented."
+            },
+            {
+              "id": "AC-2",
+              "text": "Exception path explicitly defines approval stakeholders (product, marketing, IP)."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

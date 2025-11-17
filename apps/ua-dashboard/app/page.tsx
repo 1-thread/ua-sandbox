@@ -2,8 +2,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
+  const router = useRouter();
   const [isIpOpen, setIsIpOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(220); // px
   const [isResizing, setIsResizing] = useState(false);
@@ -83,18 +85,21 @@ export default function LandingPage() {
               <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
                 <button
                   type="button"
+                  onClick={() => router.push("/ip/doh-world")}
                   className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer"
                 >
                   <span className="truncate">Doh World</span>
                 </button>
                 <button
                   type="button"
+                  onClick={() => router.push("/ip/squid-ninja")}
                   className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
                 >
                   <span className="truncate">Squid Ninja</span>
                 </button>
                 <button
                   type="button"
+                  onClick={() => router.push("/ip/trapdoor-city")}
                   className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
                 >
                   <span className="truncate">Trapdoor City</span>

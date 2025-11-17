@@ -1,0 +1,262 @@
+{
+  "code": "E4",
+  "title": "Create Concept Art and Visual Development",
+  "category": "entertainment",
+  "phase": "R&D",
+  "purpose": "Describe the core function Create Concept Art and Visual Development.",
+  "dependencies": [
+    "E1"
+  ],
+  "guardrails": [
+    "All concept art should remain exploratory and clearly marked as non\u2011final",
+    "Avoid using copyrighted or trademarked imagery without proper authorization",
+    "Maintain consistency with the established tone and visual language from the mood board and beat sheet",
+    "Provide variety in concepts while staying within defined world constraints and themes",
+    "Document references and influences properly and maintain clear attribution",
+    "Keep file sizes manageable and organized for easy review and archiving",
+    "Do not overspend time on high\u2011fidelity rendering; focus on breadth of exploration",
+    "Complete all tasks within the R&D timeframe and leave time for feedback cycles",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E4-create-concept-art-and-visual-development.md",
+  "tasks": [
+    {
+      "id": "E4-T1",
+      "title": "Review premise, beat sheet, and mood board, and script",
+      "description": "Execute the task: Review premise, beat sheet, and mood board, and script.",
+      "deliverables": [
+        {
+          "id": "E4-T1-D1",
+          "filename": "review.md",
+          "aliases": [
+            "review_notes.md",
+            "E4-T1-D1",
+            "E4-T1-review.md",
+            "review.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "Notes summarizing key themes, art directions and visual goals distilled from the premise, beat sheet, mood board and script.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Captures essential tone, themes and visual goals."
+            },
+            {
+              "id": "AC-2",
+              "text": "Reflects consensus from the creative team."
+            },
+            {
+              "id": "AC-3",
+              "text": "Organized by topic such as characters, environments and props."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4-T2",
+      "title": "Research visual styles and gather references",
+      "description": "Execute the task: Research visual styles and gather references.",
+      "deliverables": [
+        {
+          "id": "E4-T2-D1",
+          "filename": "reference-collection.zip",
+          "aliases": [
+            "reference_collection.zip",
+            "E4-T2-D1",
+            "E4-T2-reference-collection.zip",
+            "reference-collection.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "A collection of curated reference images categorized by visual style, character, environment and mood.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains organized folders for characters, environments, props and colour schemes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each reference is tagged with context and story beat."
+            },
+            {
+              "id": "AC-3",
+              "text": "Includes a manifest describing the contents."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4-T3",
+      "title": "Sketch initial concept art for principal characters",
+      "description": "Execute the task: Sketch initial concept art for principal characters.",
+      "deliverables": [
+        {
+          "id": "E4-T3-D1",
+          "filename": "character-concept-sketches.pdf",
+          "aliases": [
+            "character_concept_sketches.pdf",
+            "E4-T3-D1",
+            "E4-T3-character-concept-sketches.pdf",
+            "character-concept-sketches.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "Early concept sketches exploring visual possibilities for principal characters.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes multiple concept sketches per principal character."
+            },
+            {
+              "id": "AC-2",
+              "text": "Annotates design rationale for major visual decisions."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reflects narrative and personality descriptions."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4-T4",
+      "title": "Design environments and key locations with rough paintings",
+      "description": "Execute the task: Design environments and key locations with rough paintings.",
+      "deliverables": [
+        {
+          "id": "E4-T4-D1",
+          "filename": "environment-concept-art.pdf",
+          "aliases": [
+            "environment_concept_art.pdf",
+            "E4-T4-D1",
+            "E4-T4-environment-concept-art.pdf",
+            "environment-concept-art.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "Rough paintings and sketches illustrating key locations and environments in the story.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Depicts major locations with composition and mood cues."
+            },
+            {
+              "id": "AC-2",
+              "text": "Annotations indicate scene context and design considerations."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ties back to narrative beats and visual themes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4-T5",
+      "title": "Develop prop and costume designs",
+      "description": "Execute the task: Develop prop and costume designs.",
+      "deliverables": [
+        {
+          "id": "E4-T5-D1",
+          "filename": "prop-costume-designs.pdf",
+          "aliases": [
+            "prop_costume_designs.pdf",
+            "E4-T5-D1",
+            "E4-T5-prop-costume-designs.pdf",
+            "prop-costume-designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "Design sheets showcasing props and costumes for characters across different scenes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes detailed drawings of props and costumes with notes on scale and materials."
+            },
+            {
+              "id": "AC-2",
+              "text": "Shows variations where appropriate."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with character and world guidelines."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4-T6",
+      "title": "Define color palettes and lighting schemes",
+      "description": "Execute the task: Define color palettes and lighting schemes.",
+      "deliverables": [
+        {
+          "id": "E4-T6-D1",
+          "filename": "color-scripts.pdf",
+          "aliases": [
+            "color_scripts.pdf",
+            "E4-T6-D1",
+            "E4-T6-color-scripts.pdf",
+            "color-scripts.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "Color scripts presenting color palettes and lighting schemes across sequences, highlighting mood and progression.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each script contains panels showing color progression across a sequence."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes palette swatches and lighting notes for each panel."
+            },
+            {
+              "id": "AC-3",
+              "text": "Corresponds to narrative arcs and emotional beats."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E4-T7",
+      "title": "Build the style guid",
+      "description": "Execute the task: Build the style guid.",
+      "deliverables": [
+        {
+          "id": "E4-T7-D1",
+          "filename": "visual-style-guide.pdf",
+          "aliases": [
+            "visual_style_guide.pdf",
+            "E4-T7-D1",
+            "E4-T7-visual-style-guide.pdf",
+            "visual-style-guide.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E4/",
+          "description": "A comprehensive visual development PDF combining character, environment, prop art and colour scripts into a cohesive style guide.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Integrates all visual elements into a consistent narrative and style."
+            },
+            {
+              "id": "AC-2",
+              "text": "Defines final colour palette, line weights and textures for production art."
+            },
+            {
+              "id": "AC-3",
+              "text": "Serves as the reference for all downstream production work."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

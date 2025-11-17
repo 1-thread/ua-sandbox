@@ -1,0 +1,143 @@
+// TypeScript types for IP data structures
+
+export interface IP {
+  id: string;
+  slug: string;
+  name: string;
+  icon_url: string | null;
+  representative_image_url: string | null;
+  description: string | null;
+  health_summary: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IPVertical {
+  id: string;
+  ip_id: string;
+  vertical_name: string;
+  progress_percentage: number;
+  created_at: string;
+}
+
+// Core Function (from functions folder)
+export interface Function {
+  id: string;
+  code: string; // 'E1', 'G1', 'P1', etc.
+  title: string;
+  category: string; // 'entertainment', 'game', 'product'
+  phase: string | null;
+  purpose: string | null;
+  source_md: string | null;
+  position_x: number | null;
+  position_y: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Function Dependencies
+export interface FunctionDependency {
+  id: string;
+  from_function_code: string;
+  to_function_code: string;
+  created_at: string;
+}
+
+// IP-Function Mapping
+export interface IPFunction {
+  id: string;
+  ip_id: string;
+  function_code: string;
+  created_at: string;
+}
+
+// Function Guardrails
+export interface FunctionGuardrail {
+  id: string;
+  function_code: string;
+  guardrail_text: string;
+  display_order: number;
+  created_at: string;
+}
+
+// Tasks
+export interface Task {
+  id: string;
+  function_code: string;
+  task_id: string; // 'E1-T1', 'G1-T2', etc.
+  title: string;
+  description: string | null;
+  display_order: number;
+  created_at: string;
+}
+
+// Deliverables
+export interface Deliverable {
+  id: string;
+  task_id: string;
+  deliverable_id: string; // 'E1-T1-D1', etc.
+  filename: string;
+  filetype: string | null;
+  path_hint: string | null;
+  description: string | null;
+  display_order: number;
+  created_at: string;
+}
+
+// Deliverable Aliases
+export interface DeliverableAlias {
+  id: string;
+  deliverable_id: string;
+  alias: string;
+  created_at: string;
+}
+
+// Acceptance Criteria
+export interface AcceptanceCriterion {
+  id: string;
+  deliverable_id: string;
+  criteria_id: string; // 'AC-1', 'AC-2', etc.
+  criteria_text: string;
+  display_order: number;
+  created_at: string;
+}
+
+// Extended types with relationships
+export interface FunctionWithDetails extends Function {
+  guardrails: FunctionGuardrail[];
+  tasks: TaskWithDetails[];
+  dependencies: FunctionDependency[];
+}
+
+export interface TaskWithDetails extends Task {
+  deliverables: DeliverableWithDetails[];
+}
+
+export interface DeliverableWithDetails extends Deliverable {
+  aliases: DeliverableAlias[];
+  acceptance_criteria: AcceptanceCriterion[];
+}
+
+// Combined type for IP detail page
+export interface IPDetail extends IP {
+  verticals: IPVertical[];
+  functions: FunctionWithDetails[];
+}
+
+// Graph node type for visualization
+export interface GraphNode {
+  id: string;
+  code: string;
+  name: string;
+  category: string;
+  x?: number;
+  y?: number;
+}
+
+// Graph edge type for visualization
+export interface GraphEdge {
+  id: string;
+  source: string; // function code
+  target: string; // function code
+}
+

@@ -1,0 +1,366 @@
+{
+  "code": "E6",
+  "title": "Build Production Development",
+  "category": "entertainment",
+  "phase": "Development",
+  "purpose": "Describe the core function Build Production Development.",
+  "dependencies": [
+    "E5"
+  ],
+  "guardrails": [
+    "Adhere to approved budgets and resource constraints; do not authorize expenditures beyond agreed limits",
+    "Ensure schedules are realistic and allow for contingencies; avoid compressing timelines without analysis",
+    "Maintain crew safety and compliance with labor regulations and safety standards",
+    "Protect confidential information and footage by implementing proper access controls",
+    "Document all schedule changes, decisions, and rationale for transparency",
+    "Avoid scope creep by planning only authorized scenes and activities",
+    "Use pre\u2011visualization and storyboards to guide production; final editing and post\u2011production are out of scope",
+    "Complete the phase within the development window and adjust plans as needed to stay on track",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E6-build-production-development.md",
+  "tasks": [
+    {
+      "id": "E6-T1",
+      "title": "Define production roles and responsibilities",
+      "description": "Execute the task: Define production roles and responsibilities.",
+      "deliverables": [
+        {
+          "id": "E6-T1-D1",
+          "filename": "production-organization-chart.pdf",
+          "aliases": [
+            "production_organization_chart.pdf",
+            "E6-T1-D1",
+            "E6-T1-production-organization-chart.pdf",
+            "production-organization-chart.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Organizational chart defining production roles, responsibilities and personnel assignments.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all roles and responsibilities clearly."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes assigned personnel for each role."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the production lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T2",
+      "title": "Develop a detailed production schedule and milestones",
+      "description": "Execute the task: Develop a detailed production schedule and milestones.",
+      "deliverables": [
+        {
+          "id": "E6-T2-D1",
+          "filename": "production-master-schedule.xlsx",
+          "aliases": [
+            "production_master_schedule.xlsx",
+            "E6-T2-D1",
+            "E6-T2-production-master-schedule.xlsx",
+            "production-master-schedule.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Master production schedule outlining tasks, durations, dependencies and deliverables across the entire production.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Covers all tasks with durations and dependencies."
+            },
+            {
+              "id": "AC-2",
+              "text": "Aligns with budget and resource constraints."
+            },
+            {
+              "id": "AC-3",
+              "text": "Signed off by stakeholders."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T3",
+      "title": "Align the technical pipeline with the production schedule",
+      "description": "Execute the task: Align the technical pipeline with the production schedule.",
+      "deliverables": [
+        {
+          "id": "E6-T3-D1",
+          "filename": "pipeline-integration.docx",
+          "aliases": [
+            "pipeline_integration_plan.docx",
+            "E6-T3-D1",
+            "E6-T3-pipeline-integration.docx",
+            "pipeline-integration.docx",
+            "pipeline_integration.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Plan mapping the technical pipeline tasks to production schedule milestones and identifying dependencies and conflicts.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Shows mapping between pipeline components and production milestones."
+            },
+            {
+              "id": "AC-2",
+              "text": "Identifies and mitigates schedule gaps or conflicts."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by pipeline and production leads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T4",
+      "title": "Coordinate resource allocation and budgeting",
+      "description": "Execute the task: Coordinate resource allocation and budgeting.",
+      "deliverables": [
+        {
+          "id": "E6-T4-D1",
+          "filename": "resource-budget.xlsx",
+          "aliases": [
+            "resource_budget_plan.xlsx",
+            "E6-T4-D1",
+            "E6-T4-resource-budget.xlsx",
+            "resource-budget.xlsx",
+            "resource_budget.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Resource allocation and budget estimate detailing equipment, crew and cost forecasts.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Itemizes required equipment, crew positions and associated costs."
+            },
+            {
+              "id": "AC-2",
+              "text": "Remains within approved budget parameters."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by finance and production leads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T5",
+      "title": "Conduct rehearsals or tests for key production scenes",
+      "description": "Execute the task: Conduct rehearsals or tests for key production scenes.",
+      "deliverables": [
+        {
+          "id": "E6-T5-D1",
+          "filename": "rehearsal.md",
+          "aliases": [
+            "rehearsal_report.md",
+            "E6-T5-D1",
+            "E6-T5-rehearsal.md",
+            "rehearsal.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Report summarizing outcomes and recommendations from rehearsals or tests for key production scenes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Documents at least two test sessions with outcomes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes notes on performance, technical issues and recommendations."
+            },
+            {
+              "id": "AC-3",
+              "text": "Provides next steps for improvements."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T6",
+      "title": "Produce a behind\u2011the\u2011scenes shot list and capture plan",
+      "description": "Execute the task: Produce a behind\u2011the\u2011scenes shot list and capture plan.",
+      "deliverables": [
+        {
+          "id": "E6-T6-D1",
+          "filename": "bts-shot-list.xlsx",
+          "aliases": [
+            "bts_shot_list.xlsx",
+            "E6-T6-D1",
+            "E6-T6-bts-shot-list.xlsx",
+            "bts-shot-list.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Shot list for behind\u2011the\u2011scenes footage, including responsibilities and schedule for each shot.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Covers all planned behind\u2011the\u2011scenes shots with descriptions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Assigns responsibility and timing for each shot."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the overall production schedule."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T7",
+      "title": "Monitor progress and adjust schedules based on feedback",
+      "description": "Execute the task: Monitor progress and adjust schedules based on feedback.",
+      "deliverables": [
+        {
+          "id": "E6-T7-D1",
+          "filename": "progress-reports.zip",
+          "aliases": [
+            "progress_reports.zip",
+            "E6-T7-D1",
+            "E6-T7-progress-reports.zip",
+            "progress-reports.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "A collection of progress reports generated regularly, tracking actual vs. planned progress and proposing adjustments.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains multiple dated reports."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each report compares actual progress to the planned schedule."
+            },
+            {
+              "id": "AC-3",
+              "text": "Suggests adjustments when needed based on current status."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T8",
+      "title": "Identify and mitigate production risks",
+      "description": "Execute the task: Identify and mitigate production risks.",
+      "deliverables": [
+        {
+          "id": "E6-T8-D1",
+          "filename": "risk-register.xlsx",
+          "aliases": [
+            "risk_register.xlsx",
+            "E6-T8-D1",
+            "E6-T8-risk-register.xlsx",
+            "risk-register.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Register identifying production risks with likelihood, impact and mitigation strategies.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists identified risks with likelihood and impact ratings."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides mitigation strategies for each risk."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed regularly by project leads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T9",
+      "title": "Compile production schedule",
+      "description": "Execute the task: Compile production schedule.",
+      "deliverables": [
+        {
+          "id": "E6-T9-D1",
+          "filename": "production-schedule.xlsx",
+          "aliases": [
+            "production_schedule.xlsx",
+            "E6-T9-D1",
+            "E6-T9-production-schedule.xlsx",
+            "production-schedule.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Final production schedule compiled for distribution to post\u2011production and marketing teams.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Meets I/O specifications for downstream teams."
+            },
+            {
+              "id": "AC-2",
+              "text": "Ready for use in post\u2011production and marketing."
+            },
+            {
+              "id": "AC-3",
+              "text": "Verified for completeness and accuracy."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E6-T10",
+      "title": "Review and finalize production readiness for the next phase",
+      "description": "Execute the task: Review and finalize production readiness for the next phase.",
+      "deliverables": [
+        {
+          "id": "E6-T10-D1",
+          "filename": "readiness.md",
+          "aliases": [
+            "readiness_report.md",
+            "E6-T10-D1",
+            "E6-T10-readiness.md",
+            "readiness.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E6/",
+          "description": "Final readiness report confirming all prerequisites are met and production is ready for the next phase.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Approved by production and creative leads."
+            },
+            {
+              "id": "AC-2",
+              "text": "Confirms all prerequisites for the next phase are met."
+            },
+            {
+              "id": "AC-3",
+              "text": "Outlines any outstanding issues or follow\u2011up tasks."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

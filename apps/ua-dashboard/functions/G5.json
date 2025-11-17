@@ -1,0 +1,415 @@
+{
+  "code": "G5",
+  "title": "Build Core Gameplay",
+  "category": "game",
+  "phase": "Development",
+  "purpose": "Describe the core function Build Core Gameplay.",
+  "dependencies": [
+    "G4"
+  ],
+  "guardrails": [
+    "Adhere strictly to approved requirements; avoid adding unplanned features or scope creep",
+    "Follow coding standards and maintain a modular architecture to facilitate future integration",
+    "Use profiling tools and optimization only where necessary; avoid premature or speculative optimization",
+    "Ensure cross\u2011platform compatibility as specified by the design document",
+    "Document all interfaces, APIs, and assumptions in the repository",
+    "Keep networking features minimal; do not build full multiplayer services",
+    "Respect resource budgets for CPU, GPU, memory, and storage",
+    "Do not alter core design pillars without stakeholder sign\u2011off",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-game-G5-build-core-gameplay.md",
+  "tasks": [
+    {
+      "id": "G5-T1",
+      "title": "Assess prototype and finalize requirements, refactoring architecture for scalability/modularity.",
+      "description": "Review the prototype, finalize requirements, and refactor the architecture for scalability and modularity.",
+      "deliverables": [
+        {
+          "id": "G5-T1-D1",
+          "filename": "requirements-checklist.xlsx",
+          "aliases": [
+            "G5-T1-requirements_checklist.xlsx",
+            "requirements_checklist.xlsx",
+            "G5-T1-D1",
+            "G5-T1-requirements-checklist.xlsx",
+            "requirements-checklist.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Spreadsheet listing finalized functional and non-functional requirements with status, owner, and verification method.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all agreed-upon requirements with unique IDs and descriptions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes status, owner, and verification method for each requirement."
+            },
+            {
+              "id": "AC-3",
+              "text": "Signed off by product and technical leads."
+            }
+          ]
+        },
+        {
+          "id": "G5-T1-D2",
+          "filename": "gap.pdf",
+          "aliases": [
+            "G5-T1-gap_analysis_report.pdf",
+            "gap_analysis_report.pdf",
+            "G5-T1-D2",
+            "G5-T1-gap.pdf",
+            "gap.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Report identifying gaps between prototype capabilities and final requirements, including recommendations to address them.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Highlights differences between prototype and requirements."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes recommendations and prioritization."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by cross-disciplinary leads."
+            }
+          ]
+        },
+        {
+          "id": "G5-T1-D3",
+          "filename": "updated-architecture-design.md",
+          "aliases": [
+            "G5-T1-updated_architecture_design.md",
+            "updated_architecture_design.md",
+            "G5-T1-D3",
+            "G5-T1-updated-architecture-design.md",
+            "updated-architecture-design.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Document presenting the refactored system architecture with diagrams and explanations for scalability and modularity.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Architecture diagrams updated to reflect scalable and modular design."
+            },
+            {
+              "id": "AC-2",
+              "text": "Explains key components, interfaces, and data flows."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and accepted by technical architect."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5-T2",
+      "title": "Implement advanced mechanics, physics, networking stubs, and input handling.",
+      "description": "Develop and integrate advanced mechanics, physics interactions, networking stubs, and robust input handling.",
+      "deliverables": [
+        {
+          "id": "G5-T2-D1",
+          "filename": "advanced-mechanics.zip",
+          "aliases": [
+            "G5-T2-advanced_mechanics_module.zip",
+            "advanced_mechanics_module.zip",
+            "G5-T2-D1",
+            "G5-T2-advanced-mechanics.zip",
+            "advanced-mechanics.zip",
+            "advanced_mechanics.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Code modules implementing advanced gameplay mechanics and physics interactions with documentation.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Implements advanced mechanics as defined in the design document."
+            },
+            {
+              "id": "AC-2",
+              "text": "Integrated with physics engine and passes unit tests."
+            },
+            {
+              "id": "AC-3",
+              "text": "Documentation included for functions and classes."
+            }
+          ]
+        },
+        {
+          "id": "G5-T2-D2",
+          "filename": "networking-input.zip",
+          "aliases": [
+            "G5-T2-networking_input_module.zip",
+            "networking_input_module.zip",
+            "G5-T2-D2",
+            "G5-T2-networking-input.zip",
+            "networking-input.zip",
+            "networking_input.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Package containing networking stubs and advanced input handling code integrated into the project.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes stubbed networking components ready for later expansion."
+            },
+            {
+              "id": "AC-2",
+              "text": "Implements robust input handling with multi-device support."
+            },
+            {
+              "id": "AC-3",
+              "text": "Compiles without errors and passes integration tests."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5-T3",
+      "title": "Optimize performance and develop diagnostic/debugging tools.",
+      "description": "Optimize game performance and create diagnostic tools to assist developers in monitoring key metrics.",
+      "deliverables": [
+        {
+          "id": "G5-T3-D1",
+          "filename": "performance-optimization.pdf",
+          "aliases": [
+            "G5-T3-performance_optimization_report.pdf",
+            "performance_optimization_report.pdf",
+            "G5-T3-D1",
+            "G5-T3-performance-optimization.pdf",
+            "performance-optimization.pdf",
+            "performance_optimization.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Report detailing performance profiling results, optimization steps taken, and their impact on key metrics across platforms.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Uses profiling tools to identify bottlenecks."
+            },
+            {
+              "id": "AC-2",
+              "text": "Documents optimizations and resulting performance improvements."
+            },
+            {
+              "id": "AC-3",
+              "text": "Shows metrics meeting or exceeding targets (e.g., 30 or 60 FPS)."
+            }
+          ]
+        },
+        {
+          "id": "G5-T3-D2",
+          "filename": "debug-overlay-tool.py",
+          "aliases": [
+            "G5-T3-debug_overlay_tool.py",
+            "debug_overlay_tool.py",
+            "G5-T3-D2",
+            "G5-T3-debug-overlay-tool.py",
+            "debug-overlay-tool.py"
+          ],
+          "filetype": "py",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "A diagnostic/debug overlay tool or module that can be toggled on/off to display real-time metrics and logs.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Debug overlay displays real-time metrics (FPS, memory usage, etc.)."
+            },
+            {
+              "id": "AC-2",
+              "text": "Can be toggled on/off without affecting gameplay."
+            },
+            {
+              "id": "AC-3",
+              "text": "Code is documented and integrated into the build."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5-T4",
+      "title": "Conduct comprehensive unit and integration testing.",
+      "description": "Develop a comprehensive suite of unit and integration tests, and measure coverage to ensure code quality.",
+      "deliverables": [
+        {
+          "id": "G5-T4-D1",
+          "filename": "test-suite.zip",
+          "aliases": [
+            "G5-T4-test_suite.zip",
+            "test_suite.zip",
+            "G5-T4-D1",
+            "G5-T4-test-suite.zip",
+            "test-suite.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Collection of automated unit and integration tests covering core gameplay systems.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes tests for all critical components and mechanics."
+            },
+            {
+              "id": "AC-2",
+              "text": "Runs on CI and passes in target environments."
+            },
+            {
+              "id": "AC-3",
+              "text": "Covers edge cases and error conditions."
+            }
+          ]
+        },
+        {
+          "id": "G5-T4-D2",
+          "filename": "coverage.pdf",
+          "aliases": [
+            "G5-T4-coverage_report.pdf",
+            "coverage_report.pdf",
+            "G5-T4-D2",
+            "G5-T4-coverage.pdf",
+            "coverage.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Code coverage report summarizing the percentage of code executed by tests, highlighting uncovered areas.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Achieves at least 90% coverage across modules."
+            },
+            {
+              "id": "AC-2",
+              "text": "Highlights remaining uncovered areas with rationale."
+            },
+            {
+              "id": "AC-3",
+              "text": "Generated automatically as part of CI."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5-T5",
+      "title": "Compile a core mechanics validation report.",
+      "description": "Validate the core mechanics through testing and document the results in a comprehensive report.",
+      "deliverables": [
+        {
+          "id": "G5-T5-D1",
+          "filename": "core-mechanics-validation.pdf",
+          "aliases": [
+            "G5-T5-core_mechanics_validation_report.pdf",
+            "core_mechanics_validation_report.pdf",
+            "G5-T5-D1",
+            "G5-T5-core-mechanics-validation.pdf",
+            "core-mechanics-validation.pdf",
+            "core_mechanics_validation.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Validation report summarizing playtest results, metrics, and expert reviews confirming that core mechanics meet performance and quality criteria.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Summarizes validation experiments and metrics for each core mechanic."
+            },
+            {
+              "id": "AC-2",
+              "text": "Confirms mechanics meet design goals and performance targets."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by design and technical leads."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5-T6",
+      "title": "Freeze core gameplay module for handoff.",
+      "description": "Prepare and deliver the frozen core gameplay module for downstream integration.",
+      "deliverables": [
+        {
+          "id": "G5-T6-D1",
+          "filename": "core-gameplay.zip",
+          "aliases": [
+            "G5-T6-core_gameplay_module.zip",
+            "core_gameplay_module.zip",
+            "G5-T6-D1",
+            "G5-T6-core-gameplay.zip",
+            "core-gameplay.zip",
+            "core_gameplay.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Finalized and frozen build of the core gameplay module ready for integration, including compiled binaries and source code.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Runs without critical bugs on target platforms."
+            },
+            {
+              "id": "AC-2",
+              "text": "Matches finalized requirements and design documents."
+            },
+            {
+              "id": "AC-3",
+              "text": "Tagged and archived in version control."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G5-T7",
+      "title": "Document interfaces, APIs, and assumptions in the repository.",
+      "description": "Document all interfaces, APIs, and assumptions to support future development and integration.",
+      "deliverables": [
+        {
+          "id": "G5-T7-D1",
+          "filename": "architecture-api-docs.md",
+          "aliases": [
+            "G5-T7-architecture_and_api_docs.md",
+            "architecture_and_api_docs.md",
+            "G5-T7-D1",
+            "G5-T7-architecture-api-docs.md",
+            "architecture-api-docs.md",
+            "architecture_api_docs.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G5/",
+          "description": "Comprehensive documentation of system architecture, public APIs, interfaces, data structures, and underlying assumptions.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Documentation covers all major modules and their interfaces."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes usage examples and diagrams."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by technical lead and accessible in repository."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

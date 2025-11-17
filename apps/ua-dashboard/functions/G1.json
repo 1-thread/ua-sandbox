@@ -1,0 +1,307 @@
+{
+  "code": "G1",
+  "title": "Create Game Concept",
+  "category": "game",
+  "phase": "R&D",
+  "purpose": "Define, validate, and package the initial game concept, anchored to the Entertainment Standards exported by E1.",
+  "dependencies": [
+    "E1"
+  ],
+  "guardrails": [
+    "Game concept must **inherit** and remain consistent with E1\u2019s approved variables (premise, tone, primary characters/world cues).",
+    "Any deviation from E1 requires written rationale and notification to Entertainment."
+  ],
+  "source_md": "ua/function_core/CO-game-G1-create-game-concept.md",
+  "tasks": [
+    {
+      "id": "G1-T1",
+      "title": "Conduct Market & Genre Analysis",
+      "description": "Analyze competitor games and market trends to identify strengths, weaknesses, gaps, and opportunities. Compile research summarizing at least five comparable titles and outline target audience segments.",
+      "deliverables": [
+        {
+          "id": "G1-T1-D1",
+          "filename": "market.pdf",
+          "aliases": [
+            "G1-T1-market_analysis_report.pdf",
+            "market_analysis_report.pdf",
+            "G1-T1-D1",
+            "G1-T1-market.pdf",
+            "market.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Comprehensive market analysis report comparing five competitor games, mapping strengths and weaknesses, identifying market gaps, and outlining target audience segments.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes at least five comparable games with analysis of strengths, weaknesses, and market gaps."
+            },
+            {
+              "id": "AC-2",
+              "text": "Identifies primary and secondary target audience segments with supporting data."
+            },
+            {
+              "id": "AC-3",
+              "text": "Cites sources for market data and competitor profiles."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G1-T2",
+      "title": "Define Player Personas & Experience Goals",
+      "description": "Develop detailed player personas and define the intended experience goals to ensure the game resonates with target audiences.",
+      "deliverables": [
+        {
+          "id": "G1-T2-D1",
+          "filename": "player-persona-profiles.pdf",
+          "aliases": [
+            "G1-T2-player_persona_profiles.pdf",
+            "player_persona_profiles.pdf",
+            "G1-T2-D1",
+            "G1-T2-player-persona-profiles.pdf",
+            "player-persona-profiles.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Profiles of at least three archetypal players representing different demographics, playstyles, motivations, and pain points.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains at least three distinct persona profiles with demographics, motivations, and frustrations."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each profile links to market segment data from the market analysis."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by game design and marketing leads."
+            }
+          ]
+        },
+        {
+          "id": "G1-T2-D2",
+          "filename": "experience-goals.md",
+          "aliases": [
+            "G1-T2-experience_goals_summary.md",
+            "experience_goals_summary.md",
+            "G1-T2-D2",
+            "G1-T2-experience-goals.md",
+            "experience-goals.md",
+            "experience_goals.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Document summarizing desired player experiences and emotional outcomes, aligning them with core mechanics and creative pillars.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists key experience goals and emotional beats aligned with player personas."
+            },
+            {
+              "id": "AC-2",
+              "text": "Defines measurable success criteria for each experience goal."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by creative lead."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G1-T3",
+      "title": "Establish Core Gameplay Loop & Creative Pillars",
+      "description": "Define the fundamental gameplay loop and articulate the creative pillars that will guide art, design, and narrative decisions.",
+      "deliverables": [
+        {
+          "id": "G1-T3-D1",
+          "filename": "core-loop-pillars.pdf",
+          "aliases": [
+            "G1-T3-core_loop_and_pillars.pdf",
+            "core_loop_and_pillars.pdf",
+            "G1-T3-D1",
+            "G1-T3-core-loop-pillars.pdf",
+            "core-loop-pillars.pdf",
+            "core_loop_pillars.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Diagram of the core gameplay loop accompanied by narrative text explaining each step and a set of creative pillars with rationale linking them to player value and brand identity.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Provides a clear diagram of the core gameplay loop with inputs, actions, feedback, and rewards."
+            },
+            {
+              "id": "AC-2",
+              "text": "Lists at least three creative pillars with descriptions and rationale."
+            },
+            {
+              "id": "AC-3",
+              "text": "Demonstrates how each pillar supports the player experience goals and E1 variables."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G1-T4",
+      "title": "Identify Risks & Feasibility Concerns",
+      "description": "Systematically identify potential risks and feasibility concerns, then assign ownership and mitigation strategies.",
+      "deliverables": [
+        {
+          "id": "G1-T4-D1",
+          "filename": "risk-register.pdf",
+          "aliases": [
+            "G1-T4-risk_register.pdf",
+            "risk_register.pdf",
+            "G1-T4-D1",
+            "G1-T4-risk-register.pdf",
+            "risk-register.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Matrix capturing identified risks across gameplay, technical, art, and schedule dimensions with mitigations and probability/impact ratings.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists risks in categories (gameplay, technical, art, schedule) with probability and impact scores."
+            },
+            {
+              "id": "AC-2",
+              "text": "Provides mitigation strategies and contingency plans for each risk."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed by cross-disciplinary leads and updated regularly."
+            }
+          ]
+        },
+        {
+          "id": "G1-T4-D2",
+          "filename": "risk-owner.xlsx",
+          "aliases": [
+            "G1-T4-risk_owner_matrix.xlsx",
+            "risk_owner_matrix.xlsx",
+            "G1-T4-D2",
+            "G1-T4-risk-owner.xlsx",
+            "risk-owner.xlsx",
+            "risk_owner.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Spreadsheet mapping each identified risk to a responsible owner and timeframe for mitigation.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Every risk has an assigned owner and target resolution date."
+            },
+            {
+              "id": "AC-2",
+              "text": "Owners acknowledged and commit to mitigation plans."
+            },
+            {
+              "id": "AC-3",
+              "text": "Spreadsheet stored in shared project drive."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "G1-T5",
+      "title": "Create Greenlight Packet",
+      "description": "Package all concept phase artifacts into a greenlight packet for executive review and decision-making.",
+      "deliverables": [
+        {
+          "id": "G1-T5-D1",
+          "filename": "one-pager.pdf",
+          "aliases": [
+            "G1-T5-one_pager.pdf",
+            "one_pager.pdf",
+            "G1-T5-D1",
+            "G1-T5-one-pager.pdf",
+            "one-pager.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Concise one-page summary of the game concept, vision, target market, core loop, and differentiators.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Summarizes the concept, vision, target market, core loop, and differentiators in one page."
+            },
+            {
+              "id": "AC-2",
+              "text": "Written in clear, persuasive language suitable for executives."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by product and creative leads."
+            }
+          ]
+        },
+        {
+          "id": "G1-T5-D2",
+          "filename": "pitch-deck.pptx",
+          "aliases": [
+            "G1-T5-pitch_deck.pptx",
+            "pitch_deck.pptx",
+            "G1-T5-D2",
+            "G1-T5-pitch-deck.pptx",
+            "pitch-deck.pptx"
+          ],
+          "filetype": "pptx",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Lightweight slide deck (10\u201315 slides) conveying the game's vision, market analysis, personas, core loop, creative pillars, and risk overview.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains 10\u201315 slides covering concept, market analysis, personas, core loop, creative pillars, and risks."
+            },
+            {
+              "id": "AC-2",
+              "text": "Consistent visual design aligned with the brand."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by leadership."
+            }
+          ]
+        },
+        {
+          "id": "G1-T5-D3",
+          "filename": "artifact-manifest.md",
+          "aliases": [
+            "G1-T5-artifact_manifest.md",
+            "artifact_manifest.md",
+            "G1-T5-D3",
+            "G1-T5-artifact-manifest.md",
+            "artifact-manifest.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/game/G1/",
+          "description": "Manifest linking to all artifacts generated during the concept phase with descriptions, versions, and storage paths.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "List includes all generated artifacts with filenames, descriptions, versions, and storage paths."
+            },
+            {
+              "id": "AC-2",
+              "text": "Manifest kept up-to-date and accessible to stakeholders."
+            },
+            {
+              "id": "AC-3",
+              "text": "Cross-checked against actual file repository."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

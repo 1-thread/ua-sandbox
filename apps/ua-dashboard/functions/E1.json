@@ -1,0 +1,493 @@
+{
+  "code": "E1",
+  "title": "Create and Build Pitch Package",
+  "category": "entertainment",
+  "phase": "R&D",
+  "purpose": "Establish the IP\u2019s foundational creative vision and package it for approval. Once approved, capture all high\u2011priority variables into auditable artifacts and publish an Entertainment Standards Package that downstream functions (G1 and P1) must use.",
+  "dependencies": [],
+  "guardrails": [
+    "Do not change approved variables without recording a revision and notifying downstream owners.",
+    "Avoid ambiguous or placeholder language for core variables.",
+    "Ensure all visual references are licensed or original."
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E1-create-and-build-pitch-package.md",
+  "tasks": [
+    {
+      "id": "E1-T1",
+      "title": "Assemble Pitch Package Draft",
+      "description": "** Execute the task: Assemble Pitch Package Draft.",
+      "deliverables": [
+        {
+          "id": "E1-T1-D1",
+          "filename": "pitch-deck.pptx",
+          "aliases": [
+            "draft_pitch_deck.pptx",
+            "E1-T1-D1",
+            "E1-T1-pitch-deck.pptx",
+            "pitch-deck.pptx",
+            "pitch_deck.pptx"
+          ],
+          "filetype": "pptx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A 10\u201315 slide draft pitch deck describing the premise, problem, solution, market, competition, and roadmap.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains slides covering problem, solution, market size, competition and roadmap."
+            },
+            {
+              "id": "AC-2",
+              "text": "Uses consistent brand colors and fonts; slides are legible at 1080p."
+            },
+            {
+              "id": "AC-3",
+              "text": "All images and assets are properly licensed or sourced."
+            },
+            {
+              "id": "AC-4",
+              "text": "Narrative flow is coherent and investor\u2011ready."
+            }
+          ]
+        },
+        {
+          "id": "E1-T1-D2",
+          "filename": "reference-pack.pdf",
+          "aliases": [
+            "reference_pack.pdf",
+            "E1-T1-D2",
+            "E1-T1-reference-pack.pdf",
+            "reference-pack.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A curated collection of concept art, visual references, and style inspirations supporting the pitch deck.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains at least 12 reference images across characters, environments and UI."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each image includes a caption and source attribution."
+            },
+            {
+              "id": "AC-3",
+              "text": "Organized into thematic categories such as color palettes, character design and environment mood."
+            }
+          ]
+        },
+        {
+          "id": "E1-T1-D3",
+          "filename": "mood-boards.pdf",
+          "aliases": [
+            "mood_boards.pdf",
+            "E1-T1-D3",
+            "E1-T1-mood-boards.pdf",
+            "mood-boards.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "Thematic mood boards presenting color palettes, typography styles, and composition cues for the project.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes at least three distinct boards each illustrating a consistent visual theme."
+            },
+            {
+              "id": "AC-2",
+              "text": "Lists palette hex codes and font names used on each board."
+            },
+            {
+              "id": "AC-3",
+              "text": "Boards align with the narrative tone and style guidelines."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E1-T2",
+      "title": "Finalize Core Variables for Approval",
+      "description": "** Execute the task: Finalize Core Variables for Approval.",
+      "deliverables": [
+        {
+          "id": "E1-T2-D1",
+          "filename": "core-variables.docx",
+          "aliases": [
+            "core_variables_summary.docx",
+            "E1-T2-D1",
+            "E1-T2-core-variables.docx",
+            "core-variables.docx",
+            "core_variables.docx"
+          ],
+          "filetype": "docx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A document enumerating the project's high\u2011priority variables, including premise, characters, settings, and narrative constraints.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Lists all approved high\u2011priority variables with definitions and justifications."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each variable is traced back to the pitch deck with page references."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and approved by the creative lead and product lead."
+            }
+          ]
+        },
+        {
+          "id": "E1-T2-D2",
+          "filename": "elevator-pitch.pdf",
+          "aliases": [
+            "elevator_pitch.pdf",
+            "E1-T2-D2",
+            "E1-T2-elevator-pitch.pdf",
+            "elevator-pitch.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A succinct elevator pitch summarizing the project\u2019s premise, target audience, and unique selling points.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "One\u2011page summary highlighting premise, audience and differentiators."
+            },
+            {
+              "id": "AC-2",
+              "text": "Language is clear, engaging and free of jargon."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the leadership team."
+            }
+          ]
+        },
+        {
+          "id": "E1-T2-D3",
+          "filename": "story-arcs-overview.pdf",
+          "aliases": [
+            "story_arcs_overview.pdf",
+            "E1-T2-D3",
+            "E1-T2-story-arcs-overview.pdf",
+            "story-arcs-overview.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "Overview of story arcs outlining major plotlines, turning points, and character journeys.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Describes primary and secondary arcs with start, development and resolution points."
+            },
+            {
+              "id": "AC-2",
+              "text": "Aligns with the approved narrative outline."
+            },
+            {
+              "id": "AC-3",
+              "text": "Reviewed and accepted by the narrative lead."
+            }
+          ]
+        },
+        {
+          "id": "E1-T2-D4",
+          "filename": "primary-characters.pdf",
+          "aliases": [
+            "primary_characters_sheet.pdf",
+            "E1-T2-D4",
+            "E1-T2-primary-characters.pdf",
+            "primary-characters.pdf",
+            "primary_characters.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "Detailed summary of the primary characters including traits, motivations, and roles.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Each main character is described with name, age, personality, goals and narrative importance."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes visual references if available."
+            },
+            {
+              "id": "AC-3",
+              "text": "Consistent format across characters."
+            }
+          ]
+        },
+        {
+          "id": "E1-T2-D5",
+          "filename": "concept-art-sampler.pdf",
+          "aliases": [
+            "concept_art_sampler.pdf",
+            "E1-T2-D5",
+            "E1-T2-concept-art-sampler.pdf",
+            "concept-art-sampler.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A selection of concept art depicting characters, environments, and key scenes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes at least five character designs, three environment concepts and two key scene compositions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Each artwork labelled with context and design notes."
+            },
+            {
+              "id": "AC-3",
+              "text": "Curated to represent the visual tone of the project."
+            }
+          ]
+        },
+        {
+          "id": "E1-T2-D6",
+          "filename": "visual-style-moodboard.pdf",
+          "aliases": [
+            "visual_style_moodboard.pdf",
+            "E1-T2-D6",
+            "E1-T2-visual-style-moodboard.pdf",
+            "visual-style-moodboard.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "Expanded mood board summarizing the visual aesthetic across all visual development elements.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Consolidates mood boards into a cohesive style guide."
+            },
+            {
+              "id": "AC-2",
+              "text": "Contains colour palettes, fonts and textures for the project."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the creative director."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E1-T3",
+      "title": "Approval Review & Sign\u2011off",
+      "description": "** Execute the task: Approval Review & Sign\u2011off.",
+      "deliverables": [
+        {
+          "id": "E1-T3-D1",
+          "filename": "approved-pitch.zip",
+          "aliases": [
+            "approved_pitch_package.zip",
+            "E1-T3-D1",
+            "E1-T3-approved-pitch.zip",
+            "approved-pitch.zip",
+            "approved_pitch.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "The final approved pitch package compiled into a zip archive containing the pitch deck, references, mood boards and approval document.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes all components of the pitch package and an approval document signed by stakeholders."
+            },
+            {
+              "id": "AC-2",
+              "text": "Any conditions or edits requested during review are resolved and annotated."
+            },
+            {
+              "id": "AC-3",
+              "text": "Archive is well\u2011organized with clear file structure."
+            }
+          ]
+        },
+        {
+          "id": "E1-T3-D2",
+          "filename": "approval.md",
+          "aliases": [
+            "approval_notes.md",
+            "E1-T3-D2",
+            "E1-T3-approval.md",
+            "approval.md"
+          ],
+          "filetype": "md",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A document capturing reviewer feedback, decisions, and sign\u2011off notes from the approval review.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Records stakeholder sign\u2011off, comments, and final decisions."
+            },
+            {
+              "id": "AC-2",
+              "text": "Summarizes conditions and how they were addressed."
+            },
+            {
+              "id": "AC-3",
+              "text": "Stored in an accessible format for auditing."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E1-T4",
+      "title": "Capture & Audit High\u2011Priority Variables",
+      "description": "** Execute the task: Capture & Audit High\u2011Priority Variables.",
+      "deliverables": [
+        {
+          "id": "E1-T4-D1",
+          "filename": "pitch-frozen.pdf",
+          "aliases": [
+            "pitch_package_frozen.pdf",
+            "E1-T4-D1",
+            "E1-T4-pitch-frozen.pdf",
+            "pitch-frozen.pdf",
+            "pitch_frozen.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "The final frozen version of the pitch package exported as a PDF for archival purposes.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All variables and narrative elements are captured in the PDF."
+            },
+            {
+              "id": "AC-2",
+              "text": "Matches the approved pitch package exactly with no further edits."
+            },
+            {
+              "id": "AC-3",
+              "text": "Ready for archival and downstream reference."
+            }
+          ]
+        },
+        {
+          "id": "E1-T4-D2",
+          "filename": "audit-log.pdf",
+          "aliases": [
+            "audit_log.pdf",
+            "E1-T4-D2",
+            "E1-T4-audit-log.pdf",
+            "audit-log.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "An audit log listing each high\u2011priority variable along with the source page number where it appears in the pitch package.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Captures every variable with a corresponding page number reference."
+            },
+            {
+              "id": "AC-2",
+              "text": "Formatted for quick lookup and review."
+            },
+            {
+              "id": "AC-3",
+              "text": "Includes version information and revision history."
+            }
+          ]
+        },
+        {
+          "id": "E1-T4-D3",
+          "filename": "version-index.txt",
+          "aliases": [
+            "version_index.txt",
+            "E1-T4-D3",
+            "E1-T4-version-index.txt",
+            "version-index.txt"
+          ],
+          "filetype": "txt",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A text file indicating the version number, date, and changelog entries for the frozen pitch package.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Contains version identifier, date of freeze, and summary of changes from previous version."
+            },
+            {
+              "id": "AC-2",
+              "text": "Clearly formatted and easy to parse."
+            },
+            {
+              "id": "AC-3",
+              "text": "Stored alongside the frozen pitch package and audit log."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E1-T5",
+      "title": "Publish Entertainment Standards Package",
+      "description": "** Execute the task: Publish Entertainment Standards Package.",
+      "deliverables": [
+        {
+          "id": "E1-T5-D1",
+          "filename": "entertainment-standards.pdf",
+          "aliases": [
+            "entertainment_standards_package.pdf",
+            "E1-T5-D1",
+            "E1-T5-entertainment-standards.pdf",
+            "entertainment-standards.pdf",
+            "entertainment_standards.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A comprehensive standards document establishing the baseline for downstream game and product functions, including pointers to the frozen pitch package.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Clearly states that game (G1) and product (P1) functions must inherit these variables."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes hyperlinks or references to the frozen pitch package and audit log."
+            },
+            {
+              "id": "AC-3",
+              "text": "Indicates version number and date of issue."
+            }
+          ]
+        },
+        {
+          "id": "E1-T5-D2",
+          "filename": "audit-archive.zip",
+          "aliases": [
+            "audit_archive.zip",
+            "E1-T5-D2",
+            "E1-T5-audit-archive.zip",
+            "audit-archive.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E1/",
+          "description": "A zipped archive containing the audit log, version index, and any additional supporting documents for compliance auditing.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Archive includes all audit materials required by downstream functions."
+            },
+            {
+              "id": "AC-2",
+              "text": "All documents within the archive are complete and readable."
+            },
+            {
+              "id": "AC-3",
+              "text": "Archive structure and naming conventions are consistent and clear."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

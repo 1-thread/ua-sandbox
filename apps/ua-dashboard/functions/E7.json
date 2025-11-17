@@ -1,0 +1,282 @@
+{
+  "code": "E7",
+  "title": "Create and Design Characters, Props, Environments",
+  "category": "entertainment",
+  "phase": "Development",
+  "purpose": "Describe the core function Create and Design Characters, Props, Environments.",
+  "dependencies": [
+    "E2",
+    "E3",
+    "E4"
+  ],
+  "guardrails": [
+    "Follow art direction and brand guidelines strictly; do not diverge from approved visual style",
+    "Avoid over\u2011detailing or exceeding polygon and texture budget constraints",
+    "Maintain consistent naming conventions and file organization to support pipeline integration",
+    "Use only licensed textures or original creations; document sources and rights",
+    "Ensure rigs are compatible with the animation software and game engine",
+    "Keep detailed records of iterations and maintain version control for all assets",
+    "Do not start final rendering or lighting without approval; focus on asset readiness",
+    "Complete all work within the allocated development schedule and communicate delays promptly",
+    "UA-AUTO:END TASKS -->"
+  ],
+  "source_md": "ua/function_core/CO-entertainment-E7-create-and-design-characters-props-environments.md",
+  "tasks": [
+    {
+      "id": "E7-T1",
+      "title": "Create and review concept art and define final asset requirements",
+      "description": "Execute the task: Create and review concept art and define final asset requirements.",
+      "deliverables": [
+        {
+          "id": "E7-T1-D1",
+          "filename": "asset-requirements-list.xlsx",
+          "aliases": [
+            "asset_requirements_list.xlsx",
+            "E7-T1-D1",
+            "E7-T1-asset-requirements-list.xlsx",
+            "asset-requirements-list.xlsx"
+          ],
+          "filetype": "xlsx",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "A comprehensive list detailing all character, prop, environment and VFX assets required for production, along with associated concept art references.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Signed by the art director and details names, quantities and purpose of each asset."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes concept art or reference images for each asset."
+            },
+            {
+              "id": "AC-3",
+              "text": "Organized by asset type (character, prop, environment, VFX)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E7-T2",
+      "title": "Generate final Designs",
+      "description": "Execute the task: Generate final Designs.",
+      "deliverables": [
+        {
+          "id": "E7-T2-D1",
+          "filename": "character-designs.pdf",
+          "aliases": [
+            "final_character_designs.pdf",
+            "E7-T2-D1",
+            "E7-T2-character-designs.pdf",
+            "character-designs.pdf",
+            "character_designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Final design sheets for characters, including turnaround views, costumes and expression sheets.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Fully realized designs for each character."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes front, back and side views and expression sheets."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the art director."
+            }
+          ]
+        },
+        {
+          "id": "E7-T2-D2",
+          "filename": "prop-designs.pdf",
+          "aliases": [
+            "final_prop_designs.pdf",
+            "E7-T2-D2",
+            "E7-T2-prop-designs.pdf",
+            "prop-designs.pdf",
+            "prop_designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Final prop design sheets with detailed drawings and annotations.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes each prop with scale, materials and usage notes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Shows variations where appropriate."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the world aesthetics."
+            }
+          ]
+        },
+        {
+          "id": "E7-T2-D3",
+          "filename": "environment-designs.pdf",
+          "aliases": [
+            "final_environment_designs.pdf",
+            "E7-T2-D3",
+            "E7-T2-environment-designs.pdf",
+            "environment-designs.pdf",
+            "environment_designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Final environment design sheets with detailed layouts and colour keys for each key location.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Provides detailed environment layouts with perspective and scale."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes colour keys and lighting indications for each location."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the narrative and mood of the project."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E7-T2",
+      "title": "Sculpt and model high\u2011resolution characters, props, and environment assets",
+      "description": "Execute the task: Sculpt and model high\u2011resolution characters, props, and environment assets.",
+      "deliverables": [
+        {
+          "id": "E7-T2-D1",
+          "filename": "character-designs.pdf",
+          "aliases": [
+            "final_character_designs.pdf",
+            "E7-T2-D1",
+            "E7-T3-character-designs.pdf",
+            "character-designs.pdf",
+            "character_designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Final design sheets for characters, including turnaround views, costumes and expression sheets.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Fully realized designs for each character."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes front, back and side views and expression sheets."
+            },
+            {
+              "id": "AC-3",
+              "text": "Approved by the art director."
+            }
+          ]
+        },
+        {
+          "id": "E7-T2-D2",
+          "filename": "prop-designs.pdf",
+          "aliases": [
+            "final_prop_designs.pdf",
+            "E7-T2-D2",
+            "E7-T3-prop-designs.pdf",
+            "prop-designs.pdf",
+            "prop_designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Final prop design sheets with detailed drawings and annotations.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Includes each prop with scale, materials and usage notes."
+            },
+            {
+              "id": "AC-2",
+              "text": "Shows variations where appropriate."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the world aesthetics."
+            }
+          ]
+        },
+        {
+          "id": "E7-T2-D3",
+          "filename": "environment-designs.pdf",
+          "aliases": [
+            "final_environment_designs.pdf",
+            "E7-T2-D3",
+            "E7-T3-environment-designs.pdf",
+            "environment-designs.pdf",
+            "environment_designs.pdf"
+          ],
+          "filetype": "pdf",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Final environment design sheets with detailed layouts and colour keys for each key location.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "Provides detailed environment layouts with perspective and scale."
+            },
+            {
+              "id": "AC-2",
+              "text": "Includes colour keys and lighting indications for each location."
+            },
+            {
+              "id": "AC-3",
+              "text": "Aligns with the narrative and mood of the project."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E7-T4",
+      "title": "Rig and skin characters for animation",
+      "description": "Execute the task: Rig and skin characters for animation.",
+      "deliverables": [
+        {
+          "id": "E7-T4-D1",
+          "filename": "rigged-character-models.zip",
+          "aliases": [
+            "rigged_character_models.zip",
+            "E7-T4-D1",
+            "E7-T4-rigged-character-models.zip",
+            "rigged-character-models.zip"
+          ],
+          "filetype": "zip",
+          "path_hint": "ua/projects/<PROJECT>/entertainment/E7/",
+          "description": "Collection of characters rigged and skinned, ready for animation.",
+          "acceptance": [
+            {
+              "id": "AC-1",
+              "text": "All characters are fully rigged with appropriate controls."
+            },
+            {
+              "id": "AC-2",
+              "text": "Skins deform correctly without clipping."
+            },
+            {
+              "id": "AC-3",
+              "text": "Compatible with the animation software."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E7-T6",
+      "title": "Build environment layouts and props",
+      "description": "Execute the task: Build environment layouts and props.",
+      "deliverables": []
+    }
+  ]
+}
