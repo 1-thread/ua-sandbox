@@ -80,6 +80,9 @@ export interface Deliverable {
   filetype: string | null;
   path_hint: string | null;
   description: string | null;
+  status?: 'Assigned' | 'In Progress' | 'Completed' | 'Approved' | 'Needs Review';
+  storage_path: string | null; // Path in Supabase Storage
+  ip_id: string | null; // NULL = generic template, UUID = IP-specific
   display_order: number;
   created_at: string;
 }

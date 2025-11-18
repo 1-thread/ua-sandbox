@@ -14,6 +14,7 @@ export default function IPDetailPage() {
   const [verticals, setVerticals] = useState<IPVertical[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [imageUrls, setImageUrls] = useState<{
     iconUrl: string | null;
     heroUrl: string | null;
@@ -220,6 +221,20 @@ export default function IPDetailPage() {
           </button>
         </div>
 
+        {/* IP Info */}
+        {ip && imageUrls.iconUrl && (
+          <div className="px-2 pt-4 pb-2">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf]">
+              <img
+                src={imageUrls.iconUrl}
+                alt={ip.name}
+                className="block h-8 w-8 rounded object-cover"
+              />
+              <span className="font-medium text-sm truncate">{ip.name}</span>
+            </div>
+          </div>
+        )}
+
         {/* Main nav */}
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
           {/* Workflows */}
@@ -235,7 +250,10 @@ export default function IPDetailPage() {
           </button>
 
           {/* Assets */}
-          <button className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors">
+          <button 
+            onClick={() => router.push(`/ip/${slug}/assets`)}
+            className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+          >
             <span className="inline-flex h-6 w-6 items-center justify-center rounded">
               <img
                 src="/photo.svg"
@@ -245,6 +263,47 @@ export default function IPDetailPage() {
             </span>
             <span className="truncate">Assets</span>
           </button>
+
+          {/* Admin (section header) */}
+          <div
+            onMouseEnter={() => setIsAdminOpen(true)}
+            onMouseLeave={() => setIsAdminOpen(false)}
+          >
+            <button
+              type="button"
+              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+              onClick={() => setIsAdminOpen((open) => !open)}
+            >
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                <img
+                  src="/admin_tools_icon.svg"
+                  alt="Admin"
+                  className="block h-4 w-4"
+                />
+              </span>
+              <span className="truncate">Admin</span>
+            </button>
+
+            {/* Segmented Admin list */}
+            {isAdminOpen && (
+              <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => router.push("/admin/conductor")}
+                  className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer"
+                >
+                  <span className="truncate">Conductor</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push("/admin/function-editor")}
+                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                >
+                  <span className="truncate">Function Editor</span>
+                </button>
+              </div>
+            )}
+          </div>
         </nav>
       </aside>
 

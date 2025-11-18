@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 export default function LandingPage() {
   const router = useRouter();
   const [isIpOpen, setIsIpOpen] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(220); // px
   const [isResizing, setIsResizing] = useState(false);
 
@@ -104,71 +103,6 @@ export default function LandingPage() {
                   className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
                 >
                   <span className="truncate">Trapdoor City</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Workflows */}
-          <button className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
-              <img
-                src="/list.svg"
-                alt="Workflows"
-                className="block h-4 w-4"
-              />
-            </span>
-            <span className="truncate">Workflows</span>
-          </button>
-
-          {/* Assets */}
-          <button className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
-              <img
-                src="/photo.svg"
-                alt="Assets"
-                className="block h-4 w-4"
-              />
-            </span>
-            <span className="truncate">Assets</span>
-          </button>
-
-          {/* Admin (section header) */}
-          <div
-            onMouseEnter={() => setIsAdminOpen(true)}
-            onMouseLeave={() => setIsAdminOpen(false)}
-          >
-            <button
-              type="button"
-              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
-              onClick={() => setIsAdminOpen((open) => !open)}
-            >
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
-                <img
-                  src="/list.svg"
-                  alt="Admin"
-                  className="block h-4 w-4"
-                />
-              </span>
-              <span className="truncate">Admin</span>
-            </button>
-
-            {/* Segmented Admin list */}
-            {isAdminOpen && (
-              <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
-                <button
-                  type="button"
-                  onClick={() => router.push("/admin/conductor")}
-                  className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer"
-                >
-                  <span className="truncate">Conductor</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push("/admin/function-editor")}
-                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
-                >
-                  <span className="truncate">Function Editor</span>
                 </button>
               </div>
             )}

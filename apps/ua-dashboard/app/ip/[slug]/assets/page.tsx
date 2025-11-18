@@ -1,0 +1,722 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
+import type { Deliverable, Task, Function, IP } from "@/types/ip";
+
+interface DeliverableWithTask extends Deliverable {
+  task: Task & { function: Function };
+}
+
+export default function AssetsPage() {
+  const params = useParams();
+  const router = useRouter();
+  const slug = params.slug as string;
+
+  const [deliverables, setDeliverables] = useState<DeliverableWithTask[]>([]);
+  const [filteredDeliverables, setFilteredDeliverables] = useState<DeliverableWithTask[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [ip, setIp] = useState<IP | null>(null);
+  const [ipIconUrl, setIpIconUrl] = useState<string | null>(null);
+  
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedFunction, setSelectedFunction] = useState<string>("");
+  const [selectedTask, setSelectedTask] = useState<string>("");
+  const [selectedDeliverable, setSelectedDeliverable] = useState<string>("");
+  
+  // Dropdown options
+  const [categories, setCategories] = useState<string[]>([]);
+  const [functions, setFunctions] = useState<Array<{ code: string; title: string }>>([]);
+  const [tasks, setTasks] = useState<Array<{ code: string; task_id: string; title: string }>>([]);
+  const [deliverablesList, setDeliverablesList] = useState<Array<{ id: string; deliverable_id: string; title: string }>>([]);
+  
+  // Modal state
+  const [selectedDeliverableDetail, setSelectedDeliverableDetail] = useState<DeliverableWithTask | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    loadAssets();
+  }, [slug]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchQuery, selectedCategory, selectedFunction, selectedTask, selectedDeliverable, deliverables]);
+
+  async function loadAssets() {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Get IP data (including name and icon)
+      const { data: ipData, error: ipError } = await supabase
+        .from("ips")
+        .select("*")
+        .eq("slug", slug)
+        .single();
+
+      if (ipError || !ipData) throw new Error("IP not found");
+      
+      setIp(ipData);
+
+      // Handle IP icon URL (use local for dev, Supabase signed URLs for prod)
+      const iconPath = ipData.icon_url;
+      if (iconPath) {
+        const isDevelopment = typeof window !== 'undefined' && 
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        
+        if (isDevelopment) {
+          // Extract filename (remove 'ip-assets/' prefix if present)
+          const filename = iconPath.replace(/^ip-assets\//, '');
+          setIpIconUrl(`/icons/${filename}`);
+        } else {
+          // For production, generate signed URL from Supabase Storage
+          try {
+            const filename = iconPath.replace(/^ip-assets\//, '');
+            const { data: signedUrl, error: urlError } = await supabase.storage
+              .from('ip-assets')
+              .createSignedUrl(filename, 3600); // 1 hour expiry
+            
+            if (!urlError && signedUrl) {
+              setIpIconUrl(signedUrl.signedUrl);
+            } else {
+              // Fallback to local path
+              const filename = iconPath.replace(/^ip-assets\//, '');
+              setIpIconUrl(`/icons/${filename}`);
+            }
+          } catch (err) {
+            console.error("Error generating signed URL for icon:", err);
+            const filename = iconPath.replace(/^ip-assets\//, '');
+            setIpIconUrl(`/icons/${filename}`);
+          }
+        }
+      }
+
+      // Get functions for this IP
+      const { data: ipFunctions, error: ipFunctionsError } = await supabase
+        .from("ip_functions")
+        .select("function_code")
+        .eq("ip_id", ipData.id);
+
+      if (ipFunctionsError) throw ipFunctionsError;
+      if (!ipFunctions || ipFunctions.length === 0) {
+        setDeliverables([]);
+        setLoading(false);
+        return;
+      }
+
+      const functionCodes = ipFunctions.map(f => f.function_code);
+
+      // Get all deliverables with their tasks and functions
+      const { data: tasksData, error: tasksError } = await supabase
+        .from("tasks")
+        .select(`
+          *,
+          function:functions(*)
+        `)
+        .in("function_code", functionCodes)
+        .order("display_order");
+
+      if (tasksError) throw tasksError;
+
+      // Get IP-specific deliverables only (where ip_id matches)
+      const { data: deliverablesData, error: deliverablesError } = await supabase
+        .from("deliverables")
+        .select("*")
+        .eq("ip_id", ipData.id) // Only get IP-specific deliverables
+        .order("display_order");
+
+      if (deliverablesError) throw deliverablesError;
+
+      // Combine deliverables with their tasks and functions
+      const deliverablesWithTasks: DeliverableWithTask[] = deliverablesData
+        .map(deliverable => {
+          const task = tasksData?.find(t => t.id === deliverable.task_id);
+          if (!task) return null;
+          return {
+            ...deliverable,
+            task: {
+              ...task,
+              function: task.function as Function,
+            },
+          };
+        })
+        .filter((d): d is DeliverableWithTask => d !== null);
+
+      setDeliverables(deliverablesWithTasks);
+
+      // Extract unique categories, functions, tasks, and deliverables for filters
+      const uniqueCategories = Array.from(new Set(deliverablesWithTasks.map(d => d.task.function.category)))
+        .sort();
+      setCategories(uniqueCategories);
+
+      // Extract unique functions
+      const functionsMap = new Map<string, { code: string; title: string }>();
+      deliverablesWithTasks.forEach(d => {
+        if (!functionsMap.has(d.task.function.code)) {
+          functionsMap.set(d.task.function.code, {
+            code: d.task.function.code,
+            title: d.task.function.title
+          });
+        }
+      });
+      const uniqueFunctions = Array.from(functionsMap.values())
+        .sort((a, b) => a.code.localeCompare(b.code));
+      setFunctions(uniqueFunctions);
+
+      // Deduplicate tasks by task_id (using Map to ensure uniqueness, include title)
+      const tasksMap = new Map<string, { code: string; task_id: string; title: string }>();
+      deliverablesWithTasks.forEach(d => {
+        if (!tasksMap.has(d.task.task_id)) {
+          tasksMap.set(d.task.task_id, {
+            code: d.task.function.code,
+            task_id: d.task.task_id,
+            title: d.task.title
+          });
+        }
+      });
+      const uniqueTasks = Array.from(tasksMap.values())
+        .sort((a, b) => a.code.localeCompare(b.code) || a.task_id.localeCompare(b.task_id));
+      setTasks(uniqueTasks);
+
+      // Deduplicate deliverables (include filename as title)
+      const deliverablesMap = new Map<string, { id: string; deliverable_id: string; title: string }>();
+      deliverablesWithTasks.forEach(d => {
+        if (!deliverablesMap.has(d.id)) {
+          deliverablesMap.set(d.id, {
+            id: d.id,
+            deliverable_id: d.deliverable_id,
+            title: d.filename || d.deliverable_id
+          });
+        }
+      });
+      const uniqueDeliverables = Array.from(deliverablesMap.values())
+        .sort((a, b) => a.deliverable_id.localeCompare(b.deliverable_id));
+      setDeliverablesList(uniqueDeliverables);
+
+      setLoading(false);
+    } catch (err) {
+      console.error("Error loading assets:", err);
+      setError(err instanceof Error ? err.message : "Failed to load assets");
+      setLoading(false);
+    }
+  }
+
+  function applyFilters() {
+    let filtered = [...deliverables];
+
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(d =>
+        d.filename.toLowerCase().includes(query) ||
+        d.description?.toLowerCase().includes(query) ||
+        d.deliverable_id.toLowerCase().includes(query) ||
+        d.task.task_id.toLowerCase().includes(query) ||
+        d.task.function.code.toLowerCase().includes(query)
+      );
+    }
+
+    // Category filter
+    if (selectedCategory) {
+      filtered = filtered.filter(d => d.task.function.category === selectedCategory);
+    }
+
+    // Core Function filter
+    if (selectedFunction) {
+      filtered = filtered.filter(d => d.task.function.code === selectedFunction);
+    }
+
+    // Task filter
+    if (selectedTask) {
+      filtered = filtered.filter(d => d.task.task_id === selectedTask);
+    }
+
+    // Deliverable filter
+    if (selectedDeliverable) {
+      filtered = filtered.filter(d => d.id === selectedDeliverable);
+    }
+
+    setFilteredDeliverables(filtered);
+  }
+
+  function getThumbnailPlaceholder(filetype: string | null): string {
+    if (!filetype) return "📄";
+    const type = filetype.toLowerCase();
+    if (type === "pdf") return "📕";
+    if (["doc", "docx"].includes(type)) return "📘";
+    if (["xls", "xlsx"].includes(type)) return "📗";
+    if (["ppt", "pptx"].includes(type)) return "📙";
+    if (["jpg", "jpeg", "png", "gif", "svg"].includes(type)) return "🖼️";
+    if (["mp4", "mov", "avi"].includes(type)) return "🎬";
+    if (["mp3", "wav", "aac"].includes(type)) return "🎵";
+    return "📄";
+  }
+
+  function getStatusColor(status: string): string {
+    switch (status) {
+      case "Approved": return "bg-green-100 text-green-800";
+      case "Completed": return "bg-blue-100 text-blue-800";
+      case "In Progress": return "bg-yellow-100 text-yellow-800";
+      case "Needs Review": return "bg-orange-100 text-orange-800";
+      case "Assigned": return "bg-gray-100 text-gray-800";
+      default: return "bg-gray-100 text-gray-800";
+    }
+  }
+
+  // Extract short task code (e.g., "E1-T1" -> "T1")
+  function getShortTaskCode(taskId: string): string {
+    const parts = taskId.split('-');
+    return parts.length > 1 ? parts[parts.length - 1] : taskId;
+  }
+
+  // Extract short deliverable code (e.g., "E1-T1-D1" -> "D1")
+  function getShortDeliverableCode(deliverableId: string): string {
+    const parts = deliverableId.split('-');
+    return parts.length > 1 ? parts[parts.length - 1] : deliverableId;
+  }
+
+  async function handleUpload(file: File, deliverable: DeliverableWithTask) {
+    try {
+      setUploading(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${deliverable.deliverable_id}.${fileExt}`;
+      const filePath = `${slug}/${deliverable.task.function.category.toUpperCase()}/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('ip-assets')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Update deliverable in database
+      const { error: updateError } = await supabase
+        .from("deliverables")
+        .update({ storage_path: filePath, filename: file.name, filetype: fileExt || null })
+        .eq("id", deliverable.id);
+
+      if (updateError) throw updateError;
+
+      await loadAssets();
+      alert("File uploaded successfully!");
+    } catch (err) {
+      console.error("Error uploading file:", err);
+      alert(`Failed to upload file: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleDownload(deliverable: DeliverableWithTask) {
+    try {
+      if (!deliverable.storage_path) {
+        alert("No file available for download");
+        return;
+      }
+
+      const { data, error } = await supabase.storage
+        .from('ip-assets')
+        .download(deliverable.storage_path);
+
+      if (error) throw error;
+      if (!data) {
+        alert("File not found");
+        return;
+      }
+
+      // Create download link
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = deliverable.filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error downloading file:", err);
+      alert(`Failed to download file: ${err instanceof Error ? err.message : "Unknown error"}`);
+    }
+  }
+
+  async function handleStatusUpdate(deliverable: DeliverableWithTask, newStatus: 'Approved' | 'Needs Review') {
+    try {
+      const { error } = await supabase
+        .from("deliverables")
+        .update({ status: newStatus })
+        .eq("id", deliverable.id);
+
+      if (error) throw error;
+
+      await loadAssets();
+      setSelectedDeliverableDetail(null);
+      alert(`Status updated to ${newStatus}`);
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert(`Failed to update status: ${err instanceof Error ? err.message : "Unknown error"}`);
+    }
+  }
+
+  // Get filtered functions based on category
+  const filteredFunctions = selectedCategory
+    ? functions.filter(f => {
+        const deliverable = deliverables.find(d => d.task.function.code === f.code);
+        return deliverable?.task.function.category === selectedCategory;
+      })
+    : functions;
+
+  // Get filtered tasks based on core function
+  // When function is selected, only show tasks from that function
+  const filteredTasks = selectedFunction
+    ? (() => {
+        const tasksMap = new Map<string, { code: string; task_id: string; title: string }>();
+        deliverables.forEach(d => {
+          if (d.task.function.code === selectedFunction) {
+            if (!tasksMap.has(d.task.task_id)) {
+              tasksMap.set(d.task.task_id, {
+                code: d.task.function.code,
+                task_id: d.task.task_id,
+                title: d.task.title
+              });
+            }
+          }
+        });
+        return Array.from(tasksMap.values())
+          .sort((a, b) => a.task_id.localeCompare(b.task_id));
+      })()
+    : [];
+
+  // Get filtered deliverables based on task
+  const filteredDeliverablesForDropdown = selectedTask
+    ? deliverablesList.filter(d => {
+        const deliverable = deliverables.find(del => del.id === d.id);
+        return deliverable?.task.task_id === selectedTask;
+      })
+    : deliverablesList;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-black">Loading assets...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex bg-white text-black">
+      {/* Sidebar - same as IP detail page */}
+      <aside className="w-64 shrink-0 border-r border-[#e0e0e0] bg-white flex flex-col">
+        <div className="h-24 flex items-center px-5">
+          <div className="flex items-center gap-3">
+            <img src="/Title.svg" alt="UA" className="block h-8 w-auto" />
+            <div className="flex flex-col text-sm leading-tight">
+              <span className="font-semibold truncate">Universal</span>
+              <span className="font-semibold truncate">Asset</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-2 pt-4">
+          <button
+            onClick={() => router.push(`/ip/${slug}`)}
+            className="w-full flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium bg-transparent hover:bg-[#c9c9c9] transition-colors"
+          >
+            ← Back
+          </button>
+        </div>
+
+        {/* IP Info */}
+        {ip && ipIconUrl && (
+          <div className="px-2 pt-4 pb-2">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf]">
+              <img
+                src={ipIconUrl}
+                alt={ip.name}
+                className="block h-8 w-8 rounded object-cover"
+              />
+              <span className="font-medium text-sm truncate">{ip.name}</span>
+            </div>
+          </div>
+        )}
+
+        <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
+          <button 
+            onClick={() => router.push(`/ip/${slug}`)}
+            className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+          >
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+              <img src="/list.svg" alt="Workflows" className="block h-4 w-4" />
+            </span>
+            <span className="truncate">Workflows</span>
+          </button>
+
+          <button 
+            onClick={() => router.push(`/ip/${slug}/assets`)}
+            className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-[#c9c9c9] transition-colors"
+          >
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+              <img src="/photo.svg" alt="Assets" className="block h-4 w-4" />
+            </span>
+            <span className="truncate">Assets</span>
+          </button>
+        </nav>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 p-8 overflow-y-auto">
+        <div className="max-w-7xl">
+          {/* IP Header */}
+          {ip && ipIconUrl && (
+            <div className="mb-8">
+              <div className="flex items-center gap-4 mb-6">
+                <img
+                  src={ipIconUrl}
+                  alt={`${ip.name} icon`}
+                  className="w-12 h-12 object-contain"
+                />
+                <h1 className="text-3xl font-semibold tracking-tight">{ip.name}</h1>
+              </div>
+            </div>
+          )}
+
+          <h2 className="text-2xl font-semibold mb-6">Assets</h2>
+
+          {/* Search and Filters */}
+          <div className="mb-6 space-y-4">
+            {/* Search bar */}
+            <div>
+              <input
+                type="text"
+                placeholder="Search assets by keyword..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-[#e0e0e0] rounded-lg text-sm"
+              />
+            </div>
+
+            {/* Filter dropdowns */}
+            <div className="flex gap-4 flex-wrap">
+              <select
+                value={selectedCategory}
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  setSelectedFunction("");
+                  setSelectedTask("");
+                  setSelectedDeliverable("");
+                }}
+                className="px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm"
+              >
+                <option value="">All Categories</option>
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>
+                    {cat === 'entertainment' ? 'Entertainment (E)' : 
+                     cat === 'game' ? 'Game (G)' : 
+                     cat === 'product' ? 'Product (P)' : cat}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedFunction}
+                onChange={(e) => {
+                  setSelectedFunction(e.target.value);
+                  setSelectedTask("");
+                  setSelectedDeliverable("");
+                }}
+                disabled={!selectedCategory}
+                className="px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm disabled:opacity-50"
+              >
+                <option value="">All Core Functions</option>
+                {filteredFunctions.map(func => (
+                  <option key={func.code} value={func.code}>
+                    {func.code}: {func.title}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedTask}
+                onChange={(e) => {
+                  setSelectedTask(e.target.value);
+                  setSelectedDeliverable("");
+                }}
+                disabled={!selectedFunction}
+                className="px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm disabled:opacity-50"
+              >
+                <option value="">All Tasks</option>
+                {filteredTasks.map(task => (
+                  <option key={task.task_id} value={task.task_id}>
+                    {getShortTaskCode(task.task_id)}: {task.title}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                value={selectedDeliverable}
+                onChange={(e) => setSelectedDeliverable(e.target.value)}
+                disabled={!selectedTask}
+                className="px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm disabled:opacity-50"
+              >
+                <option value="">All Deliverables</option>
+                {filteredDeliverablesForDropdown.map(del => (
+                  <option key={del.id} value={del.id}>
+                    {getShortDeliverableCode(del.deliverable_id)}: {del.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Error message */}
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Asset cards grid */}
+          {filteredDeliverables.length === 0 ? (
+            <div className="text-center py-12 text-black/60">
+              {loading ? "Loading..." : "No assets found"}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {filteredDeliverables.map((deliverable) => (
+                <div
+                  key={deliverable.id}
+                  onClick={() => setSelectedDeliverableDetail(deliverable)}
+                  className="border border-[#e0e0e0] rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow hover:-translate-y-1"
+                >
+                  {/* Thumbnail */}
+                  <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-4xl mb-3">
+                    {getThumbnailPlaceholder(deliverable.filetype)}
+                  </div>
+
+                  {/* Code */}
+                  <div className="text-xs font-mono text-black/60 mb-1">
+                    {deliverable.deliverable_id}
+                  </div>
+
+                  {/* Description */}
+                  <div className="text-sm font-medium mb-2 line-clamp-2">
+                    {deliverable.description || deliverable.filename}
+                  </div>
+
+                  {/* Status */}
+                  <div className={`inline-block px-2 py-1 rounded text-xs ${getStatusColor(deliverable.status || 'Assigned')}`}>
+                    {deliverable.status || 'Assigned'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* Floating detail modal */}
+      {selectedDeliverableDetail && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold">Asset Details</h2>
+              <button
+                onClick={() => setSelectedDeliverableDetail(null)}
+                className="text-black/60 hover:text-black"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Thumbnail */}
+              <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-6xl">
+                {getThumbnailPlaceholder(selectedDeliverableDetail.filetype)}
+              </div>
+
+              {/* Code */}
+              <div>
+                <label className="text-xs font-medium text-black/60">Code</label>
+                <div className="text-sm font-mono">
+                  {selectedDeliverableDetail.deliverable_id}
+                </div>
+              </div>
+
+              {/* Filename */}
+              <div>
+                <label className="text-xs font-medium text-black/60">Filename</label>
+                <div className="text-sm">{selectedDeliverableDetail.filename}</div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="text-xs font-medium text-black/60">Description</label>
+                <div className="text-sm">{selectedDeliverableDetail.description || "No description"}</div>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="text-xs font-medium text-black/60">Status</label>
+                <div className={`inline-block px-3 py-1 rounded text-sm ${getStatusColor(selectedDeliverableDetail.status || 'Assigned')}`}>
+                  {selectedDeliverableDetail.status || 'Assigned'}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-[#e0e0e0]">
+                <label className="flex-1 min-w-[120px]">
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleUpload(file, selectedDeliverableDetail);
+                    }}
+                    className="hidden"
+                    disabled={uploading}
+                  />
+                  <div className={`px-4 py-2 rounded-lg text-sm text-center cursor-pointer transition-colors ${
+                    uploading 
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed" 
+                      : "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
+                  }`}>
+                    {uploading ? "Uploading..." : "UPLOAD"}
+                  </div>
+                </label>
+
+                <button
+                  onClick={() => handleDownload(selectedDeliverableDetail)}
+                  disabled={!selectedDeliverableDetail.storage_path}
+                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                    selectedDeliverableDetail.storage_path
+                      ? "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
+                      : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  DOWNLOAD
+                </button>
+
+                <button
+                  onClick={() => handleStatusUpdate(selectedDeliverableDetail, "Approved")}
+                  className="px-4 py-2 rounded-lg text-sm bg-green-100 hover:bg-green-200 text-green-800 transition-colors"
+                >
+                  APPROVE
+                </button>
+
+                <button
+                  onClick={() => handleStatusUpdate(selectedDeliverableDetail, "Needs Review")}
+                  className="px-4 py-2 rounded-lg text-sm bg-orange-100 hover:bg-orange-200 text-orange-800 transition-colors"
+                >
+                  NEEDS REVIEW
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
