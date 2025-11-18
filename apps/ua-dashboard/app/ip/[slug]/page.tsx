@@ -198,7 +198,10 @@ export default function IPDetailPage() {
       <aside className="w-64 shrink-0 border-r border-[#e0e0e0] bg-white flex flex-col">
         {/* Logo / brand */}
         <div className="h-24 flex items-center px-5">
-          <div className="flex items-center gap-3">
+          <button
+            onClick={() => router.push("/")}
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <img
               src="/Title.svg"
               alt="UA"
@@ -208,7 +211,7 @@ export default function IPDetailPage() {
               <span className="font-semibold truncate">Universal</span>
               <span className="font-semibold truncate">Asset</span>
             </div>
-          </div>
+          </button>
         </div>
 
         {/* Back button */}
