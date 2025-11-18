@@ -144,3 +144,36 @@ export interface GraphEdge {
   target: string; // function code
 }
 
+// Workflows
+export interface Workflow {
+  id: string;
+  workflow_id: string; // 'img2actions', 'txt2img', etc.
+  name: string;
+  description: string | null;
+  image_path: string | null;
+  supports_upload: boolean;
+  hidden_prompt: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WorkflowStep {
+  id: string;
+  workflow_id: string;
+  step_text: string;
+  display_order: number;
+  created_at: string;
+}
+
+export interface WorkflowDeliverable {
+  id: string;
+  workflow_id: string;
+  deliverable_code: string; // 'E1-T1-D1', etc.
+  created_at: string;
+}
+
+export interface WorkflowWithDetails extends Workflow {
+  steps: WorkflowStep[];
+  relevant_deliverables: WorkflowDeliverable[];
+}
+

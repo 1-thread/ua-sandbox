@@ -1,0 +1,19 @@
+Design for UA conductor
+
+Build a differentiable policy inside of a reinforcement learning framework, that maps the current state of the project (input) to a set of actions (output). The main role of the policy is to assign tasks to contributors taking into account workload and the state of other completed deliverables.
+
+
+=== Variables ===
+
+C = number of contributors
+L = number of contributor features [skill vector, days of assigned work, days of progress on current project]
+
+D = number of deliverables
+P = number of deliverable features [assign, remind, mark as completed]
+
+Input:
+* State of asignments [C x D x P]
+* State of contributors [C x L]
+
+Output:
+* State of asignments [C x D x P]

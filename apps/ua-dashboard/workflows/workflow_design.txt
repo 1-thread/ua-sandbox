@@ -1,0 +1,21 @@
+Workflow design document
+
+when the user clicks on the workflow item in the sidebar, it opens the workflow page.
+
+Similar to asset page, show the project icon and title at the top followed by Workflows
+
+Have the same search bar and pull down menus as the assets page for category, core function, task and deliverable. core functions list is conditioned on category. tasks are conditions on core function and deliverables conditioned on tasks. make the pull down menus as compact as possible.
+
+Below that will be a grid of cards similar to the assets page.
+
+The definition of workflows is in the workflows.json under the workflows folder. It should be analyzed and migrated to the a supabase database. Each workflow also has a thumbnail image and that should also be added to the supabase storage so it can supply the card images.
+
+Each card represents a workflow. It should have a name, image,description and relevant deliverables (all contained in the json and pulled from the database). 
+
+Each card should float upon hover.
+
+On click, the card should open a floating window. IT will include all of the information in the original card plus the directions shown as a list.
+
+Each workflow will have different inputs and outputs so those will have to be specified later. for now as default for all workflows, (1) have one text box that says "Prompt:" and (2) another text box marked as "Output" and (3) a "submit" button. 
+
+On the backend, there should be a chatGPT API call. Submit the prompt, get the response and show it to the user. The prompt should have some context and ensures that no history or context leaks in from other queries. Please come up with an appropriate hidden prompt to be sent each time. The request to GPT is for a specific workflow for the universal asset. This hidden prompt will be optimized later and should be contained in the supabase database.

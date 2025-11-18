@@ -1,0 +1,167 @@
+{
+  "generated_at": "UTC",
+  "assistants": [
+    {
+      "id": "img2actions",
+      "name": "Action / Pose Extractor",
+      "image": "img/img2actions.png",
+      "description": "Detects actions and extracts poses/keypoints from images to create annotations or drive previews. Helpful for E2/G3 planning and animation blocking.",
+      "relevant_codes": [
+        "E2-T1-D1",
+        "E2-T2-D1",
+        "E2-T3-D1",
+        "E2-T4-D1",
+        "E2-T5-D1",
+        "E2-T5-D2",
+        "G3-T1-D1",
+        "G3-T1-D2",
+        "G3-T2-D1",
+        "G3-T2-D2",
+        "G3-T2-D3",
+        "G3-T3-D1"
+      ],
+      "steps": [
+        "Provide input via upload or paste text.",
+        "Add a short prompt describing the goal.",
+        "Run the assistant to generate output.",
+        "Review, then attach the file to a UA deliverable."
+      ],
+      "supports_upload": true
+    },
+    {
+      "id": "img2lego",
+      "name": "Blockout Builder",
+      "image": "img/img2lego.png",
+      "description": "Converts images into voxel/brick blockouts for rapid level or toy prototyping. Useful for evaluating silhouette, scale, and composition without detail.",
+      "relevant_codes": [
+        "G1-T1-D1",
+        "G1-T2-D1",
+        "G1-T2-D2",
+        "G1-T3-D1",
+        "G1-T4-D1",
+        "G1-T4-D2",
+        "G1-T5-D1",
+        "G1-T5-D2",
+        "G1-T5-D3",
+        "G2-T1-D1",
+        "G2-T2-D1",
+        "G2-T3-D1"
+      ],
+      "steps": [
+        "Provide input via upload or paste text.",
+        "Add a short prompt describing the goal.",
+        "Run the assistant to generate output.",
+        "Review, then attach the file to a UA deliverable."
+      ],
+      "supports_upload": false
+    },
+    {
+      "id": "img2obj",
+      "name": "Image \u2192 3D OBJ",
+      "image": "img/img2obj.png",
+      "description": "Lifts a single reference image into a lightweight 3D OBJ/GLB with basic geometry and texture. Ideal for prop previews and quick block-ins tied to E/G phases.",
+      "relevant_codes": [
+        "E4-T1-D1",
+        "E4-T2-D1",
+        "E4-T3-D1",
+        "E4-T4-D1",
+        "E4-T5-D1",
+        "E4-T6-D1",
+        "E4-T7-D1",
+        "E5-T1-D1",
+        "E5-T2-D1",
+        "E5-T3-D1",
+        "E5-T4-D1",
+        "E5-T5-D1"
+      ],
+      "steps": [
+        "Upload a reference image or drop it into the box.",
+        "Optionally enter style or geometry hints in the prompt.",
+        "Click Run to process; preview appears below.",
+        "Download the OBJ/GLB and manifest for the UA deliverable."
+      ],
+      "supports_upload": true
+    },
+    {
+      "id": "img2schematic",
+      "name": "Schematic / Blueprint Maker",
+      "image": "img/img2schematic.png",
+      "description": "Transforms references into clean, labeled blueprint/line-art sheets with callouts. Great for manufacturing handoff, rig notes, and scene tech packets.",
+      "relevant_codes": [
+        "E5-T1-D1",
+        "E5-T2-D1",
+        "E5-T3-D1",
+        "E5-T4-D1",
+        "E5-T5-D1",
+        "E5-T6-D1",
+        "E5-T6-D2",
+        "E5-T7-D1",
+        "E5-T7-D2",
+        "P2-T1-D1",
+        "P2-T2-D1",
+        "P2-T3-D1"
+      ],
+      "steps": [
+        "Provide input via upload or paste text.",
+        "Add a short prompt describing the goal.",
+        "Run the assistant to generate output.",
+        "Review, then attach the file to a UA deliverable."
+      ],
+      "supports_upload": false
+    },
+    {
+      "id": "img2toy",
+      "name": "Toy & Packaging Composer",
+      "image": "img/img2toy.png",
+      "description": "Generates toy mockups and retail-ready box comps from concept art; can output dielines and hero renders. Perfect for P-phase deliverables.",
+      "relevant_codes": [
+        "P1-T1-D1",
+        "P1-T1-D2",
+        "P1-T2-D1",
+        "P1-T2-D2",
+        "P1-T2-D3",
+        "P1-T2-D4",
+        "P1-T2-D5",
+        "P1-T2-D6",
+        "P1-T3-D1",
+        "P1-T4-D1",
+        "P1-T4-D2",
+        "P1-T4-D3"
+      ],
+      "steps": [
+        "Provide input via upload or paste text.",
+        "Add a short prompt describing the goal.",
+        "Run the assistant to generate output.",
+        "Review, then attach the file to a UA deliverable."
+      ],
+      "supports_upload": true
+    },
+    {
+      "id": "txt2img",
+      "name": "Text \u2192 Image Generator",
+      "image": "img/txt2img.png",
+      "description": "Creates high-quality concept art directly from prompts (optionally with style tokens or references). Great for fast visual exploration before locking designs.",
+      "relevant_codes": [
+        "E1-T1-D1",
+        "E1-T1-D2",
+        "E1-T1-D3",
+        "E1-T2-D1",
+        "E1-T2-D2",
+        "E1-T2-D3",
+        "E1-T2-D4",
+        "E1-T2-D5",
+        "E1-T2-D6",
+        "E1-T3-D1",
+        "E1-T3-D2",
+        "E1-T4-D1"
+      ],
+      "steps": [
+        "Upload a reference image or drop it into the box.",
+        "Optionally enter style or geometry hints in the prompt.",
+        "Click Run to process; preview appears below.",
+        "Download the OBJ/GLB and manifest for the UA deliverable."
+      ],
+      "supports_upload": true
+    }
+  ]
+}
