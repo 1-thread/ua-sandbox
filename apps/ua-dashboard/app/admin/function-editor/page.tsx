@@ -542,7 +542,7 @@ export default function FunctionEditorPage() {
               {/* New Function Editor */}
               {isNewFunction && (
                 <NewFunctionEditor
-                  category={selectedVertical || undefined}
+                  category={selectedVertical || null}
                   onSave={async (newFunction) => {
                     await loadFunctions();
                     // Select the newly created function
