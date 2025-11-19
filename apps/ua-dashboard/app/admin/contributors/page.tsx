@@ -130,9 +130,7 @@ export default function ContributorsPage() {
       if (error) {
         console.error(`[Profile Image] Error loading ${filename}:`, error);
         console.error(`[Profile Image] Error details:`, {
-          message: error.message,
-          statusCode: error.statusCode,
-          error: error.error
+          message: error.message
         });
         return null;
       }
