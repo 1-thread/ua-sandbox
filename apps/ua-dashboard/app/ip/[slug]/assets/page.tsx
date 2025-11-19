@@ -435,20 +435,23 @@ export default function AssetsPage() {
         {/* IP Info */}
         {ip && ipIconUrl && (
           <div className="px-2 pt-4 pb-2">
-            <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf]">
+            <button
+              onClick={() => router.push(`/ip/${slug}`)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf] hover:bg-[#c9c9c9] transition-colors cursor-pointer"
+            >
               <img
                 src={ipIconUrl}
                 alt={ip.name}
                 className="block h-8 w-8 rounded object-cover"
               />
               <span className="font-medium text-sm truncate">{ip.name}</span>
-            </div>
+            </button>
           </div>
         )}
 
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
           <button 
-            onClick={() => router.push(`/ip/${slug}`)}
+            onClick={() => router.push(`/ip/${slug}/workflows`)}
             className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
           >
             <span className="inline-flex h-6 w-6 items-center justify-center rounded">
@@ -475,14 +478,17 @@ export default function AssetsPage() {
           {/* IP Header */}
           {ip && ipIconUrl && (
             <div className="mb-8">
-              <div className="flex items-center gap-4 mb-6">
+              <button
+                onClick={() => router.push(`/ip/${slug}`)}
+                className="flex items-center gap-4 mb-6 hover:opacity-80 transition-opacity cursor-pointer"
+              >
                 <img
                   src={ipIconUrl}
                   alt={`${ip.name} icon`}
                   className="w-12 h-12 object-contain"
                 />
                 <h1 className="text-3xl font-semibold tracking-tight">{ip.name}</h1>
-              </div>
+              </button>
             </div>
           )}
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import type { IP, Task, Function } from "@/types/ip";
@@ -11,10 +11,25 @@ interface WorkflowWithDetails extends Workflow {
   relevant_deliverables: WorkflowDeliverable[];
 }
 
+// Module-level cache to persist data across navigation
+interface WorkflowsCache {
+  workflows: WorkflowWithDetails[];
+  workflowImageUrls: Map<string, string>;
+  ip: IP | null;
+  ipIconUrl: string | null;
+  categories: string[];
+  functions: Array<{ code: string; title: string }>;
+  tasks: Array<{ code: string; task_id: string; title: string }>;
+  deliverablesList: Array<{ id: string; deliverable_id: string; title: string }>;
+}
+
+const workflowsCache = new Map<string, WorkflowsCache>();
+
 export default function WorkflowsPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
+  const hasLoadedRef = useRef(false);
 
   const [workflows, setWorkflows] = useState<WorkflowWithDetails[]>([]);
   const [filteredWorkflows, setFilteredWorkflows] = useState<WorkflowWithDetails[]>([]);
@@ -44,6 +59,27 @@ export default function WorkflowsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    // Reset the ref when slug changes
+    hasLoadedRef.current = false;
+    
+    // Check cache first
+    const cached = workflowsCache.get(slug);
+    if (cached) {
+      // Restore from cache
+      setWorkflows(cached.workflows);
+      setWorkflowImageUrls(cached.workflowImageUrls);
+      setIp(cached.ip);
+      setIpIconUrl(cached.ipIconUrl);
+      setCategories(cached.categories);
+      setFunctions(cached.functions);
+      setTasks(cached.tasks);
+      setDeliverablesList(cached.deliverablesList);
+      setLoading(false);
+      hasLoadedRef.current = true;
+      return;
+    }
+
+    // Load fresh data if not in cache
     loadWorkflows();
   }, [slug]);
 
@@ -68,6 +104,7 @@ export default function WorkflowsPage() {
       setIp(ipData);
 
       // Handle IP icon URL
+      let iconUrlValue: string | null = null;
       const iconPath = ipData.icon_url;
       if (iconPath) {
         const isDevelopment = typeof window !== 'undefined' && 
@@ -75,7 +112,8 @@ export default function WorkflowsPage() {
         
         if (isDevelopment) {
           const filename = iconPath.replace(/^ip-assets\//, '');
-          setIpIconUrl(`/icons/${filename}`);
+          iconUrlValue = `/icons/${filename}`;
+          setIpIconUrl(iconUrlValue);
         } else {
           try {
             const filename = iconPath.replace(/^ip-assets\//, '');
@@ -84,15 +122,18 @@ export default function WorkflowsPage() {
               .createSignedUrl(filename, 3600);
             
             if (!urlError && signedUrl) {
-              setIpIconUrl(signedUrl.signedUrl);
+              iconUrlValue = signedUrl.signedUrl;
+              setIpIconUrl(iconUrlValue);
             } else {
               const filename = iconPath.replace(/^ip-assets\//, '');
-              setIpIconUrl(`/icons/${filename}`);
+              iconUrlValue = `/icons/${filename}`;
+              setIpIconUrl(iconUrlValue);
             }
           } catch (err) {
             console.error("Error generating signed URL for icon:", err);
             const filename = iconPath.replace(/^ip-assets\//, '');
-            setIpIconUrl(`/icons/${filename}`);
+            iconUrlValue = `/icons/${filename}`;
+            setIpIconUrl(iconUrlValue);
           }
         }
       }
@@ -104,6 +145,12 @@ export default function WorkflowsPage() {
         .eq("ip_id", ipData.id);
 
       if (ipFunctionsError) throw ipFunctionsError;
+
+      // Initialize filter option variables
+      let uniqueCategories: string[] = [];
+      let functionsMap = new Map<string, { code: string; title: string }>();
+      let tasksMap = new Map<string, { code: string; task_id: string; title: string }>();
+      let deliverablesMap = new Map<string, { id: string; deliverable_id: string; title: string }>();
 
       if (ipFunctions && ipFunctions.length > 0) {
         const functionCodes = ipFunctions.map(f => f.function_code);
@@ -143,11 +190,10 @@ export default function WorkflowsPage() {
           .filter((d): d is any => d !== null);
 
         // Extract unique categories, functions, tasks, deliverables
-        const uniqueCategories = Array.from(new Set(deliverablesWithTasks.map(d => d.task.function.category)))
+        uniqueCategories = Array.from(new Set(deliverablesWithTasks.map(d => d.task.function.category)))
           .sort();
         setCategories(uniqueCategories);
 
-        const functionsMap = new Map<string, { code: string; title: string }>();
         deliverablesWithTasks.forEach(d => {
           if (!functionsMap.has(d.task.function.code)) {
             functionsMap.set(d.task.function.code, {
@@ -158,7 +204,6 @@ export default function WorkflowsPage() {
         });
         setFunctions(Array.from(functionsMap.values()).sort((a, b) => a.code.localeCompare(b.code)));
 
-        const tasksMap = new Map<string, { code: string; task_id: string; title: string }>();
         deliverablesWithTasks.forEach(d => {
           if (!tasksMap.has(d.task.task_id)) {
             tasksMap.set(d.task.task_id, {
@@ -171,7 +216,6 @@ export default function WorkflowsPage() {
         setTasks(Array.from(tasksMap.values())
           .sort((a, b) => a.code.localeCompare(b.code) || a.task_id.localeCompare(b.task_id)));
 
-        const deliverablesMap = new Map<string, { id: string; deliverable_id: string; title: string }>();
         deliverablesWithTasks.forEach(d => {
           if (!deliverablesMap.has(d.id)) {
             deliverablesMap.set(d.id, {
@@ -233,6 +277,20 @@ export default function WorkflowsPage() {
       
       console.log(`[Workflow Images] ✅ Loaded ${imageUrlMap.size} image URL(s)\n`);
       setWorkflowImageUrls(imageUrlMap);
+
+      // Cache the loaded data
+      workflowsCache.set(slug, {
+        workflows: workflowsWithDetails,
+        workflowImageUrls: imageUrlMap,
+        ip: ipData,
+        ipIconUrl: iconUrlValue,
+        categories: uniqueCategories,
+        functions: Array.from(functionsMap.values()).sort((a, b) => a.code.localeCompare(b.code)),
+        tasks: Array.from(tasksMap.values())
+          .sort((a, b) => a.code.localeCompare(b.code) || a.task_id.localeCompare(b.task_id)),
+        deliverablesList: Array.from(deliverablesMap.values())
+          .sort((a, b) => a.deliverable_id.localeCompare(b.deliverable_id)),
+      });
 
       setLoading(false);
     } catch (err) {
@@ -515,14 +573,17 @@ export default function WorkflowsPage() {
         {/* IP Info */}
         {ip && ipIconUrl && (
           <div className="px-2 pt-4 pb-2">
-            <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf]">
+            <button
+              onClick={() => router.push(`/ip/${slug}`)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf] hover:bg-[#c9c9c9] transition-colors cursor-pointer"
+            >
               <img
                 src={ipIconUrl}
                 alt={ip.name}
                 className="block h-8 w-8 rounded object-cover"
               />
               <span className="font-medium text-sm truncate">{ip.name}</span>
-            </div>
+            </button>
           </div>
         )}
 
@@ -555,14 +616,17 @@ export default function WorkflowsPage() {
           {/* IP Header */}
           {ip && ipIconUrl && (
             <div className="mb-8">
-              <div className="flex items-center gap-4 mb-6">
+              <button
+                onClick={() => router.push(`/ip/${slug}`)}
+                className="flex items-center gap-4 mb-6 hover:opacity-80 transition-opacity cursor-pointer"
+              >
                 <img
                   src={ipIconUrl}
                   alt={`${ip.name} icon`}
                   className="w-12 h-12 object-contain"
                 />
                 <h1 className="text-3xl font-semibold tracking-tight">{ip.name}</h1>
-              </div>
+              </button>
             </div>
           )}
 

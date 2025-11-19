@@ -295,17 +295,24 @@ export default function IPDetailPage() {
               <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
                 <button
                   type="button"
-                  onClick={() => router.push("/admin/conductor")}
+                  onClick={() => router.push(`/admin/conductor?ip=${slug}`)}
                   className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer"
                 >
                   <span className="truncate">Conductor</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => router.push("/admin/function-editor")}
+                  onClick={() => router.push(`/admin/function-editor?ip=${slug}`)}
                   className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
                 >
                   <span className="truncate">Function Editor</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/admin/contributors?ip=${slug}`)}
+                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                >
+                  <span className="truncate">Contributors</span>
                 </button>
               </div>
             )}
@@ -328,33 +335,32 @@ export default function IPDetailPage() {
               )}
               <h1 className="text-3xl font-semibold tracking-tight">{ip.name}</h1>
             </div>
-            {imageUrls.heroUrl && (
-              <div className="w-full max-w-2xl rounded-lg overflow-hidden mb-6">
+            
+            {/* Image and Description with text wrapping */}
+            <div className="mb-10">
+              {imageUrls.heroUrl && (
                 <img
                   src={imageUrls.heroUrl}
                   alt={`${ip.name} representative image`}
-                  className="w-full h-auto object-cover"
-                  style={{ maxHeight: '400px', objectFit: 'cover' }}
+                  className="float-left w-64 h-auto rounded-lg mr-6 mb-4 object-cover"
+                  style={{ maxWidth: '300px' }}
                 />
-              </div>
-            )}
+              )}
+              {ip.description && (
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold mb-3 tracking-tight">Description</h2>
+                  <p className="text-[15px] leading-relaxed text-black/80">{ip.description}</p>
+                </div>
+              )}
+              {ip.health_summary && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-3 tracking-tight">Health Summary</h2>
+                  <p className="text-[15px] leading-relaxed text-black/80">{ip.health_summary}</p>
+                </div>
+              )}
+              <div className="clear-both"></div>
+            </div>
           </div>
-
-          {/* Description */}
-          {ip.description && (
-            <div className="mb-10">
-              <h2 className="text-xl font-semibold mb-3 tracking-tight">Description</h2>
-              <p className="text-[15px] leading-relaxed text-black/80 max-w-2xl">{ip.description}</p>
-            </div>
-          )}
-
-          {/* Health Summary */}
-          {ip.health_summary && (
-            <div className="mb-10">
-              <h2 className="text-xl font-semibold mb-3 tracking-tight">Health Summary</h2>
-              <p className="text-[15px] leading-relaxed text-black/80 max-w-2xl">{ip.health_summary}</p>
-            </div>
-          )}
 
           {/* Pipeline Status */}
           {verticals.length > 0 && (

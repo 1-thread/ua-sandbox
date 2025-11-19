@@ -177,3 +177,27 @@ export interface WorkflowWithDetails extends Workflow {
   relevant_deliverables: WorkflowDeliverable[];
 }
 
+// Contributors
+export interface Contributor {
+  id: string;
+  name: string;
+  expertise: string[];
+  roles: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ContributorDeliverable {
+  id: string;
+  contributor_id: string;
+  deliverable_id: string;
+  status: 'Assigned' | 'Completed';
+  assigned_at: string;
+  completed_at: string | null;
+}
+
+export interface ContributorWithDeliverables extends Contributor {
+  deliverables_assigned: ContributorDeliverable[];
+  deliverables_completed: ContributorDeliverable[];
+}
+

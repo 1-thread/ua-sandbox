@@ -1,0 +1,14 @@
+Contributor List Design document
+
+* Implement contributor migration to load contributor information json to populate supabase
+* Current set of contributors are saved as json files in the contributor folder
+
+* Add "Contributor" item under "Admin" in the sidebar
+* Create a contributor page when user clicks on "contributor" item
+* Contributor page should have icon and title at the top similar to any other page
+* Create a card for each contributor with name, expertise and role (pull from database)
+* Each card should float on hover
+* Each card will spawn a floating window with the same information. Also add a section for "Deliverables Completed" and "Deliverables Assigned". We will add deliverables later.
+* Page will load information from database for the first time it is clicked but after that it should read from cache for faster loading
+* Create one contributor card with a plus sign in the middle for "add new contributor"
+* Clicking on the add new contributor card will spawn a floating window that has the name, expertise and role fields. clicking on the save button will add that new contributor to the database.

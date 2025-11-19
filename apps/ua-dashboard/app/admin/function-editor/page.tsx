@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import type { IP } from "@/types/ip";
 import FunctionEditorComponent from "@/components/FunctionEditor";
 import type {
   Function,
@@ -29,6 +30,9 @@ interface DeliverableWithData extends Deliverable {
 
 export default function FunctionEditorPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const ipSlug = searchParams.get('ip');
+  
   const [functions, setFunctions] = useState<Function[]>([]);
   const [selectedVertical, setSelectedVertical] = useState<string | null>(null);
   const [selectedFunction, setSelectedFunction] = useState<FunctionWithData | null>(null);
@@ -39,7 +43,65 @@ export default function FunctionEditorPage() {
   const [error, setError] = useState<string | null>(null);
   const [showBackupModal, setShowBackupModal] = useState(false);
   const [backups, setBackups] = useState<any[]>([]);
-  const [isVerticalsOpen, setIsVerticalsOpen] = useState(false);
+  
+  // IP context state
+  const [ip, setIp] = useState<IP | null>(null);
+  const [ipIconUrl, setIpIconUrl] = useState<string | null>(null);
+  const [isAdminOpen, setIsAdminOpen] = useState(true);
+
+  // Load IP data if slug is provided
+  useEffect(() => {
+    if (ipSlug) {
+      loadIPData();
+    }
+  }, [ipSlug]);
+
+  async function loadIPData() {
+    if (!ipSlug) return;
+    
+    try {
+      const { data: ipData, error: ipError } = await supabase
+        .from("ips")
+        .select("*")
+        .eq("slug", ipSlug)
+        .single();
+
+      if (ipError || !ipData) return;
+      
+      setIp(ipData);
+
+      const iconPath = ipData.icon_url;
+      if (iconPath) {
+        const isDevelopment = typeof window !== 'undefined' && 
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        
+        if (isDevelopment) {
+          const filename = iconPath.replace(/^ip-assets\//, '');
+          setIpIconUrl(`/icons/${filename}`);
+        } else {
+          try {
+            const filename = iconPath.replace(/^ip-assets\//, '');
+            const { data: signedUrl, error: urlError } = await supabase.storage
+              .from('ip-assets')
+              .createSignedUrl(filename, 3600);
+            
+            if (!urlError && signedUrl) {
+              setIpIconUrl(signedUrl.signedUrl);
+            } else {
+              const filename = iconPath.replace(/^ip-assets\//, '');
+              setIpIconUrl(`/icons/${filename}`);
+            }
+          } catch (err) {
+            console.error("Error generating signed URL for icon:", err);
+            const filename = iconPath.replace(/^ip-assets\//, '');
+            setIpIconUrl(`/icons/${filename}`);
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Error loading IP data:", err);
+    }
+  }
 
   const verticals = [
     { value: 'entertainment', label: 'Entertainment' },
@@ -47,10 +109,10 @@ export default function FunctionEditorPage() {
     { value: 'product', label: 'Product' },
   ];
 
-  // Filter functions by selected vertical
-  const functionsInVertical = selectedVertical
+  // Filter functions by selected vertical (or show all if no vertical selected)
+  const filteredFunctions = selectedVertical
     ? functions.filter(f => f.category === selectedVertical)
-    : [];
+    : functions;
 
   // Load all functions
   useEffect(() => {
@@ -68,10 +130,8 @@ export default function FunctionEditorPage() {
 
   // Clear function selection when vertical changes
   useEffect(() => {
-    if (selectedVertical) {
-      setSelectedFunction(null);
-      setIsNewFunction(false);
-    }
+    setSelectedFunction(null);
+    setIsNewFunction(false);
   }, [selectedVertical]);
 
   async function loadFunctions() {
@@ -261,7 +321,7 @@ export default function FunctionEditorPage() {
 
   return (
     <div className="min-h-screen flex bg-white text-black">
-      {/* Sidebar */}
+      {/* Sidebar - IP context sidebar */}
       <aside className="w-64 shrink-0 border-r border-[#e0e0e0] bg-white flex flex-col">
         <div className="h-24 flex items-center px-5">
           <button
@@ -276,14 +336,46 @@ export default function FunctionEditorPage() {
           </button>
         </div>
 
-        <div className="px-2 pt-4">
-          <button
-            onClick={() => router.push("/")}
-            className="w-full flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium bg-transparent hover:bg-[#c9c9c9] transition-colors mb-4"
-          >
-            ← Back
-          </button>
+        {ipSlug && (
+          <div className="px-2 pt-4">
+            <button
+              onClick={() => router.push(`/ip/${ipSlug}`)}
+              className="w-full flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium bg-transparent hover:bg-[#c9c9c9] transition-colors"
+            >
+              ← Back
+            </button>
+          </div>
+        )}
 
+        {!ipSlug && (
+          <div className="px-2 pt-4">
+            <button
+              onClick={() => router.push("/")}
+              className="w-full flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium bg-transparent hover:bg-[#c9c9c9] transition-colors"
+            >
+              ← Back
+            </button>
+          </div>
+        )}
+
+        {/* IP Info */}
+        {ip && ipIconUrl && (
+          <div className="px-2 pt-4 pb-2">
+            <button
+              onClick={() => router.push(`/ip/${ipSlug}`)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-[#dfdfdf] hover:bg-[#c9c9c9] transition-colors cursor-pointer"
+            >
+              <img
+                src={ipIconUrl}
+                alt={ip.name}
+                className="block h-8 w-8 rounded object-cover"
+              />
+              <span className="font-medium text-sm truncate">{ip.name}</span>
+            </button>
+          </div>
+        )}
+
+        <div className="px-2 pt-4">
           <button
             onClick={() => setShowBackupModal(true)}
             className="w-full flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium bg-[#c9c9c9] hover:bg-[#b0b0b0] transition-colors mb-4"
@@ -294,141 +386,186 @@ export default function FunctionEditorPage() {
 
         {/* Main nav */}
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
+          {/* Workflows */}
+          {ipSlug && (
+            <button 
+              onClick={() => router.push(`/ip/${ipSlug}/workflows`)}
+              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+            >
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                <img src="/list.svg" alt="Workflows" className="block h-4 w-4" />
+              </span>
+              <span className="truncate">Workflows</span>
+            </button>
+          )}
+
+          {/* Assets */}
+          {ipSlug && (
+            <button 
+              onClick={() => router.push(`/ip/${ipSlug}/assets`)}
+              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+            >
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                <img src="/photo.svg" alt="Assets" className="block h-4 w-4" />
+              </span>
+              <span className="truncate">Assets</span>
+            </button>
+          )}
+
+          {/* Admin (section header) */}
+          <div>
+            <button
+              type="button"
+              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+            >
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                <img src="/admin_tools_icon.svg" alt="Admin" className="block h-4 w-4" />
+              </span>
+              <span className="truncate">Admin</span>
+            </button>
+
+            {/* Segmented Admin list - Always visible on admin pages */}
+            <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
+                <button
+                  type="button"
+                  onClick={() => router.push(ipSlug ? `/admin/conductor?ip=${ipSlug}` : "/admin/conductor")}
+                  className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer"
+                >
+                  <span className="truncate">Conductor</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push(ipSlug ? `/admin/function-editor?ip=${ipSlug}` : "/admin/function-editor")}
+                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white bg-white cursor-pointer"
+                >
+                  <span className="truncate">Function Editor</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => router.push(ipSlug ? `/admin/contributors?ip=${ipSlug}` : "/admin/contributors")}
+                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                >
+                  <span className="truncate">Contributors</span>
+                </button>
+              </div>
+          </div>
           {error && (
             <div className="px-2 mb-2 text-xs text-red-600">
               Error: {error}
             </div>
           )}
 
-          {/* Verticals (section header) */}
-          <div
-            onMouseEnter={() => setIsVerticalsOpen(true)}
-            onMouseLeave={() => setIsVerticalsOpen(false)}
-          >
-            <button
-              type="button"
-              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
-              onClick={() => setIsVerticalsOpen((open) => !open)}
-            >
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
-                <img
-                  src="/list.svg"
-                  alt="Verticals"
-                  className="block h-4 w-4"
-                />
-              </span>
-              <span className="truncate">Verticals</span>
-            </button>
-
-            {/* Segmented Vertical list */}
-            {isVerticalsOpen && (
-              <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
-                {verticals.map((vertical, index) => (
-                  <button
-                    key={vertical.value}
-                    type="button"
-                    onClick={() => {
-                      console.log("Selecting vertical:", vertical.value);
-                      setSelectedVertical(vertical.value);
-                      setSelectedFunction(null);
-                    }}
-                    className={`w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer ${
-                      index === 0 ? "border border-black/10" : ""
-                    } ${
-                      selectedVertical === vertical.value ? "bg-white" : ""
-                    }`}
-                  >
-                    <span className="truncate">{vertical.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
         </nav>
       </aside>
 
       {/* Main content */}
       <main className="flex-1 p-8 overflow-y-auto">
-        {loadingFunction ? (
-          <div className="max-w-4xl">
+        <div className="max-w-4xl">
+          <h1 className="text-sm font-semibold mb-6">Function Editor</h1>
+          
+          {loadingFunction ? (
             <div className="text-black">Loading function details...</div>
-          </div>
-        ) : selectedFunction ? (
-          <FunctionEditorComponent
-            function={selectedFunction}
-            onSave={async () => {
-              await loadFunctionDetails(selectedFunction.code);
-              await loadFunctions();
-            }}
-            onDelete={async () => {
-              setSelectedFunction(null);
-              await loadFunctions();
-            }}
-          />
-        ) : selectedVertical ? (
-          <div className="max-w-4xl">
-            <h1 className="text-sm font-semibold mb-4">Function Editor</h1>
-            {!isNewFunction && !selectedFunction && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">
-                  Select Function ({verticals.find(v => v.value === selectedVertical)?.label})
+          ) : selectedFunction ? (
+            <FunctionEditorComponent
+              function={selectedFunction}
+              onSave={async () => {
+                await loadFunctionDetails(selectedFunction.code);
+                await loadFunctions();
+              }}
+              onDelete={async () => {
+                setSelectedFunction(null);
+                await loadFunctions();
+              }}
+            />
+          ) : (
+            <div className="space-y-4">
+              {/* Vertical dropdown */}
+              <div>
+                <label className="block text-xs font-medium mb-2 text-black/80">
+                  Vertical (Optional)
                 </label>
                 <select
-                  value=""
+                  value={selectedVertical || ""}
                   onChange={(e) => {
-                    const funcCode = e.target.value;
-                    if (funcCode === "__new__") {
-                      setIsNewFunction(true);
-                      setSelectedFunction(null);
-                    } else if (funcCode) {
-                      const func = functions.find(f => f.code === funcCode);
-                      if (func) {
-                        setSelectedFunction({ ...func, guardrails: [], tasks: [] } as FunctionWithData);
-                        setIsNewFunction(false);
-                      }
-                    }
+                    const verticalValue = e.target.value || null;
+                    setSelectedVertical(verticalValue);
+                    setSelectedFunction(null);
+                    setIsNewFunction(false);
                   }}
-                  className="w-full max-w-md px-4 py-2 border border-[#e0e0e0] rounded-lg text-sm"
+                  className="w-full max-w-md px-3 py-2 border border-[#e0e0e0] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#c9c9c9]"
                 >
-                  <option value="">-- Select a function --</option>
-                  <option value="__new__">+ Add new function</option>
-                  {functionsInVertical.map((func) => (
-                    <option key={func.id} value={func.code}>
-                      {func.code}: {func.title}
+                  <option value="">-- All Verticals --</option>
+                  {verticals.map((vertical) => (
+                    <option key={vertical.value} value={vertical.value}>
+                      {vertical.label}
                     </option>
                   ))}
                 </select>
-                {functionsInVertical.length === 0 && (
-                  <p className="mt-2 text-sm text-black/60">
-                    No functions found in {verticals.find(v => v.value === selectedVertical)?.label} vertical.
-                  </p>
-                )}
               </div>
-            )}
-            {isNewFunction && (
-              <NewFunctionEditor
-                category={selectedVertical}
-                onSave={async (newFunction) => {
-                  await loadFunctions();
-                  // Select the newly created function (the insert returns the full function data)
-                  setSelectedFunction({ ...newFunction, guardrails: [], tasks: [] } as FunctionWithData);
-                  setIsNewFunction(false);
-                }}
-                onCancel={() => {
-                  setIsNewFunction(false);
-                  setSelectedFunction(null);
-                }}
-              />
-            )}
-          </div>
-        ) : (
-          <div className="max-w-4xl">
-            <h1 className="text-sm font-semibold mb-4">Function Editor</h1>
-            <p className="text-sm text-black/60">
-              Select a vertical from the sidebar to begin editing functions.
-            </p>
-          </div>
-        )}
+
+              {/* Core Function dropdown */}
+              {!isNewFunction && (
+                <div>
+                  <label className="block text-xs font-medium mb-2 text-black/80">
+                    Core Function
+                  </label>
+                  <select
+                    value={selectedFunction?.code || ""}
+                    onChange={(e) => {
+                      const funcCode = e.target.value;
+                      if (funcCode === "__new__") {
+                        setIsNewFunction(true);
+                        setSelectedFunction(null);
+                      } else if (funcCode) {
+                        const func = functions.find(f => f.code === funcCode);
+                        if (func) {
+                          setSelectedFunction({ ...func, guardrails: [], tasks: [] } as FunctionWithData);
+                          setIsNewFunction(false);
+                        }
+                      } else {
+                        setSelectedFunction(null);
+                        setIsNewFunction(false);
+                      }
+                    }}
+                    className="w-full max-w-md px-3 py-2 border border-[#e0e0e0] rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#c9c9c9]"
+                  >
+                    <option value="">-- Select a function --</option>
+                    <option value="__new__">+ Add new function</option>
+                    {filteredFunctions.map((func) => (
+                      <option key={func.id} value={func.code}>
+                        {func.code}: {func.title}
+                      </option>
+                    ))}
+                  </select>
+                  {filteredFunctions.length === 0 && (
+                    <p className="mt-2 text-xs text-black/60">
+                      {selectedVertical 
+                        ? `No functions found in ${verticals.find(v => v.value === selectedVertical)?.label} vertical.`
+                        : "No functions found."}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* New Function Editor */}
+              {isNewFunction && (
+                <NewFunctionEditor
+                  category={selectedVertical || undefined}
+                  onSave={async (newFunction) => {
+                    await loadFunctions();
+                    // Select the newly created function
+                    setSelectedFunction({ ...newFunction, guardrails: [], tasks: [] } as FunctionWithData);
+                    setIsNewFunction(false);
+                  }}
+                  onCancel={() => {
+                    setIsNewFunction(false);
+                    setSelectedFunction(null);
+                  }}
+                />
+              )}
+            </div>
+          )}
+        </div>
       </main>
 
       {/* Backup Modal */}
