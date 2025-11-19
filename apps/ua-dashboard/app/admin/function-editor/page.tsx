@@ -375,14 +375,6 @@ export default function FunctionEditorPage() {
           </div>
         )}
 
-        <div className="px-2 pt-4">
-          <button
-            onClick={() => setShowBackupModal(true)}
-            className="w-full flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium bg-[#c9c9c9] hover:bg-[#b0b0b0] transition-colors mb-4"
-          >
-            💾 Backup/Restore
-          </button>
-        </div>
 
         {/* Main nav */}
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">

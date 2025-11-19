@@ -1,0 +1,20 @@
+Conductor Design Document
+
+* When the user clicks on the conductor item in the sidebar, it will open the conductor page
+* the conductor page should have the same IP icon and title at the top similar to other pages, along with the title "conductor"
+
+* The conductor page has three cards (one for each vertical) that span the entire width of the page
+* In the default view of the page looks very similiar to the Pipeline Status of the opening IP page. One card for each vertical, a progress bar and (this is new) a row of small round profile pictures that shows all of the contributors that have been assigned to deliverables that belong to that vertical.
+* The structure of the core functions, tasks and deliverables is simiilar to the function editor.
+* Each vertical text title should have a sideways triangle in the front that indicates that the vertical can be expanded. When the user clicks on the triangle, the triangle points down to reveal a list of core function IDs and title under the vertical such as "E1: Create and Build Pitch Package". In this view, each core function now has a row of profile picture to show the contributors that have been assigned to deliverables under each core function. The row of small round profile pictures under the vertical should disappear when the core function is expanded. Only show small  profile pictures for the leaf item that has been expanded.
+* each core function also has a triangle in the front that indicates that it can be expanded. When the user clicks on the triangle or title, it expands all of the tasks under that core function like "E1-T1: Assemble Pitch Package Draft". Under the Task name now shows a row of small profile images to show all of the contributors that own deliverables under that task.
+* Each task title also has a expandable triangle. When the user clicks on the triangle or title, then a list of deliverables are shown. The deliverables are denoted as "E1-T1-D1: pitch-deck.pptx" and a row of profile pictures reveal the owners of the deliverable.
+
+* The owner of each deliverable should be extracted from the supabase database. 
+* If there is no owner for the deliverable, there should just be a small round circle with a plus sign and a small text that says "add owner". 
+* ADDING OWNERS: When a user click on the circle, it spawn a floating page that shows a list of contributors (small round image, name, expertise and total number of assigned tasks). The total number of assigned task should be loaded or compputed from the supabase database. When a contributor is selected as the new owner, the database should be updated and the deliverable count for the contributor should also be incremented by one.
+* CHANGE OWNER: The user can also reassign or remove an owner by clicking on the small round profile picture if it exists. When the user clicks on the small round profile picture, it spawns the same floating window with a list of all contributors as described above. Clicking on a new contributor changes the owner, and the assignment should be made to the database. There should be an option to remove or unassign a contributor from a deliverable. Make a small gray button the same size as a profile picuture. Clicking on this gray round circle with the name "no owner" will set the owner to "unassigned" in the database.
+* Each time a vertical, core function or task is folded the row of small round profile picutres needs to be updated to show the most up to date assignments. 
+
+* update the database as needed to support these functions.
+
