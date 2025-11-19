@@ -173,7 +173,7 @@ export default function ContributorsPage() {
       const { data: deliverablesData } = deliverableIds.length > 0
         ? await supabase
             .from("deliverables")
-            .select("id, deliverable_id, filename, description")
+            .select("id, task_id, deliverable_id, filename, filetype, path_hint, description, status, storage_path, ip_id, display_order, created_at")
             .in("id", deliverableIds)
         : { data: [] };
 
