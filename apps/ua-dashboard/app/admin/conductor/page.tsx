@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import type { IP, Function, Task, Deliverable, Contributor, ContributorDeliverable } from "@/types/ip";
@@ -34,10 +34,22 @@ interface DeliverableData {
 // Module-level cache for profile images (persists across re-renders and component instances)
 const profileImageCache = new Map<string, { url: string; expiresAt: number }>();
 
+// Module-level cache to persist data across navigation
+interface ConductorCache {
+  ip: IP | null;
+  ipIconUrl: string | null;
+  verticals: VerticalData[];
+  contributors: Contributor[];
+  profileImageUrls: Array<[string, string]>; // Map as array of tuples for serialization
+}
+
+const conductorCache = new Map<string, ConductorCache>();
+
 export default function ConductorPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const ipSlug = searchParams.get('ip');
+  const hasLoadedRef = useRef(false);
   
   const [ip, setIp] = useState<IP | null>(null);
   const [ipIconUrl, setIpIconUrl] = useState<string | null>(null);
@@ -52,12 +64,34 @@ export default function ConductorPage() {
   const verticalNames = ['entertainment', 'game', 'product'];
 
   useEffect(() => {
-    if (ipSlug) {
+    if (!ipSlug) return;
+    
+    // Reset the ref when ipSlug changes
+    hasLoadedRef.current = false;
+    
+    // Check cache first
+    const cached = conductorCache.get(ipSlug);
+    if (cached) {
+      // Restore from cache
+      setIp(cached.ip);
+      setIpIconUrl(cached.ipIconUrl);
+      setVerticals(cached.verticals);
+      setContributors(cached.contributors);
+      setProfileImageUrls(new Map(cached.profileImageUrls));
+      setLoading(false);
+      hasLoadedRef.current = true;
+      // Still load IP data for icon URL
       loadIPData();
-      loadAllData();
-      // Preload all profile images in the background
+      // Preload profile images in background (they may have expired)
       preloadAllProfileImages();
+      return;
     }
+
+    // Load fresh data if not in cache
+    loadIPData();
+    loadAllData();
+    // Preload all profile images in the background
+    preloadAllProfileImages();
   }, [ipSlug]);
 
   async function preloadAllProfileImages() {
@@ -109,13 +143,15 @@ export default function ConductorPage() {
       setIp(ipData);
 
       const iconPath = ipData.icon_url;
+      let iconUrlValue: string | null = null;
       if (iconPath) {
         const isDevelopment = typeof window !== 'undefined' && 
           (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
         
         if (isDevelopment) {
           const filename = iconPath.replace(/^ip-assets\//, '');
-          setIpIconUrl(`/icons/${filename}`);
+          iconUrlValue = `/icons/${filename}`;
+          setIpIconUrl(iconUrlValue);
         } else {
           try {
             const filename = iconPath.replace(/^ip-assets\//, '');
@@ -124,16 +160,31 @@ export default function ConductorPage() {
               .createSignedUrl(filename, 3600);
             
             if (!urlError && signedUrl) {
-              setIpIconUrl(signedUrl.signedUrl);
+              iconUrlValue = signedUrl.signedUrl;
+              setIpIconUrl(iconUrlValue);
             } else {
               const filename = iconPath.replace(/^ip-assets\//, '');
-              setIpIconUrl(`/icons/${filename}`);
+              iconUrlValue = `/icons/${filename}`;
+              setIpIconUrl(iconUrlValue);
             }
           } catch (err) {
             console.error("Error generating signed URL for icon:", err);
             const filename = iconPath.replace(/^ip-assets\//, '');
-            setIpIconUrl(`/icons/${filename}`);
+            iconUrlValue = `/icons/${filename}`;
+            setIpIconUrl(iconUrlValue);
           }
+        }
+      }
+      
+      // Update cache with IP icon URL if we have cached data
+      if (ipSlug && hasLoadedRef.current) {
+        const cached = conductorCache.get(ipSlug);
+        if (cached) {
+          conductorCache.set(ipSlug, {
+            ...cached,
+            ip: ipData,
+            ipIconUrl: iconUrlValue
+          });
         }
       }
     } catch (err) {
@@ -198,11 +249,11 @@ export default function ConductorPage() {
         .select("*")
         .order("name");
 
+      // Load profile images (with caching)
+      const profileImageUrlMap = new Map<string, string>();
       if (contributorsData) {
         setContributors(contributorsData);
         
-        // Load profile images (with caching)
-        const profileImageUrlMap = new Map<string, string>();
         await Promise.all(
           contributorsData.map(async (contributor) => {
             const firstName = getFirstName(contributor.name);
@@ -359,6 +410,19 @@ export default function ConductorPage() {
       const verticalsArray = Array.from(verticalsMap.values());
       console.log("Loaded verticals:", verticalsArray.map(v => ({ name: v.name, functionCount: v.functions.length })));
       setVerticals(verticalsArray);
+      
+      // Cache the data
+      if (ipSlug) {
+        conductorCache.set(ipSlug, {
+          ip: ipData,
+          ipIconUrl: ipIconUrl || null,
+          verticals: verticalsArray,
+          contributors: contributorsData || [],
+          profileImageUrls: Array.from(profileImageUrlMap.entries())
+        });
+        hasLoadedRef.current = true;
+      }
+      
       setLoading(false);
     } catch (err) {
       console.error("Error loading conductor data:", err);
@@ -813,18 +877,22 @@ export default function ConductorPage() {
                         return (
                           <div
                             key={contributor.id}
-                            className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0"
-                            title={contributor.name}
+                            className="relative group w-8 h-8 rounded-full overflow-visible flex-shrink-0"
                           >
-                            {imageUrl ? (
-                              <img src={imageUrl} alt={contributor.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
-                                <span className="text-xs font-semibold text-black/60">
-                                  {contributor.name.charAt(0).toUpperCase()}
-                                </span>
-                              </div>
-                            )}
+                            <div className="w-8 h-8 rounded-full overflow-hidden">
+                              {imageUrl ? (
+                                <img src={imageUrl} alt={contributor.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
+                                  <span className="text-xs font-semibold text-black/60">
+                                    {contributor.name.charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-white text-[10px] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                              {contributor.name}
+                            </div>
                           </div>
                         );
                       })}
@@ -877,18 +945,22 @@ export default function ConductorPage() {
                                     return (
                                       <div
                                         key={contributor.id}
-                                        className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0"
-                                        title={contributor.name}
+                                        className="relative group w-6 h-6 rounded-full overflow-visible flex-shrink-0"
                                       >
-                                        {imageUrl ? (
-                                          <img src={imageUrl} alt={contributor.name} className="w-full h-full object-cover" />
-                                        ) : (
-                                          <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
-                                            <span className="text-[10px] font-semibold text-black/60">
-                                              {contributor.name.charAt(0).toUpperCase()}
-                                            </span>
-                                          </div>
-                                        )}
+                                        <div className="w-6 h-6 rounded-full overflow-hidden">
+                                          {imageUrl ? (
+                                            <img src={imageUrl} alt={contributor.name} className="w-full h-full object-cover" />
+                                          ) : (
+                                            <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
+                                              <span className="text-[10px] font-semibold text-black/60">
+                                                {contributor.name.charAt(0).toUpperCase()}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-white text-[10px] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                                          {contributor.name}
+                                        </div>
                                       </div>
                                     );
                                   })}
@@ -934,18 +1006,22 @@ export default function ConductorPage() {
                                               return (
                                                 <div
                                                   key={contributor.id}
-                                                  className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0"
-                                                  title={contributor.name}
+                                                  className="relative group w-6 h-6 rounded-full overflow-visible flex-shrink-0"
                                                 >
-                                                  {imageUrl ? (
-                                                    <img src={imageUrl} alt={contributor.name} className="w-full h-full object-cover" />
-                                                  ) : (
-                                                    <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
-                                                      <span className="text-[10px] font-semibold text-black/60">
-                                                        {contributor.name.charAt(0).toUpperCase()}
-                                                      </span>
-                                                    </div>
-                                                  )}
+                                                  <div className="w-6 h-6 rounded-full overflow-hidden">
+                                                    {imageUrl ? (
+                                                      <img src={imageUrl} alt={contributor.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                      <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
+                                                        <span className="text-[10px] font-semibold text-black/60">
+                                                          {contributor.name.charAt(0).toUpperCase()}
+                                                        </span>
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-white text-[10px] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                                                    {contributor.name}
+                                                  </div>
                                                 </div>
                                               );
                                             })}
@@ -968,29 +1044,33 @@ export default function ConductorPage() {
                                                 {/* Owner Profile Picture or Add Button */}
                                                 <div className="flex items-center gap-2">
                                                   {deliverableData.owner ? (
-                                                    <button
-                                                      type="button"
-                                                      onClick={() => {
-                                                        setSelectedDeliverable(deliverableData);
-                                                        setShowOwnerModal(true);
-                                                      }}
-                                                      className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 hover:ring-2 hover:ring-[#c9c9c9]"
-                                                      title={deliverableData.owner.name}
-                                                    >
-                                                      {profileImageUrls.get(deliverableData.owner.id) ? (
-                                                        <img 
-                                                          src={profileImageUrls.get(deliverableData.owner.id)!} 
-                                                          alt={deliverableData.owner.name} 
-                                                          className="w-full h-full object-cover" 
-                                                        />
-                                                      ) : (
-                                                        <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
-                                                          <span className="text-[10px] font-semibold text-black/60">
-                                                            {deliverableData.owner.name.charAt(0).toUpperCase()}
-                                                          </span>
-                                                        </div>
-                                                      )}
-                                                    </button>
+                                                    <div className="relative group">
+                                                      <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                          setSelectedDeliverable(deliverableData);
+                                                          setShowOwnerModal(true);
+                                                        }}
+                                                        className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 hover:ring-2 hover:ring-[#c9c9c9]"
+                                                      >
+                                                        {profileImageUrls.get(deliverableData.owner.id) ? (
+                                                          <img 
+                                                            src={profileImageUrls.get(deliverableData.owner.id)!} 
+                                                            alt={deliverableData.owner.name} 
+                                                            className="w-full h-full object-cover" 
+                                                          />
+                                                        ) : (
+                                                          <div className="w-full h-full bg-[#dfdfdf] flex items-center justify-center">
+                                                            <span className="text-[10px] font-semibold text-black/60">
+                                                              {deliverableData.owner.name.charAt(0).toUpperCase()}
+                                                            </span>
+                                                          </div>
+                                                        )}
+                                                      </button>
+                                                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-white text-[10px] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                                                        {deliverableData.owner.name}
+                                                      </div>
+                                                    </div>
                                                   ) : (
                                                     <button
                                                       type="button"
@@ -1136,8 +1216,9 @@ function OwnerAssignmentModal({
                   onClick={() => onAssign(deliverable.deliverable.id, contributor.id)}
                   className="w-full flex items-center gap-3 p-3 border border-[#e0e0e0] rounded-lg hover:bg-[#f9f9f9] text-left"
                 >
-                  {imageUrl ? (
-                    <img
+                  <div className="relative group w-10 h-10 rounded-full overflow-visible flex-shrink-0">
+                    {imageUrl ? (
+                      <img
                       src={imageUrl}
                       alt={contributor.name}
                       className="w-10 h-10 rounded-full object-cover flex-shrink-0"
@@ -1149,6 +1230,10 @@ function OwnerAssignmentModal({
                       </span>
                     </div>
                   )}
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-black/80 text-white text-[10px] rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                    {contributor.name}
+                  </div>
+                  </div>
                   <div className="flex-1">
                     <div className="text-sm font-medium">{contributor.name}</div>
                     <div className="text-xs text-black/60">
