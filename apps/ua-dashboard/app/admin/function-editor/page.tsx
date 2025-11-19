@@ -502,7 +502,7 @@ export default function FunctionEditorPage() {
                     Core Function
                   </label>
                   <select
-                    value={selectedFunction?.code || ""}
+                    value={(selectedFunction as FunctionWithData | null)?.code || ""}
                     onChange={(e) => {
                       const funcCode = e.target.value;
                       if (funcCode === "__new__") {
