@@ -112,9 +112,8 @@ After uploading:
 
 | Location | Path | Purpose |
 |----------|------|---------|
-| **Source** | `workflows/img/*.png` | Original images |
-| **Local Dev** | `public/workflows/*.png` | Served by Next.js in development |
-| **Production** | Supabase Storage `workflows/*.png` | Served via signed URLs |
+| **Source** | `public/workflows/*.png` | Images served by Next.js in development |
+| **Production** | Supabase Storage `workflows` bucket | Images served via signed URLs |
 | **Database** | `workflows.image_path` = `img/img2actions.png` | Reference path |
 
 ---

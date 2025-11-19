@@ -1,0 +1,21 @@
+Assset Page Design Description:
+
+When the "assets" item is clicked in the sidebar, it should open the asset viewer in the main page.
+
+At the top, there is a search bar for assets to filter by keywords. There should also be a row of small pull down menu for category { Entertainment(E), Game(G), Product(P)}, task {E1,E2,...} and deliverable {D1,D2,...}. task and deliverable should be conditional on the category and task that's selected.
+
+Initially, the main page should show a list of cards for each asset. Use the existing asset/deliverable supabase database to dynamically create cards.
+
+*Card should contain thumbnail of asset (or placeholder image, make an an appropriate SVG placeholder depending on file type)
+*Category-Task-Deliverable code
+*Description
+*Status: {Assigned, In Progress, Completed}
+
+Cards should float on hover.
+
+When clicked it should open a floating window showing all of the information in the card plus the following options:
+
+UPLOAD: There should be an upload button to upload an asset. The asset should be added to the supabase storage for the target IP (e.g., doh world). That path to the asset in storage should be updated in the existing asset database for the target IP.
+DOWNLOAD: There should be a download button to download the asset locally by accessing the supabase asset storage using the saved path to the asset in the asset database.
+APPROVE: There should also be an approval button. When the approval button is clicked, it should change the status of the deliverable in the asset database to "approved"
+NEEDS REVIEW: There should also be "need review" button.

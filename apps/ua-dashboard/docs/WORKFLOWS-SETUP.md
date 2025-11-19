@@ -35,7 +35,7 @@ Upload workflow thumbnail images to Supabase Storage:
 
 1. Go to Supabase Dashboard → Storage
 2. Create a bucket called `workflows` (if it doesn't exist)
-3. Upload images from `workflows/img/` folder
+3. Upload images from `public/workflows/` folder
 4. Make sure the image paths match what's in the database (`image_path` field)
 
 Alternatively, for local development:

@@ -45,11 +45,11 @@ ORDER BY i.name;
 -- 6. Check if deliverables have ip_id (should be NULL for templates)
 -- NOTE: Uncomment this query ONLY AFTER running supabase/add-ip-id-to-deliverables.sql
 -- If you get an error about ip_id not existing, run the schema update first.
-/*
+
 SELECT 
   'Deliverables with IP' as data_type,
   COUNT(*) FILTER (WHERE ip_id IS NULL) as template_count,
   COUNT(*) FILTER (WHERE ip_id IS NOT NULL) as ip_specific_count
 FROM deliverables;
-*/
+
 
