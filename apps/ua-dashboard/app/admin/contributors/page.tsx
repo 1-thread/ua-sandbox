@@ -270,17 +270,26 @@ export default function ContributorsPage() {
     try {
       const sizeSuffix = size === 'original' ? '' : `-${size}`;
       const filename = `${firstName}${sizeSuffix}.png`;
-      console.log(`[Profile Image] Attempting to load: ${filename}`);
+      
+      // Check if we're in development mode
+      const isDevelopment = typeof window !== 'undefined' && 
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      
+      console.log(`[Profile Image] Attempting to load: ${filename} (${isDevelopment ? 'DEV' : 'PROD'} mode)`);
       
       const { data: signedUrl, error } = await supabase.storage
         .from('profile-pics')
         .createSignedUrl(filename, 3600);
       
       if (error) {
-        console.error(`[Profile Image] Error loading ${filename}:`, error);
-        console.error(`[Profile Image] Error details:`, {
-          message: error.message
-        });
+        console.error(`[Profile Image] Error loading ${filename}:`, error.message);
+        if (isDevelopment) {
+          console.warn(`[Profile Image] Development mode troubleshooting:`);
+          console.warn(`   1. Check .env.local has NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY`);
+          console.warn(`   2. Verify profile images exist in Supabase Storage "profile-pics" bucket`);
+          console.warn(`   3. Check RLS policies: run supabase/profile-pics-storage-policies.sql`);
+          console.warn(`   4. Verify the bucket is public or RLS allows read access`);
+        }
         return null;
       }
       

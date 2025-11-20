@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import type { Deliverable, Task, Function, IP } from "@/types/ip";
+import type { Deliverable, Task, Function, IP, AcceptanceCriterion, AssetHistoryWithContributor } from "@/types/ip";
 import { useLogout } from "@/components/LogoutContext";
 import { useSelectedContributorRole } from "@/hooks/useSelectedContributorRole";
 
@@ -42,6 +42,8 @@ export default function AssetsPage() {
   
   // Modal state
   const [selectedDeliverableDetail, setSelectedDeliverableDetail] = useState<DeliverableWithTask | null>(null);
+  const [acceptanceCriteria, setAcceptanceCriteria] = useState<AcceptanceCriterion[]>([]);
+  const [assetHistory, setAssetHistory] = useState<AssetHistoryWithContributor[]>([]);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -292,22 +294,37 @@ export default function AssetsPage() {
       const fileName = `${deliverable.deliverable_id}.${fileExt}`;
       const filePath = `${slug}/${deliverable.task.function.category.toUpperCase()}/${fileName}`;
 
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('ip-assets')
-        .upload(filePath, file, { upsert: true });
+      // Get current contributor ID from sessionStorage
+      const contributorId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('selectedContributorId') 
+        : null;
 
-      if (uploadError) throw uploadError;
+      // Use API route to upload (bypasses RLS)
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('filePath', filePath);
+      formData.append('deliverableId', deliverable.id);
+      formData.append('filename', file.name);
+      formData.append('filetype', fileExt || '');
+      if (contributorId) {
+        formData.append('contributorId', contributorId);
+      }
 
-      // Update deliverable in database
-      const { error: updateError } = await supabase
-        .from("deliverables")
-        .update({ storage_path: filePath, filename: file.name, filetype: fileExt || null })
-        .eq("id", deliverable.id);
+      const response = await fetch('/api/upload-asset', {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (updateError) throw updateError;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload file');
+      }
 
       await loadAssets();
+      // Reload history if modal is open
+      if (selectedDeliverableDetail && selectedDeliverableDetail.id === deliverable.id) {
+        await loadAssetHistory(deliverable.id);
+      }
       alert("File uploaded successfully!");
     } catch (err) {
       console.error("Error uploading file:", err);
@@ -317,28 +334,45 @@ export default function AssetsPage() {
     }
   }
 
-  async function handleDownload(deliverable: DeliverableWithTask) {
+  async function handleDownloadFromPath(storagePath: string, filename: string) {
     try {
-      if (!deliverable.storage_path) {
+      if (!storagePath) {
         alert("No file available for download");
         return;
       }
 
-      const { data, error } = await supabase.storage
-        .from('ip-assets')
-        .download(deliverable.storage_path);
+      console.log(`[Download] Attempting to download: ${storagePath}`);
 
-      if (error) throw error;
-      if (!data) {
+      // Use API route to generate signed URL (bypasses RLS)
+      const response = await fetch(`/api/download-asset?path=${encodeURIComponent(storagePath)}`);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate download URL');
+      }
+
+      const { signedUrl } = await response.json();
+      
+      if (!signedUrl) {
         alert("File not found");
         return;
       }
 
+      console.log(`[Download] Successfully generated signed URL`);
+
+      // Fetch the file using the signed URL
+      const fileResponse = await fetch(signedUrl);
+      if (!fileResponse.ok) {
+        throw new Error(`Failed to download file: ${fileResponse.statusText}`);
+      }
+
+      const blob = await fileResponse.blob();
+
       // Create download link
-      const url = URL.createObjectURL(data);
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = deliverable.filename;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -347,6 +381,14 @@ export default function AssetsPage() {
       console.error("Error downloading file:", err);
       alert(`Failed to download file: ${err instanceof Error ? err.message : "Unknown error"}`);
     }
+  }
+
+  async function handleDownload(deliverable: DeliverableWithTask) {
+    if (!deliverable.storage_path) {
+      alert("No file available for download");
+      return;
+    }
+    await handleDownloadFromPath(deliverable.storage_path, deliverable.filename);
   }
 
   async function handleStatusUpdate(deliverable: DeliverableWithTask, newStatus: 'Approved' | 'Needs Review') {
@@ -365,6 +407,53 @@ export default function AssetsPage() {
       console.error("Error updating status:", err);
       alert(`Failed to update status: ${err instanceof Error ? err.message : "Unknown error"}`);
     }
+  }
+
+  async function loadAcceptanceCriteria(deliverableId: string) {
+    try {
+      const { data, error } = await supabase
+        .from("acceptance_criteria")
+        .select("*")
+        .eq("deliverable_id", deliverableId)
+        .order("display_order");
+
+      if (error) throw error;
+      setAcceptanceCriteria(data || []);
+    } catch (err) {
+      console.error("Error loading acceptance criteria:", err);
+      setAcceptanceCriteria([]);
+    }
+  }
+
+  async function loadAssetHistory(deliverableId: string) {
+    try {
+      const { data, error } = await supabase
+        .from("asset_history")
+        .select(`
+          *,
+          contributor:contributors(name)
+        `)
+        .eq("deliverable_id", deliverableId)
+        .order("uploaded_at", { ascending: false });
+
+      if (error) throw error;
+      
+      const historyWithContributors: AssetHistoryWithContributor[] = (data || []).map((item: any) => ({
+        ...item,
+        contributor_name: item.contributor?.name || null
+      }));
+      
+      setAssetHistory(historyWithContributors);
+    } catch (err) {
+      console.error("Error loading asset history:", err);
+      setAssetHistory([]);
+    }
+  }
+
+  function handleDeliverableSelect(deliverable: DeliverableWithTask) {
+    setSelectedDeliverableDetail(deliverable);
+    loadAcceptanceCriteria(deliverable.id);
+    loadAssetHistory(deliverable.id);
   }
 
   // Get filtered functions based on category
@@ -682,9 +771,16 @@ export default function AssetsPage() {
               {filteredDeliverables.map((deliverable) => (
                 <div
                   key={deliverable.id}
-                  onClick={() => setSelectedDeliverableDetail(deliverable)}
+                  onClick={() => handleDeliverableSelect(deliverable)}
                   className="border border-[#e0e0e0] rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow hover:-translate-y-1"
                 >
+                  {/* Filename */}
+                  {deliverable.filename && (
+                    <div className="text-xs font-medium mb-2 line-clamp-1">
+                      {deliverable.filename}
+                    </div>
+                  )}
+
                   {/* Thumbnail */}
                   <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-4xl mb-3">
                     {getThumbnailPlaceholder(deliverable.filetype)}
@@ -718,7 +814,11 @@ export default function AssetsPage() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold">Asset Details</h2>
               <button
-                onClick={() => setSelectedDeliverableDetail(null)}
+                onClick={() => {
+                  setSelectedDeliverableDetail(null);
+                  setAcceptanceCriteria([]);
+                  setAssetHistory([]);
+                }}
                 className="text-black/60 hover:text-black"
               >
                 ✕
@@ -742,7 +842,16 @@ export default function AssetsPage() {
               {/* Filename */}
               <div>
                 <label className="text-xs font-medium text-black/60">Filename</label>
-                <div className="text-sm">{selectedDeliverableDetail.filename}</div>
+                {selectedDeliverableDetail.storage_path ? (
+                  <button
+                    onClick={() => handleDownloadFromPath(selectedDeliverableDetail.storage_path!, selectedDeliverableDetail.filename)}
+                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                  >
+                    {selectedDeliverableDetail.filename}
+                  </button>
+                ) : (
+                  <div className="text-sm">{selectedDeliverableDetail.filename}</div>
+                )}
               </div>
 
               {/* Description */}
@@ -758,6 +867,49 @@ export default function AssetsPage() {
                   {selectedDeliverableDetail.status || 'Assigned'}
                 </div>
               </div>
+
+              {/* Acceptance Criteria */}
+              {acceptanceCriteria.length > 0 && (
+                <div>
+                  <label className="text-xs font-medium text-black/60 mb-2 block">Acceptance Criteria</label>
+                  <ol className="list-decimal list-inside space-y-1">
+                    {acceptanceCriteria.map((criterion) => (
+                      <li key={criterion.id} className="text-sm">
+                        {criterion.criteria_text}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+
+              {/* Asset History */}
+              {assetHistory.length > 0 && (
+                <div>
+                  <label className="text-xs font-medium text-black/60 mb-2 block">Upload History</label>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {assetHistory.map((historyItem) => (
+                      <div key={historyItem.id} className="border border-[#e0e0e0] rounded p-2 text-xs">
+                        <div className="flex items-center justify-between mb-1">
+                          <button
+                            onClick={() => handleDownloadFromPath(historyItem.storage_path, historyItem.filename)}
+                            className="font-medium text-blue-600 hover:text-blue-800 hover:underline cursor-pointer text-left"
+                          >
+                            {historyItem.filename}
+                          </button>
+                          <span className="text-black/60">
+                            {new Date(historyItem.uploaded_at).toLocaleString()}
+                          </span>
+                        </div>
+                        {historyItem.contributor_name && (
+                          <div className="text-black/60">
+                            Uploaded by: {historyItem.contributor_name}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex flex-wrap gap-2 pt-4 border-t border-[#e0e0e0]">
@@ -780,17 +932,6 @@ export default function AssetsPage() {
                   </div>
                 </label>
 
-                <button
-                  onClick={() => handleDownload(selectedDeliverableDetail)}
-                  disabled={!selectedDeliverableDetail.storage_path}
-                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                    selectedDeliverableDetail.storage_path
-                      ? "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
-                      : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  }`}
-                >
-                  DOWNLOAD
-                </button>
 
                 <button
                   onClick={() => handleStatusUpdate(selectedDeliverableDetail, "Approved")}

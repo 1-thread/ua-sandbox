@@ -20,19 +20,53 @@ export default function ProfileSelector({ onContributorChange }: ProfileSelector
     return fullName.split(' ')[0].toLowerCase();
   }
 
-  async function getProfileImageUrl(firstName: string, size: 'small' | 'medium' | 'original' = 'small'): Promise<string | null> {
+  async function getProfileImageUrl(firstName: string, size: 'small' | 'medium' | 'original' = 'small', tryFallback: boolean = true): Promise<string | null> {
     try {
       const sizeSuffix = size === 'original' ? '' : `-${size}`;
       const filename = `${firstName}${sizeSuffix}.png`;
+      
+      // Check if we're in development mode
+      const isDevelopment = typeof window !== 'undefined' && 
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      
+      console.log(`[ProfileSelector] Loading ${size} image: ${filename}`);
       
       const { data: signedUrl, error } = await supabase.storage
         .from('profile-pics')
         .createSignedUrl(filename, 3600);
       
-      if (error) return null;
-      return signedUrl?.signedUrl || null;
+      if (error) {
+        console.warn(`[ProfileSelector] Could not load ${filename}:`, error.message);
+        
+        // Try fallback sizes if requested
+        if (tryFallback && size === 'small') {
+          console.log(`[ProfileSelector] Trying fallback: medium size...`);
+          const mediumUrl = await getProfileImageUrl(firstName, 'medium', false);
+          if (mediumUrl) return mediumUrl;
+          
+          console.log(`[ProfileSelector] Trying fallback: original size...`);
+          const originalUrl = await getProfileImageUrl(firstName, 'original', false);
+          if (originalUrl) return originalUrl;
+        }
+        
+        if (isDevelopment) {
+          console.warn(`[ProfileSelector] Troubleshooting:`);
+          console.warn(`   1. Check if ${filename} exists in Supabase Storage "profile-pics" bucket`);
+          console.warn(`   2. Verify RLS policies allow read access`);
+          console.warn(`   3. Check Supabase credentials in .env.local`);
+        }
+        return null;
+      }
+      
+      if (signedUrl?.signedUrl) {
+        console.log(`[ProfileSelector] ✅ Successfully loaded: ${filename}`);
+        return signedUrl.signedUrl;
+      }
+      
+      console.warn(`[ProfileSelector] ⚠️ No signed URL returned for: ${filename}`);
+      return null;
     } catch (err) {
-      console.error(`Error loading profile image for ${firstName}:`, err);
+      console.error(`[ProfileSelector] Exception loading profile image for ${firstName} (${size}):`, err);
       return null;
     }
   }
@@ -51,15 +85,20 @@ export default function ProfileSelector({ onContributorChange }: ProfileSelector
         // Load profile images for all contributors
         const profileImageUrlMap = new Map<string, string>();
         if (data && data.length > 0) {
-          await Promise.all(
+          console.log(`[ProfileSelector] Loading profile images for ${data.length} contributors...`);
+          const results = await Promise.all(
             data.map(async (contributor) => {
               const firstName = getFirstName(contributor.name);
               const imageUrl = await getProfileImageUrl(firstName, 'small');
               if (imageUrl) {
                 profileImageUrlMap.set(contributor.id, imageUrl);
+                return { name: contributor.name, success: true };
               }
+              return { name: contributor.name, success: false };
             })
           );
+          const successCount = results.filter(r => r.success).length;
+          console.log(`[ProfileSelector] Loaded ${successCount}/${data.length} profile images`);
         }
         setProfileImageUrls(profileImageUrlMap);
 

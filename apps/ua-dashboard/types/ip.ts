@@ -105,6 +105,22 @@ export interface AcceptanceCriterion {
   created_at: string;
 }
 
+// Asset History
+export interface AssetHistory {
+  id: string;
+  deliverable_id: string;
+  contributor_id: string | null;
+  filename: string;
+  storage_path: string;
+  uploaded_at: string;
+  created_at: string;
+}
+
+// Asset History with Contributor
+export interface AssetHistoryWithContributor extends AssetHistory {
+  contributor_name: string | null;
+}
+
 // Extended types with relationships
 export interface FunctionWithDetails extends Function {
   guardrails: FunctionGuardrail[];

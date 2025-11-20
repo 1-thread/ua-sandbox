@@ -214,12 +214,24 @@ export default function ConductorPage() {
         return cached.url;
       }
       
+      // Check if we're in development mode
+      const isDevelopment = typeof window !== 'undefined' && 
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      
       // Generate new signed URL
       const { data: signedUrl, error } = await supabase.storage
         .from('profile-pics')
         .createSignedUrl(filename, 3600);
       
-      if (!error && signedUrl) {
+      if (error) {
+        if (isDevelopment) {
+          console.warn(`[Profile Image] Could not load ${filename} from Supabase Storage:`, error.message);
+          console.warn(`[Profile Image] Make sure Supabase credentials and RLS policies are set up correctly`);
+        }
+        return null;
+      }
+      
+      if (signedUrl) {
         // Cache the URL (expires 5 minutes before the signed URL expires)
         profileImageCache.set(filename, {
           url: signedUrl.signedUrl,

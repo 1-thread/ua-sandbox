@@ -260,20 +260,23 @@ export default function ContributionsPage() {
       const fileName = `${deliverable.deliverable_id}.${fileExt}`;
       const filePath = `${slug}/${deliverable.task.function.category.toUpperCase()}/${fileName}`;
 
-      // Upload to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('ip-assets')
-        .upload(filePath, file, { upsert: true });
+      // Use API route to upload (bypasses RLS)
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('filePath', filePath);
+      formData.append('deliverableId', deliverable.id);
+      formData.append('filename', file.name);
+      formData.append('filetype', fileExt || '');
 
-      if (uploadError) throw uploadError;
+      const response = await fetch('/api/upload-asset', {
+        method: 'POST',
+        body: formData,
+      });
 
-      // Update deliverable in database
-      const { error: updateError } = await supabase
-        .from("deliverables")
-        .update({ storage_path: filePath, filename: file.name, filetype: fileExt || null })
-        .eq("id", deliverable.id);
-
-      if (updateError) throw updateError;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload file');
+      }
 
       // Refresh asset URL
       const { data: signedUrl, error: urlError } = await supabase.storage
@@ -573,7 +576,7 @@ export default function ContributionsPage() {
             <div className="space-y-6">
               {/* Assigned Deliverables Card */}
               <div className="border border-[#e0e0e0] rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Assigned Deliverables ({assignedDeliverables.length})</h3>
+                <h3 className="text-sm font-semibold mb-4">Assigned Deliverables ({assignedDeliverables.length})</h3>
                 {assignedDeliverables.length === 0 ? (
                   <p className="text-sm text-black/60">No assigned deliverables.</p>
                 ) : (
@@ -600,7 +603,7 @@ export default function ContributionsPage() {
 
               {/* Completed Deliverables Card */}
               <div className="border border-[#e0e0e0] rounded-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Completed Deliverables ({completedDeliverables.length})</h3>
+                <h3 className="text-sm font-semibold mb-4">Completed Deliverables ({completedDeliverables.length})</h3>
                 {completedDeliverables.length === 0 ? (
                   <p className="text-sm text-black/60">No completed deliverables.</p>
                 ) : (
