@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import type { IP, Function, Task, Deliverable, Contributor, ContributorDeliverable } from "@/types/ip";
+import { useLogout } from "@/components/LogoutContext";
+import { useSelectedContributorRole } from "@/hooks/useSelectedContributorRole";
 
 interface VerticalData {
   name: string;
@@ -50,6 +52,9 @@ export default function ConductorPage() {
   const searchParams = useSearchParams();
   const ipSlug = searchParams.get('ip');
   const hasLoadedRef = useRef(false);
+  const { handleLogout } = useLogout();
+  const selectedContributorRole = useSelectedContributorRole();
+  const isAdmin = selectedContributorRole === 'admin';
   
   const [ip, setIp] = useState<IP | null>(null);
   const [ipIconUrl, setIpIconUrl] = useState<string | null>(null);
@@ -109,7 +114,7 @@ export default function ConductorPage() {
     Promise.all(
       allContributors.map(async (contributor) => {
         const firstName = getFirstName(contributor.name);
-        const imageUrl = await getProfileImageUrl(firstName);
+        const imageUrl = await getProfileImageUrl(firstName, 'small');
         
         // Preload the actual image in the browser cache
         if (imageUrl) {
@@ -196,9 +201,10 @@ export default function ConductorPage() {
     return fullName.split(' ')[0].toLowerCase();
   }
 
-  async function getProfileImageUrl(firstName: string): Promise<string | null> {
+  async function getProfileImageUrl(firstName: string, size: 'small' | 'medium' | 'original' = 'small'): Promise<string | null> {
     try {
-      const filename = `${firstName}.png`;
+      const sizeSuffix = size === 'original' ? '' : `-${size}`;
+      const filename = `${firstName}${sizeSuffix}.png`;
       
       // Check cache first
       const cached = profileImageCache.get(filename);
@@ -257,7 +263,7 @@ export default function ConductorPage() {
         await Promise.all(
           contributorsData.map(async (contributor) => {
             const firstName = getFirstName(contributor.name);
-            const imageUrl = await getProfileImageUrl(firstName);
+            const imageUrl = await getProfileImageUrl(firstName, 'small');
             if (imageUrl) {
               profileImageUrlMap.set(contributor.id, imageUrl);
             }
@@ -687,7 +693,7 @@ export default function ConductorPage() {
     <div className="min-h-screen flex bg-white text-black">
       {/* Sidebar - IP context sidebar */}
       <aside className="w-64 shrink-0 border-r border-[#e0e0e0] bg-white flex flex-col">
-        <div className="h-24 flex items-center px-5">
+        <div className="h-24 flex items-center justify-between px-5">
           <button
             onClick={() => router.push("/")}
             className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
@@ -697,6 +703,20 @@ export default function ConductorPage() {
               <span className="font-semibold truncate">Universal</span>
               <span className="font-semibold truncate">Asset</span>
             </div>
+          </button>
+          <button
+            onClick={handleLogout}
+            className="relative group p-2 hover:bg-[#c9c9c9] rounded transition-colors"
+            title="Logout"
+          >
+            <img
+              src="/logout.svg"
+              alt="Logout"
+              className="block h-5 w-5"
+            />
+            <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+              logout
+            </span>
           </button>
         </div>
 
@@ -740,6 +760,23 @@ export default function ConductorPage() {
         )}
 
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
+          {/* Contributions */}
+          {ipSlug && (
+            <button 
+              onClick={() => router.push(`/ip/${ipSlug}/contributions`)}
+              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+            >
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                <img
+                  src="/contributions.svg"
+                  alt="Contributions"
+                  className="block h-4 w-4"
+                />
+              </span>
+              <span className="truncate">Contributions</span>
+            </button>
+          )}
+
           {/* Workflows */}
           {ipSlug && (
             <button 
@@ -766,43 +803,45 @@ export default function ConductorPage() {
             </button>
           )}
 
-          {/* Admin (section header) */}
-          <div>
-            <button
-              type="button"
-              className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
-            >
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded">
-                <img src="/admin_tools_icon.svg" alt="Admin" className="block h-4 w-4" />
-              </span>
-              <span className="truncate">Admin</span>
-            </button>
+          {/* Admin (section header) - Only visible to admins */}
+          {isAdmin && (
+            <div>
+              <button
+                type="button"
+                className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+              >
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                  <img src="/admin_tools_icon.svg" alt="Admin" className="block h-4 w-4" />
+                </span>
+                <span className="truncate">Admin</span>
+              </button>
 
-            {/* Segmented Admin list - Always visible on admin pages */}
-            <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
-                <button
-                  type="button"
-                  onClick={() => router.push(ipSlug ? `/admin/conductor?ip=${ipSlug}` : "/admin/conductor")}
-                  className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer bg-white"
-                >
-                  <span className="truncate">Conductor</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push(ipSlug ? `/admin/function-editor?ip=${ipSlug}` : "/admin/function-editor")}
-                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
-                >
-                  <span className="truncate">Function Editor</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => router.push(ipSlug ? `/admin/contributors?ip=${ipSlug}` : "/admin/contributors")}
-                  className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
-                >
-                  <span className="truncate">Contributors</span>
-                </button>
-              </div>
-          </div>
+              {/* Segmented Admin list - Always visible on admin pages */}
+              <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => router.push(ipSlug ? `/admin/conductor?ip=${ipSlug}` : "/admin/conductor")}
+                    className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer bg-white"
+                  >
+                    <span className="truncate">Conductor</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push(ipSlug ? `/admin/function-editor?ip=${ipSlug}` : "/admin/function-editor")}
+                    className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                  >
+                    <span className="truncate">Function Editor</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push(ipSlug ? `/admin/contributors?ip=${ipSlug}` : "/admin/contributors")}
+                    className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                  >
+                    <span className="truncate">Contributors</span>
+                  </button>
+                </div>
+            </div>
+          )}
         </nav>
       </aside>
 
@@ -810,19 +849,21 @@ export default function ConductorPage() {
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-7xl">
           {/* Header */}
-          <div className="mb-8 flex items-center gap-4">
-            {ip && ipIconUrl && (
-              <img
-                src={ipIconUrl}
-                alt={ip.name}
-                className="block h-12 w-12 rounded object-cover"
-              />
-            )}
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight mb-1">Conductor</h1>
-              {ip && <p className="text-sm text-black/60">{ip.name}</p>}
+          {ip && ipIconUrl && (
+            <div className="mb-8">
+              <div className="flex items-center gap-4">
+                <img
+                  src={ipIconUrl}
+                  alt={ip.name}
+                  className="block h-12 w-12 rounded object-cover flex-shrink-0"
+                />
+                <div className="flex flex-col justify-center h-12">
+                  <h1 className="text-3xl font-semibold tracking-tight leading-tight">Conductor</h1>
+                  <p className="text-sm text-black/60 leading-tight">{ip.name}</p>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Vertical Cards */}
           <div className="space-y-4">

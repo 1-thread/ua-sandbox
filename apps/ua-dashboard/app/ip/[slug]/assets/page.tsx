@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import type { Deliverable, Task, Function, IP } from "@/types/ip";
+import { useLogout } from "@/components/LogoutContext";
+import { useSelectedContributorRole } from "@/hooks/useSelectedContributorRole";
 
 interface DeliverableWithTask extends Deliverable {
   task: Task & { function: Function };
@@ -13,6 +15,10 @@ export default function AssetsPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
+  const { handleLogout } = useLogout();
+  const selectedContributorRole = useSelectedContributorRole();
+  const isAdmin = selectedContributorRole === 'admin';
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
 
   const [deliverables, setDeliverables] = useState<DeliverableWithTask[]>([]);
   const [filteredDeliverables, setFilteredDeliverables] = useState<DeliverableWithTask[]>([]);
@@ -410,7 +416,7 @@ export default function AssetsPage() {
     <div className="min-h-screen flex bg-white text-black">
       {/* Sidebar - same as IP detail page */}
       <aside className="w-64 shrink-0 border-r border-[#e0e0e0] bg-white flex flex-col">
-        <div className="h-24 flex items-center px-5">
+        <div className="h-24 flex items-center justify-between px-5">
           <button
             onClick={() => router.push("/")}
             className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
@@ -420,6 +426,20 @@ export default function AssetsPage() {
               <span className="font-semibold truncate">Universal</span>
               <span className="font-semibold truncate">Asset</span>
             </div>
+          </button>
+          <button
+            onClick={handleLogout}
+            className="relative group p-2 hover:bg-[#c9c9c9] rounded transition-colors"
+            title="Logout"
+          >
+            <img
+              src="/logout.svg"
+              alt="Logout"
+              className="block h-5 w-5"
+            />
+            <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+              logout
+            </span>
           </button>
         </div>
 
@@ -450,6 +470,17 @@ export default function AssetsPage() {
         )}
 
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
+          {/* Contributions */}
+          <button 
+            onClick={() => router.push(`/ip/${slug}/contributions`)}
+            className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+          >
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+              <img src="/contributions.svg" alt="Contributions" className="block h-4 w-4" />
+            </span>
+            <span className="truncate">Contributions</span>
+          </button>
+
           <button 
             onClick={() => router.push(`/ip/${slug}/workflows`)}
             className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
@@ -469,6 +500,56 @@ export default function AssetsPage() {
             </span>
             <span className="truncate">Assets</span>
           </button>
+
+          {/* Admin (section header) - Only visible to admins */}
+          {isAdmin && (
+            <div
+              onMouseEnter={() => setIsAdminOpen(true)}
+              onMouseLeave={() => setIsAdminOpen(false)}
+            >
+              <button
+                type="button"
+                className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-transparent hover:bg-[#c9c9c9] transition-colors"
+                onClick={() => setIsAdminOpen((open) => !open)}
+              >
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded">
+                  <img
+                    src="/admin_tools_icon.svg"
+                    alt="Admin"
+                    className="block h-4 w-4"
+                  />
+                </span>
+                <span className="truncate">Admin</span>
+              </button>
+
+              {/* Segmented Admin list */}
+              {isAdminOpen && (
+                <div className="mt-1 rounded-lg bg-[#dfdfdf] px-1.5 py-1.5 space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/admin/conductor?ip=${slug}`)}
+                    className="w-full flex items-center justify-between rounded border border-black/10 bg-transparent hover:bg-white px-3 h-8 text-left text-[14px] cursor-pointer"
+                  >
+                    <span className="truncate">Conductor</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/admin/function-editor?ip=${slug}`)}
+                    className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                  >
+                    <span className="truncate">Function Editor</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/admin/contributors?ip=${slug}`)}
+                    className="w-full flex items-center justify-between rounded px-3 h-7 text-left text-[14px] hover:bg-white cursor-pointer"
+                  >
+                    <span className="truncate">Contributors</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
       </aside>
 
@@ -478,22 +559,21 @@ export default function AssetsPage() {
           {/* IP Header */}
           {ip && ipIconUrl && (
             <div className="mb-8">
-              <button
-                onClick={() => router.push(`/ip/${slug}`)}
-                className="flex items-center gap-4 mb-6 hover:opacity-80 transition-opacity cursor-pointer"
-              >
+              <div className="flex items-center gap-4">
                 <img
                   src={ipIconUrl}
-                  alt={`${ip.name} icon`}
-                  className="w-12 h-12 object-contain"
+                  alt={ip.name}
+                  className="block h-12 w-12 rounded object-cover flex-shrink-0"
                 />
-                <h1 className="text-3xl font-semibold tracking-tight">{ip.name}</h1>
-              </button>
+                <div className="flex flex-col justify-center h-12">
+                  <h1 className="text-3xl font-semibold tracking-tight leading-tight">Assets</h1>
+                  <p className="text-sm text-black/60 leading-tight">{ip.name}</p>
+                </div>
+              </div>
             </div>
           )}
 
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold">Assets</h2>
             <div className="text-xs text-black/40 font-mono">
               {filteredDeliverables.length} out of {deliverables.length} assets
             </div>

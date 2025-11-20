@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { LogoutProvider } from "./LogoutContext";
+import ProfileSelector from "./ProfileSelector";
 
 const STORAGE_KEY = "ua-dashboard-auth";
 
@@ -9,6 +12,7 @@ interface PasswordGateProps {
 }
 
 export default function PasswordGate({ children }: PasswordGateProps) {
+  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -44,6 +48,8 @@ export default function PasswordGate({ children }: PasswordGateProps) {
     setIsAuthenticated(false);
     setPassword("");
     setError("");
+    // Redirect to landing page
+    router.push("/");
   };
 
   if (isChecking) {
@@ -99,17 +105,10 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   }
 
   return (
-    <>
-      <div className="fixed top-4 right-4 z-[1000]">
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 rounded-lg border border-[#e0e0e0] bg-white hover:bg-[#c9c9c9] text-black text-sm cursor-pointer transition-colors"
-        >
-          Logout
-        </button>
-      </div>
+    <LogoutProvider handleLogout={handleLogout}>
+      <ProfileSelector />
       {children}
-    </>
+    </LogoutProvider>
   );
 }
 

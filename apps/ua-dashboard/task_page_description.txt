@@ -1,0 +1,15 @@
+Task Page Description Document
+
+* Add a menu item called "Contributions" in the sidebar under the IP and above the "Workflows"
+* Make an appropriate SVG image as the icon for Contributions similar to ther sidebar items
+
+* The deliverables that are listed on the Contributions page will depend on the user. For now, put a pull down menu with all contributor names. ONce the user selects a contributor name, all of the relevant deliverables will be shown on this page. 
+
+* Upon clicking on the Contributions item, open a main page with the IP icon, title and "Contributions" similar to other pages.
+* There should be one card for "assigned deliverables" and one card for "completed deliverables" similar to the contributors page.
+* Each deliverable should be title using the vertical-function-tasks-devliverable code and deliverable name such as "E1-T1-D1: pitch-deck.pptx" (from database)
+* Each deliverable should have a expansion triangle at the front. 
+* upon expanding the deliverable display the task title (from database) and description of the deliverable.
+* Below that show the details of the deliverable that needs to be upload, removed, approved or marked for further review ("Needs Review"). The format should be very similar to the asset viewer. Show an image of the deliverable/asset and buttons below for Upload, Remove, Approve and Needs Review.
+
+* The card for "completed deliverable" will have the exact same format as the  "assigned deliverables" but all of the assets will have been approved already, so that means that the "approve" button is highlighted green and others are not highlighted.

@@ -3,9 +3,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLogout } from "@/components/LogoutContext";
 
 export default function LandingPage() {
   const router = useRouter();
+  const { handleLogout } = useLogout();
   const [isIpOpen, setIsIpOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(220); // px
   const [isResizing, setIsResizing] = useState(false);
@@ -42,7 +44,7 @@ export default function LandingPage() {
         style={{ width: sidebarWidth }}
       >
         {/* Logo / brand */}
-        <div className="h-24 flex items-center px-5">
+        <div className="h-24 flex items-center justify-between px-5">
           <div className="flex items-center gap-3">
             {/* UA wordmark from Title.svg */}
             <img
@@ -56,6 +58,20 @@ export default function LandingPage() {
               <span className="font-semibold truncate">Asset</span>
             </div>
           </div>
+          <button
+            onClick={handleLogout}
+            className="relative group p-2 hover:bg-[#c9c9c9] rounded transition-colors"
+            title="Logout"
+          >
+            <img
+              src="/logout.svg"
+              alt="Logout"
+              className="block h-5 w-5"
+            />
+            <span className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+              logout
+            </span>
+          </button>
         </div>
 
         {/* Main nav + IP list */}

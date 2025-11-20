@@ -62,6 +62,7 @@ async function importContributors() {
           .update({
             expertise: contributor.expertise || [],
             roles: contributor.roles || [],
+            role: contributor.role || 'contributor',
             updated_at: new Date().toISOString()
           })
           .eq('id', existing.id);
@@ -76,7 +77,8 @@ async function importContributors() {
           .insert({
             name: contributor.name,
             expertise: contributor.expertise || [],
-            roles: contributor.roles || []
+            roles: contributor.roles || [],
+            role: contributor.role || 'contributor'
           });
 
         if (insertError) throw insertError;

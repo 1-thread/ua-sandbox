@@ -183,6 +183,7 @@ export interface Contributor {
   name: string;
   expertise: string[];
   roles: string[];
+  role: 'admin' | 'contributor';
   created_at: string;
   updated_at: string;
 }
