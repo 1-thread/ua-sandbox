@@ -269,7 +269,15 @@ export default function WorkflowsPage() {
         })
       );
 
-      setWorkflows(workflowsWithDetails);
+      // Sort workflows: production first, then under development, then by name
+      const sortedWorkflows = workflowsWithDetails.sort((a, b) => {
+        // Production workflows come first
+        if (a.status === 'production' && b.status !== 'production') return -1;
+        if (a.status !== 'production' && b.status === 'production') return 1;
+        
+        // Within same status group, sort by name
+        return a.name.localeCompare(b.name);
+      });
 
       // Load image URLs for all workflows
       const imageUrlMap = new Map<string, string>();
@@ -280,7 +288,7 @@ export default function WorkflowsPage() {
       console.log(`[Workflow Images] Hostname: ${typeof window !== 'undefined' ? window.location.hostname : 'server-side'}`);
       
       await Promise.all(
-        workflowsWithDetails.map(async (workflow) => {
+        sortedWorkflows.map(async (workflow) => {
           if (workflow.image_path) {
             const url = await getWorkflowImageUrl(workflow.image_path);
             if (url) {
@@ -293,10 +301,11 @@ export default function WorkflowsPage() {
       
       console.log(`[Workflow Images] ✅ Loaded ${imageUrlMap.size} image URL(s)\n`);
       setWorkflowImageUrls(imageUrlMap);
+      setWorkflows(sortedWorkflows);
 
-      // Cache the loaded data
+      // Cache the loaded data (use sorted workflows)
       workflowsCache.set(slug, {
-        workflows: workflowsWithDetails,
+        workflows: sortedWorkflows,
         workflowImageUrls: imageUrlMap,
         ip: ipData,
         ipIconUrl: iconUrlValue,
@@ -1415,10 +1424,23 @@ export default function WorkflowsPage() {
 
                     {/* Relevant deliverables count */}
                     {workflow.relevant_deliverables.length > 0 && (
-                      <div className="text-xs text-black/40">
+                      <div className="text-xs text-black/40 mb-2">
                         {workflow.relevant_deliverables.length} deliverable{workflow.relevant_deliverables.length !== 1 ? 's' : ''}
                       </div>
                     )}
+
+                    {/* Status tag */}
+                    <div className="mt-auto pt-2">
+                      <span
+                        className={`inline-block px-2 py-1 text-xs font-medium rounded ${
+                          workflow.status === 'production'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {workflow.status === 'production' ? 'production' : 'under development'}
+                      </span>
+                    </div>
                   </div>
                 );
               })}

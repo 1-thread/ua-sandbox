@@ -172,6 +172,7 @@ export interface Workflow {
   image_path: string | null;
   supports_upload: boolean;
   hidden_prompt: string | null;
+  status: 'production' | 'under development' | null; // null during migration, defaults to 'under development'
   created_at: string;
   updated_at: string;
 }
