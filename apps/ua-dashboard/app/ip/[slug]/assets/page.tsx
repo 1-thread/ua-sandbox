@@ -45,6 +45,13 @@ export default function AssetsPage() {
   const [acceptanceCriteria, setAcceptanceCriteria] = useState<AcceptanceCriterion[]>([]);
   const [assetHistory, setAssetHistory] = useState<AssetHistoryWithContributor[]>([]);
   const [uploading, setUploading] = useState(false);
+  
+  // Image thumbnails cache (key: asset_history.id)
+  const [thumbnailUrls, setThumbnailUrls] = useState<Map<string, string>>(new Map());
+  const [imageUrls, setImageUrls] = useState<Map<string, string>>(new Map());
+  
+  // Asset history for all deliverables (key: deliverable_id)
+  const [allAssetHistory, setAllAssetHistory] = useState<Map<string, AssetHistoryWithContributor[]>>(new Map());
 
   useEffect(() => {
     loadAssets();
@@ -205,6 +212,9 @@ export default function AssetsPage() {
         .sort((a, b) => a.deliverable_id.localeCompare(b.deliverable_id));
       setDeliverablesList(uniqueDeliverables);
 
+      // Preload asset history for all deliverables in the background
+      preloadAllAssetHistory(deliverablesWithTasks.map(d => d.id));
+
       setLoading(false);
     } catch (err) {
       console.error("Error loading assets:", err);
@@ -321,10 +331,8 @@ export default function AssetsPage() {
       }
 
       await loadAssets();
-      // Reload history if modal is open
-      if (selectedDeliverableDetail && selectedDeliverableDetail.id === deliverable.id) {
-        await loadAssetHistory(deliverable.id);
-      }
+      // Reload history for this deliverable to update cache and modal
+      await loadAssetHistory(deliverable.id);
       alert("File uploaded successfully!");
     } catch (err) {
       console.error("Error uploading file:", err);
@@ -444,16 +452,164 @@ export default function AssetsPage() {
       }));
       
       setAssetHistory(historyWithContributors);
+      
+      // Update the cache
+      setAllAssetHistory(prev => {
+        const updated = new Map(prev);
+        updated.set(deliverableId, historyWithContributors);
+        return updated;
+      });
+      
+      // Load thumbnails and images for image files
+      await loadImageUrls(historyWithContributors);
     } catch (err) {
       console.error("Error loading asset history:", err);
       setAssetHistory([]);
     }
   }
 
+  // Load image URLs (thumbnails and full images) for image files
+  async function loadImageUrls(history: AssetHistoryWithContributor[]) {
+    const isDevelopment = typeof window !== 'undefined' && 
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+    // Start with existing URLs to avoid losing previously loaded ones
+    const newThumbnailUrls = new Map(thumbnailUrls);
+    const newImageUrls = new Map(imageUrls);
+
+    for (const item of history) {
+      // Skip if we already have URLs for this item
+      if (newThumbnailUrls.has(item.id) && newImageUrls.has(item.id)) {
+        continue;
+      }
+
+      const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].some(ext => 
+        item.filename.toLowerCase().endsWith(`.${ext}`) || 
+        item.storage_path.toLowerCase().endsWith(`.${ext}`)
+      );
+
+      if (isImage) {
+        // Try to get thumbnail URL first
+        if (item.thumbnail_path) {
+          try {
+            const response = await fetch(`/api/get-signed-url?path=${encodeURIComponent(item.thumbnail_path)}`);
+            if (response.ok) {
+              const data = await response.json();
+              if (data.signedUrl) {
+                newThumbnailUrls.set(item.id, data.signedUrl);
+              }
+            } else {
+              const errorData = await response.json().catch(() => ({}));
+              console.error(`Error loading thumbnail for ${item.filename}:`, errorData.error || 'Unknown error');
+            }
+          } catch (err) {
+            console.error(`Error loading thumbnail for ${item.filename}:`, err);
+          }
+        }
+
+        // Get full image URL
+        try {
+          const response = await fetch(`/api/get-signed-url?path=${encodeURIComponent(item.storage_path)}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.signedUrl) {
+              newImageUrls.set(item.id, data.signedUrl);
+            }
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.error(`Error loading image for ${item.filename}:`, errorData.error || 'Unknown error');
+          }
+        } catch (err) {
+          console.error(`Error loading image for ${item.filename}:`, err);
+        }
+      }
+    }
+
+    setThumbnailUrls(newThumbnailUrls);
+    setImageUrls(newImageUrls);
+  }
+
+  // Preload asset history for all deliverables in the background
+  async function preloadAllAssetHistory(deliverableIds: string[]) {
+    try {
+      // Load all asset history in parallel
+      const historyPromises = deliverableIds.map(async (deliverableId) => {
+        try {
+          const { data, error } = await supabase
+            .from("asset_history")
+            .select(`
+              *,
+              contributor:contributors(name)
+            `)
+            .eq("deliverable_id", deliverableId)
+            .order("uploaded_at", { ascending: false });
+
+          if (error) {
+            console.error(`Error loading history for deliverable ${deliverableId}:`, error);
+            return { deliverableId, history: [] };
+          }
+
+          const historyWithContributors: AssetHistoryWithContributor[] = (data || []).map((item: any) => ({
+            ...item,
+            contributor_name: item.contributor?.name || null
+          }));
+
+          return { deliverableId, history: historyWithContributors };
+        } catch (err) {
+          console.error(`Error loading history for deliverable ${deliverableId}:`, err);
+          return { deliverableId, history: [] };
+        }
+      });
+
+      const results = await Promise.all(historyPromises);
+
+      // Update cache with all loaded history
+      setAllAssetHistory(prev => {
+        const updated = new Map(prev);
+        results.forEach(({ deliverableId, history }) => {
+          updated.set(deliverableId, history);
+        });
+        return updated;
+      });
+
+      // Load image URLs for all image files
+      const allImageItems: AssetHistoryWithContributor[] = [];
+      results.forEach(({ history }) => {
+        const imageFiles = getImageFiles(history);
+        allImageItems.push(...imageFiles);
+      });
+
+      if (allImageItems.length > 0) {
+        await loadImageUrls(allImageItems);
+      }
+    } catch (err) {
+      console.error("Error preloading asset history:", err);
+    }
+  }
+
+  // Get image files from asset history
+  function getImageFiles(history: AssetHistoryWithContributor[]): AssetHistoryWithContributor[] {
+    return history.filter(item => {
+      const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].some(ext => 
+        item.filename.toLowerCase().endsWith(`.${ext}`) || 
+        item.storage_path.toLowerCase().endsWith(`.${ext}`)
+      );
+      return isImage;
+    });
+  }
+
   function handleDeliverableSelect(deliverable: DeliverableWithTask) {
     setSelectedDeliverableDetail(deliverable);
     loadAcceptanceCriteria(deliverable.id);
-    loadAssetHistory(deliverable.id);
+    // Use cached asset history if available, otherwise load it
+    const cachedHistory = allAssetHistory.get(deliverable.id);
+    if (cachedHistory) {
+      setAssetHistory(cachedHistory);
+      // Ensure image URLs are loaded
+      loadImageUrls(cachedHistory);
+    } else {
+      loadAssetHistory(deliverable.id);
+    }
   }
 
   // Get filtered functions based on category
@@ -782,9 +938,74 @@ export default function AssetsPage() {
                   )}
 
                   {/* Thumbnail */}
-                  <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-4xl mb-3">
-                    {getThumbnailPlaceholder(deliverable.filetype)}
-                  </div>
+                  {(() => {
+                    // Get image files from asset history for this deliverable
+                    const deliverableHistory = allAssetHistory.get(deliverable.id) || [];
+                    const imageFiles = deliverableHistory.filter(item => 
+                      ['jpg', 'jpeg', 'png', 'gif', 'webp'].some(ext => 
+                        item.filename.toLowerCase().endsWith(`.${ext}`) ||
+                        item.storage_path.toLowerCase().endsWith(`.${ext}`)
+                      )
+                    );
+                    
+                    if (imageFiles.length > 0) {
+                      // Show first image thumbnail
+                      const firstImage = imageFiles[0];
+                      const thumbnailUrl = thumbnailUrls.get(firstImage.id);
+                      const imageUrl = imageUrls.get(firstImage.id);
+                      
+                      return (
+                        <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center relative mb-3">
+                          {thumbnailUrl ? (
+                            <img
+                              src={thumbnailUrl}
+                              alt={firstImage.filename}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                // Fallback to full image if thumbnail fails
+                                if (imageUrl) {
+                                  (e.target as HTMLImageElement).src = imageUrl;
+                                } else {
+                                  (e.target as HTMLImageElement).style.display = 'none';
+                                  const parent = (e.target as HTMLImageElement).parentElement;
+                                  if (parent) {
+                                    parent.innerHTML = `<div class="text-4xl">${getThumbnailPlaceholder(deliverable.filetype)}</div>`;
+                                  }
+                                }
+                              }}
+                            />
+                          ) : imageUrl ? (
+                            <img
+                              src={imageUrl}
+                              alt={firstImage.filename}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none';
+                                const parent = (e.target as HTMLImageElement).parentElement;
+                                if (parent) {
+                                  parent.innerHTML = `<div class="text-4xl">${getThumbnailPlaceholder(deliverable.filetype)}</div>`;
+                                }
+                              }}
+                            />
+                          ) : (
+                            <div className="text-4xl">{getThumbnailPlaceholder(deliverable.filetype)}</div>
+                          )}
+                          {imageFiles.length > 1 && (
+                            <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
+                              +{imageFiles.length - 1}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+                    
+                    // No images, show placeholder
+                    return (
+                      <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center text-4xl mb-3">
+                        {getThumbnailPlaceholder(deliverable.filetype)}
+                      </div>
+                    );
+                  })()}
 
                   {/* Code */}
                   <div className="text-xs font-mono text-black/60 mb-1">
@@ -826,10 +1047,69 @@ export default function AssetsPage() {
             </div>
 
             <div className="space-y-4">
-              {/* Thumbnail */}
-              <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-6xl">
-                {getThumbnailPlaceholder(selectedDeliverableDetail.filetype)}
-              </div>
+              {/* Image Gallery */}
+              {(() => {
+                const imageFiles = getImageFiles(assetHistory);
+                
+                if (imageFiles.length > 0) {
+                  return (
+                    <div>
+                      <label className="text-xs font-medium text-black/60 mb-2 block">
+                        Images ({imageFiles.length})
+                      </label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {imageFiles.map((imageItem) => {
+                          const thumbnailUrl = thumbnailUrls.get(imageItem.id);
+                          const imageUrl = imageUrls.get(imageItem.id);
+                          
+                          return (
+                            <div key={imageItem.id} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                              {thumbnailUrl ? (
+                                <img
+                                  src={thumbnailUrl}
+                                  alt={imageItem.filename}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                  onClick={() => {
+                                    if (imageUrl) {
+                                      window.open(imageUrl, '_blank');
+                                    }
+                                  }}
+                                  onError={(e) => {
+                                    if (imageUrl) {
+                                      (e.target as HTMLImageElement).src = imageUrl;
+                                    }
+                                  }}
+                                />
+                              ) : imageUrl ? (
+                                <img
+                                  src={imageUrl}
+                                  alt={imageItem.filename}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                  onClick={() => window.open(imageUrl, '_blank')}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-2xl">
+                                  {getThumbnailPlaceholder('image')}
+                                </div>
+                              )}
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs px-2 py-1 truncate">
+                                {imageItem.filename}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // No images, show placeholder
+                return (
+                  <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center text-6xl">
+                    {getThumbnailPlaceholder(selectedDeliverableDetail.filetype)}
+                  </div>
+                );
+              })()}
 
               {/* Code */}
               <div>
@@ -903,6 +1183,7 @@ export default function AssetsPage() {
                         {historyItem.contributor_name && (
                           <div className="text-black/60">
                             Uploaded by: {historyItem.contributor_name}
+                            {historyItem.model_used && ` (using ${historyItem.model_used})`}
                           </div>
                         )}
                       </div>

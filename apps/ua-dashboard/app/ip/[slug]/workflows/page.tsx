@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import type { IP, Task, Function } from "@/types/ip";
+import type { IP, Task, Function, Deliverable, AcceptanceCriterion, WorkflowResult } from "@/types/ip";
 import type { Workflow, WorkflowStep, WorkflowDeliverable } from "@/types/ip";
 import { useLogout } from "@/components/LogoutContext";
 import { useSelectedContributorRole } from "@/hooks/useSelectedContributorRole";
@@ -63,6 +63,16 @@ export default function WorkflowsPage() {
   const [prompt, setPrompt] = useState("");
   const [output, setOutput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Text2Img specific state
+  const [selectedDeliverableId, setSelectedDeliverableId] = useState<string>("");
+  const [availableDeliverables, setAvailableDeliverables] = useState<Array<{ id: string; deliverable_id: string; filename: string; description: string | null }>>([]);
+  const [selectedTxt2ImgDeliverable, setSelectedTxt2ImgDeliverable] = useState<Deliverable & { task: Task & { function: Function }; acceptance_criteria: AcceptanceCriterion[] } | null>(null);
+  const [contextPrompt, setContextPrompt] = useState("");
+  const [userPrompt, setUserPrompt] = useState("");
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+  const [currentResultId, setCurrentResultId] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     // Reset the ref when slug changes
@@ -424,7 +434,560 @@ export default function WorkflowsPage() {
     return workflowImageUrls.get(workflowId) || null;
   }
 
+  // Load deliverables assigned to current user
+  async function loadUserDeliverables() {
+    try {
+      const contributorId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('selectedContributorId') 
+        : null;
+
+      if (!contributorId) {
+        setAvailableDeliverables([]);
+        return;
+      }
+
+      // Get IP ID
+      const { data: ipData } = await supabase
+        .from('ips')
+        .select('id')
+        .eq('slug', slug)
+        .single();
+
+      if (!ipData) return;
+
+      // Get contributor deliverables
+      const { data: contributorDeliverables } = await supabase
+        .from('contributor_deliverables')
+        .select('deliverable_id')
+        .eq('contributor_id', contributorId)
+        .eq('status', 'Assigned');
+
+      if (!contributorDeliverables || contributorDeliverables.length === 0) {
+        setAvailableDeliverables([]);
+        return;
+      }
+
+      const deliverableIds = contributorDeliverables.map(cd => cd.deliverable_id);
+
+      // Get deliverable details
+      const { data: deliverablesData } = await supabase
+        .from('deliverables')
+        .select('id, deliverable_id, filename, description')
+        .in('id', deliverableIds)
+        .eq('ip_id', ipData.id);
+
+      setAvailableDeliverables(deliverablesData || []);
+    } catch (err) {
+      console.error('Error loading user deliverables:', err);
+      setAvailableDeliverables([]);
+    }
+  }
+
+  // Load deliverable details with acceptance criteria
+  async function loadDeliverableDetails(deliverableId: string) {
+    try {
+      // Get deliverable
+      const { data: deliverableData, error: deliverableError } = await supabase
+        .from('deliverables')
+        .select('*')
+        .eq('id', deliverableId)
+        .single();
+
+      if (deliverableError || !deliverableData) {
+        setSelectedTxt2ImgDeliverable(null);
+        return;
+      }
+
+      // Get task with function
+      const { data: taskData, error: taskError } = await supabase
+        .from('tasks')
+        .select(`
+          *,
+          function:functions(*)
+        `)
+        .eq('id', deliverableData.task_id)
+        .single();
+
+      if (taskError || !taskData) {
+        console.error('Error loading task:', taskError);
+        setSelectedTxt2ImgDeliverable(null);
+        return;
+      }
+
+      // Load acceptance criteria
+      const { data: criteriaData } = await supabase
+        .from('acceptance_criteria')
+        .select('*')
+        .eq('deliverable_id', deliverableId)
+        .order('display_order');
+
+      const deliverableWithDetails = {
+        ...deliverableData,
+        task: {
+          ...taskData,
+          function: taskData.function as Function
+        } as Task & { function: Function },
+        acceptance_criteria: (criteriaData || []) as AcceptanceCriterion[]
+      };
+
+      setSelectedTxt2ImgDeliverable(deliverableWithDetails);
+
+      // Build context prompt
+      await buildContextPrompt(deliverableWithDetails);
+    } catch (err) {
+      console.error('Error loading deliverable details:', err);
+      setSelectedTxt2ImgDeliverable(null);
+    }
+  }
+
+  // Validate workflow is appropriate for deliverable
+  function validateWorkflowForDeliverable(deliverable: Deliverable & { task: Task & { function: Function }; acceptance_criteria: AcceptanceCriterion[] }): string | null {
+    if (!selectedWorkflow || selectedWorkflow.workflow_id !== 'txt2img') {
+      return null;
+    }
+
+    // Check if deliverable is for PowerPoint or other non-image tasks
+    const filename = deliverable.filename.toLowerCase();
+    const description = (deliverable.description || '').toLowerCase();
+    
+    // PowerPoint files should not use txt2img
+    if (filename.includes('.pptx') || filename.includes('.ppt') || 
+        description.includes('powerpoint') || description.includes('presentation')) {
+      return 'This workflow (Text → Image) is not appropriate for PowerPoint deliverables. Please use a different workflow.';
+    }
+
+    return null;
+  }
+
+  // Build context prompt from IP, deliverable, acceptance criteria, and workflow
+  async function buildContextPrompt(deliverable: Deliverable & { task: Task & { function: Function }; acceptance_criteria: AcceptanceCriterion[] }) {
+    try {
+      // Validate workflow
+      const validationError = validateWorkflowForDeliverable(deliverable);
+      if (validationError) {
+        setContextPrompt(`ERROR: ${validationError}`);
+        return;
+      }
+
+      // Check if deliverable has a stored context prompt
+      if (deliverable.context_prompt) {
+        console.log('Using stored context prompt from database');
+        setContextPrompt(deliverable.context_prompt);
+        return;
+      }
+
+      // Otherwise, build it dynamically
+      let contextParts: string[] = [];
+
+      // Get IP description
+      if (ip && ip.description) {
+        contextParts.push(`IP Description: ${ip.description}`);
+      }
+
+      // Add deliverable description
+      if (deliverable.description) {
+        contextParts.push(`Deliverable Description: ${deliverable.description}`);
+      }
+
+      // Add deliverable code and filename
+      contextParts.push(`Deliverable: ${deliverable.deliverable_id} - ${deliverable.filename}`);
+
+      // Add task and function context
+      contextParts.push(`Task: ${deliverable.task.title}`);
+      contextParts.push(`Core Function: ${deliverable.task.function.code} - ${deliverable.task.function.title}`);
+
+      // Add acceptance criteria
+      if (deliverable.acceptance_criteria && deliverable.acceptance_criteria.length > 0) {
+        contextParts.push(`\nAcceptance Criteria:`);
+        deliverable.acceptance_criteria.forEach((criterion, index) => {
+          contextParts.push(`${index + 1}. ${criterion.criteria_text}`);
+        });
+      }
+
+      // Add workflow description
+      if (selectedWorkflow && selectedWorkflow.description) {
+        contextParts.push(`\nWorkflow: ${selectedWorkflow.name}`);
+        contextParts.push(`Workflow Description: ${selectedWorkflow.description}`);
+      }
+
+      // Add workflow validation note
+      if (selectedWorkflow && selectedWorkflow.workflow_id === 'txt2img') {
+        contextParts.push(`\nIMPORTANT: This workflow (${selectedWorkflow.name}) is designed for text-to-image generation.`);
+        contextParts.push(`Generate a high-quality image that meets the deliverable requirements and acceptance criteria.`);
+      }
+
+      const fullContextPrompt = contextParts.join('\n\n');
+      console.log('Built context prompt:', fullContextPrompt);
+      setContextPrompt(fullContextPrompt);
+    } catch (err) {
+      console.error('Error building context prompt:', err);
+      setContextPrompt(`Error building context prompt: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }
+
+  // Load last workflow result if exists
+  async function loadLastWorkflowResult() {
+    if (!selectedWorkflow || !selectedDeliverableId) return;
+
+    try {
+      const contributorId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('selectedContributorId') 
+        : null;
+
+      if (!contributorId) return;
+
+      const { data: resultData } = await supabase
+        .from('workflow_results')
+        .select('*')
+        .eq('workflow_id', selectedWorkflow.workflow_id)
+        .eq('deliverable_id', selectedDeliverableId)
+        .eq('contributor_id', contributorId)
+        .in('status', ['processing', 'completed'])
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (resultData) {
+        setContextPrompt(resultData.context_prompt);
+        setUserPrompt(resultData.user_prompt);
+        setCurrentResultId(resultData.id);
+        
+        if (resultData.status === 'processing') {
+          setIsGenerating(true);
+          // Poll for completion
+          pollForCompletion(resultData.id);
+        } else if (resultData.status === 'completed' && resultData.output_image_url) {
+          setGeneratedImageUrl(resultData.output_image_url);
+        }
+      }
+    } catch (err) {
+      // No previous result found, that's okay
+    }
+  }
+
+  // Poll for workflow completion
+  async function pollForCompletion(resultId: string) {
+    const maxAttempts = 60; // 5 minutes max
+    let attempts = 0;
+
+    const poll = async () => {
+      if (attempts >= maxAttempts) {
+        setIsGenerating(false);
+        return;
+      }
+
+      try {
+        const { data: resultData } = await supabase
+          .from('workflow_results')
+          .select('status, output_image_url')
+          .eq('id', resultId)
+          .single();
+
+        if (resultData) {
+          if (resultData.status === 'completed' && resultData.output_image_url) {
+            setIsGenerating(false);
+            setGeneratedImageUrl(resultData.output_image_url);
+          } else if (resultData.status === 'failed') {
+            setIsGenerating(false);
+            alert('Image generation failed. Please try again.');
+          } else {
+            attempts++;
+            setTimeout(poll, 5000); // Poll every 5 seconds
+          }
+        }
+      } catch (err) {
+        attempts++;
+        setTimeout(poll, 5000);
+      }
+    };
+
+    poll();
+  }
+
+  // Handle deliverable selection
+  async function handleDeliverableSelect(deliverableId: string) {
+    setSelectedDeliverableId(deliverableId);
+    await loadDeliverableDetails(deliverableId);
+    await loadLastWorkflowResult();
+  }
+
+  // Handle image generation
+  async function handleGenerateImage() {
+    if (!selectedTxt2ImgDeliverable || !userPrompt.trim()) {
+      alert('Please select a deliverable and enter a prompt');
+      return;
+    }
+
+    if (!contextPrompt) {
+      alert('Context prompt not available');
+      return;
+    }
+
+    // Check for validation errors
+    if (contextPrompt.startsWith('ERROR:')) {
+      alert(contextPrompt);
+      return;
+    }
+
+    try {
+      setIsGenerating(true);
+      setGeneratedImageUrl(null);
+
+      const contributorId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('selectedContributorId') 
+        : null;
+
+      if (!contributorId) {
+        alert('No contributor selected');
+        return;
+      }
+
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contextPrompt: contextPrompt,
+          userPrompt: userPrompt,
+          workflowId: selectedWorkflow!.workflow_id,
+          deliverableId: selectedTxt2ImgDeliverable.id,
+          contributorId: contributorId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = errorData.error || 'Failed to generate image';
+        const details = errorData.details ? ` Details: ${JSON.stringify(errorData.details)}` : '';
+        console.error('Image generation error:', errorData);
+        throw new Error(`${errorMessage}${details}`);
+      }
+
+      const data = await response.json();
+      setGeneratedImageUrl(data.imageUrl);
+      setCurrentResultId(data.resultId);
+      setIsGenerating(false);
+    } catch (err) {
+      console.error('Error generating image:', err);
+      alert(`Failed to generate image: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setIsGenerating(false);
+    }
+  }
+
+  // Handle archive
+  async function handleArchive() {
+    if (!selectedTxt2ImgDeliverable || !generatedImageUrl) {
+      alert('No result to archive');
+      return;
+    }
+
+    try {
+      const contributorId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('selectedContributorId') 
+        : null;
+
+      if (!contributorId) {
+        alert('No contributor selected');
+        return;
+      }
+
+      // Get contributor name
+      const { data: contributorData } = await supabase
+        .from('contributors')
+        .select('name')
+        .eq('id', contributorId)
+        .single();
+
+      const contributorName = contributorData?.name || 'Unknown';
+
+      // Fetch the image through API route to avoid CORS issues
+      const imageResponse = await fetch(`/api/download-workflow-image?url=${encodeURIComponent(generatedImageUrl)}`);
+      
+      if (!imageResponse.ok) {
+        throw new Error('Failed to download image');
+      }
+      
+      const imageBlob = await imageResponse.blob();
+
+      // Create versioned file paths
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const contributorSlug = contributorName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const category = selectedTxt2ImgDeliverable.task.function.category.toUpperCase();
+      
+      const promptFileName = `${selectedTxt2ImgDeliverable.deliverable_id}_prompt_${timestamp}_${contributorSlug}.txt`;
+      const imageFileName = `${selectedTxt2ImgDeliverable.deliverable_id}_image_${timestamp}_${contributorSlug}.png`;
+      
+      const promptPath = `${slug}/${category}/${promptFileName}`;
+      const imagePath = `${slug}/${category}/${imageFileName}`;
+
+      // Convert prompt to blob
+      const promptBlob = new Blob([userPrompt], { type: 'text/plain' });
+
+      // Get or create workflow result
+      let workflowResultId = currentResultId;
+      // Default model name - should match what's used in generate-image API
+      const defaultModelName = 'DALL-E 3';
+      let modelUsed = defaultModelName;
+
+      if (workflowResultId) {
+        // Get model used from existing workflow result
+        const { data: resultData } = await supabase
+          .from('workflow_results')
+          .select('model_used')
+          .eq('id', workflowResultId)
+          .single();
+
+        if (resultData) {
+          modelUsed = resultData.model_used || defaultModelName;
+        }
+      } else {
+        // Create a new workflow result if one doesn't exist
+        const { data: newResult, error: createError } = await supabase
+          .from('workflow_results')
+          .insert({
+            workflow_id: selectedWorkflow!.workflow_id,
+            deliverable_id: selectedTxt2ImgDeliverable.id,
+            contributor_id: contributorId,
+            context_prompt: contextPrompt,
+            user_prompt: userPrompt,
+            output_image_url: generatedImageUrl,
+            model_used: defaultModelName,
+            status: 'completed'
+          })
+          .select('id')
+          .single();
+
+        if (!createError && newResult) {
+          workflowResultId = newResult.id;
+          setCurrentResultId(workflowResultId);
+        }
+      }
+
+      const promptFormData = new FormData();
+      promptFormData.append('file', promptBlob, promptFileName);
+      promptFormData.append('filePath', promptPath);
+      promptFormData.append('deliverableId', selectedTxt2ImgDeliverable.id);
+      promptFormData.append('filename', promptFileName);
+      promptFormData.append('filetype', 'txt');
+      promptFormData.append('contributorId', contributorId);
+      promptFormData.append('modelUsed', modelUsed);
+
+      // Create a new Blob with explicit content type to ensure image detection works
+      const typedImageBlob = new Blob([imageBlob], { type: 'image/png' });
+      
+      const imageFormData = new FormData();
+      imageFormData.append('file', typedImageBlob, imageFileName);
+      imageFormData.append('filePath', imagePath);
+      imageFormData.append('deliverableId', selectedTxt2ImgDeliverable.id);
+      imageFormData.append('filename', imageFileName);
+      imageFormData.append('filetype', 'png');
+      imageFormData.append('contributorId', contributorId);
+      imageFormData.append('modelUsed', modelUsed);
+
+      const uploadPromises = [
+        fetch('/api/upload-asset', {
+          method: 'POST',
+          body: promptFormData,
+        }),
+        fetch('/api/upload-asset', {
+          method: 'POST',
+          body: imageFormData,
+        }),
+      ];
+
+      const uploadResults = await Promise.all(uploadPromises);
+      
+      // Check for errors and log details
+      for (let i = 0; i < uploadResults.length; i++) {
+        const result = uploadResults[i];
+        const fileType = i === 0 ? 'prompt' : 'image';
+        
+        if (!result.ok) {
+          const errorData = await result.json().catch(() => ({ error: 'Unknown error' }));
+          console.error(`Error uploading ${fileType}:`, errorData);
+          throw new Error(`Failed to upload ${fileType}: ${errorData.error || 'Unknown error'}`);
+        } else {
+          const successData = await result.json().catch(() => ({}));
+          console.log(`✅ Successfully uploaded ${fileType}:`, successData);
+        }
+      }
+
+      // Update workflow result if it exists
+      if (workflowResultId) {
+        await supabase
+          .from('workflow_results')
+          .update({
+            status: 'archived',
+            archived_at: new Date().toISOString(),
+            archived_prompt_path: promptPath,
+            archived_image_path: imagePath,
+          })
+          .eq('id', workflowResultId);
+      }
+
+      // Reset to default state
+      resetWorkflowState();
+      alert('Results archived successfully!');
+    } catch (err) {
+      console.error('Error archiving:', err);
+      alert(`Failed to archive: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }
+
+  // Handle delete
+  async function handleDelete() {
+    if (!currentResultId) {
+      alert('No result to delete');
+      return;
+    }
+
+    if (!confirm('Are you sure you want to delete this result?')) {
+      return;
+    }
+
+    try {
+      await supabase
+        .from('workflow_results')
+        .update({ status: 'deleted' })
+        .eq('id', currentResultId);
+
+      resetWorkflowState();
+    } catch (err) {
+      console.error('Error deleting result:', err);
+      alert(`Failed to delete: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }
+
+  // Reset workflow state to default
+  function resetWorkflowState() {
+    setSelectedDeliverableId('');
+    setSelectedTxt2ImgDeliverable(null);
+    setContextPrompt('');
+    setUserPrompt('');
+    setGeneratedImageUrl(null);
+    setCurrentResultId(null);
+    setIsGenerating(false);
+  }
+
+  // Load deliverables when workflow modal opens for txt2img
+  useEffect(() => {
+    if (selectedWorkflow && selectedWorkflow.workflow_id === 'txt2img') {
+      loadUserDeliverables();
+    } else {
+      setAvailableDeliverables([]);
+      resetWorkflowState();
+    }
+  }, [selectedWorkflow, slug]);
+
   async function handleSubmit(workflow: WorkflowWithDetails) {
+    // For txt2img, use special handler
+    if (workflow.workflow_id === 'txt2img') {
+      await handleGenerateImage();
+      return;
+    }
+
+    // For other workflows, use original handler
     if (!prompt.trim()) {
       alert("Please enter a prompt");
       return;
@@ -875,6 +1438,7 @@ export default function WorkflowsPage() {
                   setSelectedWorkflow(null);
                   setPrompt("");
                   setOutput("");
+                  resetWorkflowState();
                 }}
                 className="text-black/60 hover:text-black"
               >
@@ -931,42 +1495,152 @@ export default function WorkflowsPage() {
                 </div>
               )}
 
-              {/* Workflow Input/Output */}
-              <div className="pt-4 border-t border-[#e0e0e0] space-y-3">
-                <div>
-                  <label className="text-xs font-medium text-black/60 mb-1 block">Prompt:</label>
-                  <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Enter your prompt..."
-                    rows={4}
-                    className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm"
-                  />
-                </div>
+              {/* Text2Img Special UI */}
+              {selectedWorkflow.workflow_id === 'txt2img' ? (
+                <div className="pt-4 border-t border-[#e0e0e0] space-y-4">
+                  {/* Deliverable Selection */}
+                  <div>
+                    <label className="text-xs font-medium text-black/60 mb-1 block">
+                      Select Deliverable <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={selectedDeliverableId}
+                      onChange={(e) => handleDeliverableSelect(e.target.value)}
+                      className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm"
+                    >
+                      <option value="">-- Select a deliverable --</option>
+                      {availableDeliverables.map(del => (
+                        <option key={del.id} value={del.id}>
+                          {del.deliverable_id}: {del.filename}
+                        </option>
+                      ))}
+                    </select>
+                    {availableDeliverables.length === 0 && (
+                      <p className="text-xs text-black/60 mt-1">No deliverables assigned to you</p>
+                    )}
+                  </div>
 
-                <div>
-                  <label className="text-xs font-medium text-black/60 mb-1 block">Output:</label>
-                  <textarea
-                    value={output}
-                    readOnly
-                    placeholder="Output will appear here..."
-                    rows={6}
-                    className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm bg-gray-50"
-                  />
-                </div>
+                  {/* Context Prompt (read-only) */}
+                  {selectedTxt2ImgDeliverable && (
+                    <div>
+                      <label className="text-xs font-medium text-black/60 mb-1 block">Project Context Prompt:</label>
+                      <textarea
+                        value={contextPrompt || 'Loading context prompt...'}
+                        readOnly
+                        rows={8}
+                        className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                          contextPrompt.startsWith('ERROR:')
+                            ? 'border-red-300 bg-red-50 text-red-800'
+                            : 'border-[#e0e0e0] bg-gray-50'
+                        }`}
+                      />
+                    </div>
+                  )}
 
-                <button
-                  onClick={() => handleSubmit(selectedWorkflow)}
-                  disabled={isSubmitting || !prompt.trim()}
-                  className={`w-full px-4 py-2 rounded-lg text-sm transition-colors ${
-                    isSubmitting || !prompt.trim()
-                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                      : "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
-                  }`}
-                >
-                  {isSubmitting ? "Processing..." : "Submit"}
-                </button>
-              </div>
+                  {/* User Prompt */}
+                  {selectedTxt2ImgDeliverable && (
+                    <div>
+                      <label className="text-xs font-medium text-black/60 mb-1 block">
+                        Your Prompt <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        value={userPrompt}
+                        onChange={(e) => setUserPrompt(e.target.value)}
+                        placeholder={userPrompt ? "" : "Add your own prompt for this deliverable..."}
+                        rows={4}
+                        className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm"
+                      />
+                    </div>
+                  )}
+
+                  {/* Generate Button */}
+                  {selectedTxt2ImgDeliverable && (
+                    <button
+                      onClick={handleGenerateImage}
+                      disabled={isGenerating || !userPrompt.trim()}
+                      className={`w-full px-4 py-2 rounded-lg text-sm transition-colors ${
+                        isGenerating || !userPrompt.trim()
+                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                          : "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
+                      }`}
+                    >
+                      {isGenerating ? (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
+                          <span>Generating image...</span>
+                        </div>
+                      ) : (
+                        "Generate Image"
+                      )}
+                    </button>
+                  )}
+
+                  {/* Generated Image */}
+                  {generatedImageUrl && (
+                    <div className="space-y-3">
+                      <label className="text-xs font-medium text-black/60 mb-1 block">Generated Image:</label>
+                      <div className="w-full border border-[#e0e0e0] rounded-lg overflow-hidden">
+                        <img
+                          src={generatedImageUrl}
+                          alt="Generated"
+                          className="w-full h-auto"
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleArchive}
+                          className="flex-1 px-4 py-2 rounded-lg text-sm bg-green-100 hover:bg-green-200 text-green-800 transition-colors"
+                        >
+                          Archive
+                        </button>
+                        <button
+                          onClick={handleDelete}
+                          className="flex-1 px-4 py-2 rounded-lg text-sm bg-red-100 hover:bg-red-200 text-red-800 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* Standard Workflow Input/Output */
+                <div className="pt-4 border-t border-[#e0e0e0] space-y-3">
+                  <div>
+                    <label className="text-xs font-medium text-black/60 mb-1 block">Prompt:</label>
+                    <textarea
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder="Enter your prompt..."
+                      rows={4}
+                      className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-medium text-black/60 mb-1 block">Output:</label>
+                    <textarea
+                      value={output}
+                      readOnly
+                      placeholder="Output will appear here..."
+                      rows={6}
+                      className="w-full px-3 py-2 border border-[#e0e0e0] rounded-lg text-sm bg-gray-50"
+                    />
+                  </div>
+
+                  <button
+                    onClick={() => handleSubmit(selectedWorkflow)}
+                    disabled={isSubmitting || !prompt.trim()}
+                    className={`w-full px-4 py-2 rounded-lg text-sm transition-colors ${
+                      isSubmitting || !prompt.trim()
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
+                    }`}
+                  >
+                    {isSubmitting ? "Processing..." : "Submit"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

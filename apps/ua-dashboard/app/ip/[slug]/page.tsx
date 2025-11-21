@@ -20,6 +20,7 @@ export default function IPDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [ipName, setIpName] = useState<string | null>(null);
   const [imageUrls, setImageUrls] = useState<{
     iconUrl: string | null;
     heroUrl: string | null;
@@ -30,6 +31,17 @@ export default function IPDetailPage() {
       try {
         setLoading(true);
         setError(null);
+
+        // Fetch IP name first for loading message
+        const { data: ipNameData, error: ipNameError } = await supabase
+          .from("ips")
+          .select("name")
+          .eq("slug", slug)
+          .single();
+        
+        if (!ipNameError && ipNameData) {
+          setIpName(ipNameData.name);
+        }
 
         // Fetch IP data
         console.log("Fetching IP with slug:", slug);
@@ -174,7 +186,9 @@ export default function IPDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-black">Loading...</div>
+        <div className="text-black">
+          {ipName ? `Loading ${ipName}...` : "Loading..."}
+        </div>
       </div>
     );
   }

@@ -83,6 +83,7 @@ export interface Deliverable {
   status?: 'Assigned' | 'In Progress' | 'Completed' | 'Approved' | 'Needs Review';
   storage_path: string | null; // Path in Supabase Storage
   ip_id: string | null; // NULL = generic template, UUID = IP-specific
+  context_prompt: string | null; // Pre-generated context prompt for workflows
   display_order: number;
   created_at: string;
 }
@@ -114,6 +115,8 @@ export interface AssetHistory {
   storage_path: string;
   uploaded_at: string;
   created_at: string;
+  model_used: string | null;
+  thumbnail_path: string | null;
 }
 
 // Asset History with Contributor
@@ -191,6 +194,25 @@ export interface WorkflowDeliverable {
 export interface WorkflowWithDetails extends Workflow {
   steps: WorkflowStep[];
   relevant_deliverables: WorkflowDeliverable[];
+}
+
+// Workflow Results
+export interface WorkflowResult {
+  id: string;
+  workflow_id: string;
+  deliverable_id: string | null;
+  contributor_id: string | null;
+  context_prompt: string;
+  user_prompt: string;
+  output_text: string | null;
+  output_image_url: string | null;
+  model_used: string | null;
+  status: 'processing' | 'completed' | 'failed' | 'archived' | 'deleted';
+  created_at: string;
+  updated_at: string;
+  archived_at: string | null;
+  archived_prompt_path: string | null;
+  archived_image_path: string | null;
 }
 
 // Contributors
