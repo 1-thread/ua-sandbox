@@ -881,7 +881,7 @@ export default function ContributorsPage() {
         )}
 
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
-          {/* Contributions */}
+          {/* To Do */}
           {ipSlug && (
             <button 
               onClick={() => router.push(`/ip/${ipSlug}/contributions`)}
@@ -889,12 +889,12 @@ export default function ContributorsPage() {
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded">
                 <img
-                  src="/contributions.svg"
-                  alt="Contributions"
+                  src="/list.svg"
+                  alt="To Do"
                   className="block h-4 w-4"
                 />
               </span>
-              <span className="truncate">Contributions</span>
+              <span className="truncate">To Do</span>
             </button>
           )}
 
@@ -906,7 +906,7 @@ export default function ContributorsPage() {
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded">
                 <img
-                  src="/list.svg"
+                  src="/contributions.svg"
                   alt="Workflows"
                   className="block h-4 w-4"
                 />

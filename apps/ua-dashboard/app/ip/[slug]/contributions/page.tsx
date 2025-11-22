@@ -15,7 +15,7 @@ interface DeliverableWithContributor extends DeliverableWithTask {
   contributorDeliverable: ContributorDeliverable;
 }
 
-export default function ContributionsPage() {
+export default function ToDoPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
@@ -602,19 +602,19 @@ export default function ContributionsPage() {
 
         {/* Main nav */}
         <nav className="flex-1 px-2 pt-4 space-y-3 text-sm font-medium">
-          {/* Contributions */}
+          {/* To Do */}
           <button 
             onClick={() => router.push(`/ip/${slug}/contributions`)}
             className="w-full flex items-center gap-3 rounded-lg px-4 h-10 bg-[#c9c9c9] transition-colors"
           >
             <span className="inline-flex h-6 w-6 items-center justify-center rounded">
               <img
-                src="/contributions.svg"
-                alt="Contributions"
+                src="/list.svg"
+                alt="To Do"
                 className="block h-4 w-4"
               />
             </span>
-            <span className="truncate">Contributions</span>
+            <span className="truncate">To Do</span>
           </button>
 
           {/* Workflows */}
@@ -624,7 +624,7 @@ export default function ContributionsPage() {
           >
             <span className="inline-flex h-6 w-6 items-center justify-center rounded">
               <img
-                src="/list.svg"
+                src="/contributions.svg"
                 alt="Workflows"
                 className="block h-4 w-4"
               />
@@ -712,7 +712,7 @@ export default function ContributionsPage() {
                   className="block h-12 w-12 rounded object-cover flex-shrink-0"
                 />
                 <div className="flex flex-col justify-center h-12">
-                  <h1 className="text-3xl font-semibold tracking-tight leading-tight">Contributions</h1>
+                  <h1 className="text-3xl font-semibold tracking-tight leading-tight">To Do</h1>
                   <p className="text-sm text-black/60 leading-tight">{ip.name}</p>
                 </div>
               </div>
