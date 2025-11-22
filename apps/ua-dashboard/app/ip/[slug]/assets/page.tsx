@@ -52,14 +52,35 @@ export default function AssetsPage() {
   
   // Asset history for all deliverables (key: deliverable_id)
   const [allAssetHistory, setAllAssetHistory] = useState<Map<string, AssetHistoryWithContributor[]>>(new Map());
+  
+  // Assigned deliverable IDs for current contributor (Set for fast lookup)
+  const [assignedDeliverableIds, setAssignedDeliverableIds] = useState<Set<string>>(new Set());
+  
+  // Toggle between "my assets" and "all assets"
+  const [showOnlyMyAssets, setShowOnlyMyAssets] = useState(false);
 
   useEffect(() => {
     loadAssets();
   }, [slug]);
 
   useEffect(() => {
+    loadContributorAssignments();
+
+    // Listen for contributor changes to reload assignments
+    function handleContributorChange() {
+      loadContributorAssignments();
+    }
+
+    window.addEventListener('contributorChanged', handleContributorChange);
+
+    return () => {
+      window.removeEventListener('contributorChanged', handleContributorChange);
+    };
+  }, [slug]);
+
+  useEffect(() => {
     applyFilters();
-  }, [searchQuery, selectedCategory, selectedFunction, selectedTask, selectedDeliverable, deliverables]);
+  }, [searchQuery, selectedCategory, selectedFunction, selectedTask, selectedDeliverable, deliverables, assignedDeliverableIds, showOnlyMyAssets]);
 
   async function loadAssets() {
     try {
@@ -223,6 +244,39 @@ export default function AssetsPage() {
     }
   }
 
+  async function loadContributorAssignments() {
+    try {
+      // Get current contributor ID from sessionStorage
+      const contributorId = typeof window !== 'undefined' 
+        ? sessionStorage.getItem('selectedContributorId') 
+        : null;
+
+      if (!contributorId) {
+        setAssignedDeliverableIds(new Set());
+        return;
+      }
+
+      // Fetch assignments for current contributor
+      const { data, error } = await supabase
+        .from("contributor_deliverables")
+        .select("deliverable_id")
+        .eq("contributor_id", contributorId);
+
+      if (error) {
+        console.error("Error loading contributor assignments:", error);
+        setAssignedDeliverableIds(new Set());
+        return;
+      }
+
+      // Create a Set of assigned deliverable IDs
+      const assignedIds = new Set<string>((data || []).map(item => item.deliverable_id));
+      setAssignedDeliverableIds(assignedIds);
+    } catch (err) {
+      console.error("Error in loadContributorAssignments:", err);
+      setAssignedDeliverableIds(new Set());
+    }
+  }
+
   function applyFilters() {
     let filtered = [...deliverables];
 
@@ -257,6 +311,24 @@ export default function AssetsPage() {
     if (selectedDeliverable) {
       filtered = filtered.filter(d => d.id === selectedDeliverable);
     }
+
+    // Filter by assigned assets if "my assets" mode is enabled
+    if (showOnlyMyAssets && assignedDeliverableIds.size > 0) {
+      filtered = filtered.filter(d => assignedDeliverableIds.has(d.id));
+    }
+
+    // Sort: assigned deliverables first, then by display_order
+    filtered.sort((a, b) => {
+      const aIsAssigned = assignedDeliverableIds.has(a.id);
+      const bIsAssigned = assignedDeliverableIds.has(b.id);
+      
+      // If one is assigned and the other isn't, assigned comes first
+      if (aIsAssigned && !bIsAssigned) return -1;
+      if (!aIsAssigned && bIsAssigned) return 1;
+      
+      // If both are assigned or both are not assigned, sort by display_order
+      return a.display_order - b.display_order;
+    });
 
     setFilteredDeliverables(filtered);
   }
@@ -320,14 +392,37 @@ export default function AssetsPage() {
         formData.append('contributorId', contributorId);
       }
 
-      const response = await fetch('/api/upload-asset', {
-        method: 'POST',
-        body: formData,
-      });
+      let response: Response;
+      try {
+        response = await fetch('/api/upload-asset', {
+          method: 'POST',
+          body: formData,
+        });
+      } catch (fetchError) {
+        // Network error or fetch failed
+        console.error("Fetch error:", fetchError);
+        throw new Error(
+          `Network error: ${fetchError instanceof Error ? fetchError.message : 'Failed to connect to server'}. ` +
+          `Please check your connection and try again.`
+        );
+      }
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to upload file');
+        // Try to parse error message from response
+        let errorMessage = `Server error (${response.status})`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          // If we can't parse JSON, use the status text
+          errorMessage = response.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.error || 'Upload failed');
       }
 
       await loadAssets();
@@ -336,7 +431,8 @@ export default function AssetsPage() {
       alert("File uploaded successfully!");
     } catch (err) {
       console.error("Error uploading file:", err);
-      alert(`Failed to upload file: ${err instanceof Error ? err.message : "Unknown error"}`);
+      const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+      alert(`Failed to upload file: ${errorMessage}`);
     } finally {
       setUploading(false);
     }
@@ -819,8 +915,36 @@ export default function AssetsPage() {
           )}
 
           <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              {/* Toggle between "My Assets" and "All Assets" */}
+              <div className="flex items-center gap-2 border border-[#e0e0e0] rounded-lg p-1 bg-white">
+                <button
+                  onClick={() => setShowOnlyMyAssets(true)}
+                  className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${
+                    showOnlyMyAssets
+                      ? 'bg-[#c9c9c9] text-black'
+                      : 'bg-transparent text-black/60 hover:text-black'
+                  }`}
+                >
+                  My Assets
+                </button>
+                <button
+                  onClick={() => setShowOnlyMyAssets(false)}
+                  className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${
+                    !showOnlyMyAssets
+                      ? 'bg-[#c9c9c9] text-black'
+                      : 'bg-transparent text-black/60 hover:text-black'
+                  }`}
+                >
+                  All Assets
+                </button>
+              </div>
+            </div>
             <div className="text-xs text-black/40 font-mono">
-              {filteredDeliverables.length} out of {deliverables.length} assets
+              {showOnlyMyAssets 
+                ? `${filteredDeliverables.length} ${filteredDeliverables.length === 1 ? 'asset' : 'assets'} assigned to you`
+                : `${filteredDeliverables.length} out of ${deliverables.length} assets${assignedDeliverableIds.size > 0 ? ` (${filteredDeliverables.filter(d => assignedDeliverableIds.has(d.id)).length} assigned to you)` : ''}`
+              }
             </div>
           </div>
 
@@ -924,11 +1048,15 @@ export default function AssetsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {filteredDeliverables.map((deliverable) => (
+              {filteredDeliverables.map((deliverable) => {
+                const isAssigned = assignedDeliverableIds.has(deliverable.id);
+                return (
                 <div
                   key={deliverable.id}
                   onClick={() => handleDeliverableSelect(deliverable)}
-                  className="border border-[#e0e0e0] rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow hover:-translate-y-1"
+                  className={`border border-[#e0e0e0] rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow hover:-translate-y-1 ${
+                    isAssigned ? 'bg-gray-100' : 'bg-white'
+                  }`}
                 >
                   {/* Filename */}
                   {deliverable.filename && (
@@ -1022,7 +1150,8 @@ export default function AssetsPage() {
                     {deliverable.status || 'Assigned'}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

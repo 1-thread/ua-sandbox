@@ -2,13 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import sharp from 'sharp';
 
+// Set runtime to Node.js for server-side operations
+export const runtime = 'nodejs';
+
+// Increase max duration for large file uploads (if using Vercel)
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   try {
+    console.log('📤 Upload request received');
+    
     // Get credentials at request time (not at module evaluation)
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceRoleKey) {
+      console.error('❌ Missing Supabase credentials');
       return NextResponse.json(
         { error: 'Missing Supabase credentials. Please configure NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your environment variables.' },
         { status: 500 }
@@ -17,7 +26,19 @@ export async function POST(request: NextRequest) {
 
     // Create Supabase client with service role key (bypasses RLS)
     const supabase = createClient(supabaseUrl, serviceRoleKey);
-    const formData = await request.formData();
+    
+    let formData: FormData;
+    try {
+      formData = await request.formData();
+      console.log('✅ FormData parsed successfully');
+    } catch (formError) {
+      console.error('❌ Error parsing FormData:', formError);
+      return NextResponse.json(
+        { error: `Failed to parse form data: ${formError instanceof Error ? formError.message : 'Unknown error'}` },
+        { status: 400 }
+      );
+    }
+    
     const file = formData.get('file') as File;
     const baseFilePath = formData.get('filePath') as string;
     const deliverableId = formData.get('deliverableId') as string;
@@ -26,7 +47,21 @@ export async function POST(request: NextRequest) {
     const contributorId = formData.get('contributorId') as string | null;
     const modelUsed = formData.get('modelUsed') as string | null;
 
+    console.log('📋 Upload parameters:', {
+      filename,
+      fileSize: file?.size,
+      filePath: baseFilePath,
+      deliverableId,
+      hasFile: !!file
+    });
+
     if (!file || !baseFilePath || !deliverableId || !filename) {
+      console.error('❌ Missing required fields:', {
+        hasFile: !!file,
+        hasFilePath: !!baseFilePath,
+        hasDeliverableId: !!deliverableId,
+        hasFilename: !!filename
+      });
       return NextResponse.json(
         { error: 'Missing required fields (file, filePath, deliverableId, filename)' },
         { status: 400 }
@@ -212,9 +247,16 @@ export async function POST(request: NextRequest) {
       filePath: versionedFilePath
     });
   } catch (error) {
-    console.error('Error in upload-asset API:', error);
+    console.error('❌ Error in upload-asset API:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    console.error('Error stack:', errorStack);
+    
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? errorStack : undefined
+      },
       { status: 500 }
     );
   }
