@@ -44,7 +44,7 @@ Generate a JSON object with the following exact structure (output ONLY valid JSO
 Ensure all image prompts maintain visual consistency across panels and include the character's description and style.`;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "gpt-4o-mini", // gpt-4o-mini supports JSON mode and is more cost-effective
     messages: [
       {
         role: "system",
@@ -143,7 +143,7 @@ Generate a JSON object with this exact structure (output ONLY valid JSON, no mar
 Make the theme colors, prize/hazard names, and messages thematically consistent with the IP idea.`;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "gpt-4o-mini", // gpt-4o-mini supports JSON mode and is more cost-effective
     messages: [
       {
         role: "system",
