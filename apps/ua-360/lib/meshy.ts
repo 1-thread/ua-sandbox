@@ -6,19 +6,24 @@ if (!process.env.MESHY_API_KEY) {
 
 const MESHY_API_BASE = 'https://api.meshy.ai/v2';
 
-interface MeshyTaskResponse {
-  result: string;
-  task_id: string;
+interface MeshyCreateTaskResponse {
+  result: string; // task_id
 }
 
 interface MeshyTaskStatus {
-  status: 'PENDING' | 'PROCESSING' | 'SUCCEEDED' | 'FAILED';
+  id: string;
+  status: 'PENDING' | 'IN_PROGRESS' | 'SUCCEEDED' | 'FAILED' | 'CANCELED';
   progress?: number;
-  model_urls?: {
+  model_url?: {
     glb?: string;
     obj?: string;
+    fbx?: string;
+    usdz?: string;
   };
-  error?: string;
+  task_error?: {
+    message: string;
+  };
+  finished_at?: number;
 }
 
 export async function createImageTo3DTask(imageUrl: string): Promise<string> {
@@ -30,9 +35,12 @@ export async function createImageTo3DTask(imageUrl: string): Promise<string> {
     },
     body: JSON.stringify({
       image_url: imageUrl,
-      art_style: 'stylized',
-      resolution: '1024',
-      texture_richness: 'medium',
+      // Optional parameters with sensible defaults for toy-style models
+      ai_model: 'latest', // Use latest model
+      topology: 'triangle', // Generate triangle mesh (good for toys)
+      should_texture: true, // Enable texturing
+      should_remesh: true, // Enable remesh phase
+      moderation: false, // Disable moderation for faster processing (can enable if needed)
     }),
   });
 
@@ -41,8 +49,8 @@ export async function createImageTo3DTask(imageUrl: string): Promise<string> {
     throw new Error(`Meshy API error: ${error}`);
   }
 
-  const data: MeshyTaskResponse = await response.json();
-  return data.task_id;
+  const data: MeshyCreateTaskResponse = await response.json();
+  return data.result; // task_id
 }
 
 export async function getTaskStatus(taskId: string): Promise<MeshyTaskStatus> {
@@ -69,20 +77,33 @@ export async function waitFor3DModel(taskId: string, maxWaitTime: number = 30000
     const status = await getTaskStatus(taskId);
 
     if (status.status === 'SUCCEEDED') {
-      const glbUrl = status.model_urls?.glb;
-      const objUrl = status.model_urls?.obj;
+      const modelUrl = status.model_url;
+      if (!modelUrl) {
+        throw new Error('No model_url in successful response');
+      }
+
+      // Prefer GLB, fall back to OBJ, then FBX, then USDZ
+      const glbUrl = modelUrl.glb;
+      const objUrl = modelUrl.obj;
+      const fbxUrl = modelUrl.fbx;
+      const usdzUrl = modelUrl.usdz;
       
       if (glbUrl) {
         return glbUrl;
       } else if (objUrl) {
         return objUrl;
+      } else if (fbxUrl) {
+        return fbxUrl;
+      } else if (usdzUrl) {
+        return usdzUrl;
       } else {
-        throw new Error('No model URL in successful response');
+        throw new Error('No model URL found in model_url object');
       }
     }
 
-    if (status.status === 'FAILED') {
-      throw new Error(`Meshy task failed: ${status.error || 'Unknown error'}`);
+    if (status.status === 'FAILED' || status.status === 'CANCELED') {
+      const errorMessage = status.task_error?.message || 'Unknown error';
+      throw new Error(`Meshy task ${status.status.toLowerCase()}: ${errorMessage}`);
     }
 
     // Wait before polling again
