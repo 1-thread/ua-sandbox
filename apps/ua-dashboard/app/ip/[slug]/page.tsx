@@ -383,7 +383,7 @@ export default function IPDetailPage() {
                   className="w-12 h-12 object-contain"
                 />
               )}
-              <h1 className="text-3xl font-semibold tracking-tight">{ip.name}</h1>
+              <h1 className="text-xl font-semibold tracking-tight">{ip.name}</h1>
             </div>
             
             {/* Image and Description with text wrapping */}
@@ -398,14 +398,14 @@ export default function IPDetailPage() {
               )}
               {ip.description && (
                 <div className="mb-6">
-                  <h2 className="text-xl font-semibold mb-3 tracking-tight">Description</h2>
-                  <p className="text-[15px] leading-relaxed text-black/80">{ip.description}</p>
+                  <h2 className="text-sm font-semibold mb-2 tracking-tight">Description</h2>
+                  <p className="text-xs leading-relaxed text-black/80">{ip.description}</p>
                 </div>
               )}
               {ip.health_summary && (
                 <div>
-                  <h2 className="text-xl font-semibold mb-3 tracking-tight">Health Summary</h2>
-                  <p className="text-[15px] leading-relaxed text-black/80">{ip.health_summary}</p>
+                  <h2 className="text-sm font-semibold mb-2 tracking-tight">Health Summary</h2>
+                  <p className="text-xs leading-relaxed text-black/80">{ip.health_summary}</p>
                 </div>
               )}
               <div className="clear-both"></div>
@@ -415,13 +415,13 @@ export default function IPDetailPage() {
           {/* Pipeline Status */}
           {verticals.length > 0 && (
             <div className="mb-10">
-              <h2 className="text-xl font-semibold mb-4 tracking-tight">Pipeline Status</h2>
+              <h2 className="text-sm font-semibold mb-3 tracking-tight">Pipeline Status</h2>
               <div className="space-y-3 max-w-2xl">
                 {verticals.map((vertical) => (
                   <div key={vertical.id} className="border border-[#e0e0e0] rounded-lg p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[15px] font-medium capitalize text-black">{vertical.vertical_name}</span>
-                      <span className="text-[14px] text-black/60">
+                      <span className="text-xs font-medium capitalize text-black">{vertical.vertical_name}</span>
+                      <span className="text-xs text-black/60">
                         {vertical.progress_percentage}%
                       </span>
                     </div>
@@ -439,7 +439,7 @@ export default function IPDetailPage() {
 
           {/* Placeholder for Function Graph */}
           <div className="mb-10">
-            <h2 className="text-xl font-semibold mb-4 tracking-tight">Core Functions</h2>
+            <h2 className="text-sm font-semibold mb-3 tracking-tight">Core Functions</h2>
             <div className="border border-[#e0e0e0] rounded-lg p-8 text-center text-black/40 max-w-2xl">
               Function graph visualization coming soon
             </div>

@@ -197,20 +197,45 @@ export default function FunctionEditorPage() {
 
       // Load deliverables for each task
       if (tasksData.data) {
+        // Get IP ID if IP context is provided
+        let ipId: string | null = null;
+        if (ipSlug && ip) {
+          ipId = ip.id;
+        }
+
         const tasksWithDeliverables = await Promise.all(
           tasksData.data.map(async (task) => {
+            // Query deliverables: if IP is selected, prefer IP-specific, otherwise show template
+            let deliverablesQuery = supabase
+              .from("deliverables")
+              .select("*")
+              .eq("task_id", task.id);
+
+            if (ipId) {
+              // If IP is selected, get IP-specific deliverables first, fallback to template
+              deliverablesQuery = deliverablesQuery.or(`ip_id.eq.${ipId},ip_id.is.null`);
+            } else {
+              // If no IP selected, show only template deliverables
+              deliverablesQuery = deliverablesQuery.is("ip_id", null);
+            }
+
             const [deliverablesData] = await Promise.all([
-              supabase.from("deliverables").select("*").eq("task_id", task.id).order("display_order"),
+              deliverablesQuery.order("display_order"),
             ]);
 
-            // Deduplicate deliverables by ID (in case of duplicates in database)
-            const uniqueDeliverablesMap = new Map<string, any>();
+            // Deduplicate by deliverable_id: prefer IP-specific over template
+            const deliverablesByCode = new Map<string, any>();
             (deliverablesData.data || []).forEach((deliverable) => {
-              if (!uniqueDeliverablesMap.has(deliverable.id)) {
-                uniqueDeliverablesMap.set(deliverable.id, deliverable);
+              const code = deliverable.deliverable_id;
+              const existing = deliverablesByCode.get(code);
+              
+              // If no existing, or if this is IP-specific and existing is template, use this one
+              if (!existing || (deliverable.ip_id && !existing.ip_id)) {
+                deliverablesByCode.set(code, deliverable);
               }
             });
-            const uniqueDeliverables = Array.from(uniqueDeliverablesMap.values());
+            
+            const uniqueDeliverables = Array.from(deliverablesByCode.values());
 
             const deliverables: DeliverableWithData[] = await Promise.all(
               uniqueDeliverables.map(async (deliverable) => {

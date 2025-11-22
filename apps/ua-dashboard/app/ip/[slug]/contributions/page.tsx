@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import type { Deliverable, Task, Function, IP, Contributor, ContributorDeliverable } from "@/types/ip";
+import type { Deliverable, Task, Function, IP, Contributor, ContributorDeliverable, AssetHistoryWithContributor } from "@/types/ip";
 import { useLogout } from "@/components/LogoutContext";
 import { useSelectedContributorRole } from "@/hooks/useSelectedContributorRole";
 
@@ -35,6 +35,11 @@ export default function ContributionsPage() {
   const [expandedDeliverables, setExpandedDeliverables] = useState<Set<string>>(new Set());
   const [uploading, setUploading] = useState(false);
   const [assetUrls, setAssetUrls] = useState<Map<string, string>>(new Map());
+  // Asset history for each deliverable (key: deliverable.id, value: array of all items)
+  const [assetHistory, setAssetHistory] = useState<Map<string, AssetHistoryWithContributor[]>>(new Map());
+  // Thumbnail and image URLs (key: asset_history.id)
+  const [thumbnailUrls, setThumbnailUrls] = useState<Map<string, string>>(new Map());
+  const [imageUrls, setImageUrls] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     loadContributors();
@@ -195,8 +200,14 @@ export default function ContributionsPage() {
       });
 
       // Separate into assigned and completed
-      const assigned = deliverablesWithContributor.filter(d => d.contributorDeliverable.status === 'Assigned');
-      const completed = deliverablesWithContributor.filter(d => d.contributorDeliverable.status === 'Completed');
+      // Assigned: status is 'Assigned' OR deliverable status is 'Needs Review'
+      // Completed: status is 'Completed' AND deliverable status is not 'Needs Review'
+      const assigned = deliverablesWithContributor.filter(d => 
+        d.contributorDeliverable.status === 'Assigned' || d.status === 'Needs Review'
+      );
+      const completed = deliverablesWithContributor.filter(d => 
+        d.contributorDeliverable.status === 'Completed' && d.status !== 'Needs Review'
+      );
 
       setAssignedDeliverables(assigned);
       setCompletedDeliverables(completed);
@@ -236,8 +247,92 @@ export default function ContributionsPage() {
       newSet.delete(deliverableId);
     } else {
       newSet.add(deliverableId);
+      // Load asset history when expanding
+      loadAssetHistory(deliverableId);
     }
     setExpandedDeliverables(newSet);
+  }
+
+  async function loadAssetHistory(deliverableId: string) {
+    try {
+      const { data, error } = await supabase
+        .from("asset_history")
+        .select(`
+          *,
+          contributor:contributors(name)
+        `)
+        .eq("deliverable_id", deliverableId)
+        .order("uploaded_at", { ascending: false });
+
+      if (error) throw error;
+
+      const historyWithContributors: AssetHistoryWithContributor[] = (data || []).map((item: any) => ({
+        ...item,
+        contributor_name: item.contributor?.name || null
+      }));
+
+      // Update asset history map
+      setAssetHistory(prev => {
+        const updated = new Map(prev);
+        updated.set(deliverableId, historyWithContributors);
+        return updated;
+      });
+
+      // Load image URLs for image files
+      await loadImageUrls(historyWithContributors);
+    } catch (err) {
+      console.error("Error loading asset history:", err);
+    }
+  }
+
+  async function loadImageUrls(historyItems: AssetHistoryWithContributor[]) {
+    const newThumbnailUrls = new Map(thumbnailUrls);
+    const newImageUrls = new Map(imageUrls);
+
+    for (const item of historyItems) {
+      // Skip if we already have URLs
+      if (newThumbnailUrls.has(item.id) && newImageUrls.has(item.id)) {
+        continue;
+      }
+
+      const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].some(ext => 
+        item.filename.toLowerCase().endsWith(`.${ext}`) || 
+        item.storage_path.toLowerCase().endsWith(`.${ext}`)
+      );
+
+      if (isImage) {
+        // Try to get thumbnail URL first
+        if (item.thumbnail_path) {
+          try {
+            const response = await fetch(`/api/get-signed-url?path=${encodeURIComponent(item.thumbnail_path)}`);
+            if (response.ok) {
+              const data = await response.json();
+              if (data.signedUrl) {
+                newThumbnailUrls.set(item.id, data.signedUrl);
+              }
+            }
+          } catch (err) {
+            console.error(`Error loading thumbnail for ${item.filename}:`, err);
+          }
+        }
+
+        // Get full image URL
+        try {
+          const response = await fetch(`/api/get-signed-url?path=${encodeURIComponent(item.storage_path)}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.signedUrl) {
+              newImageUrls.set(item.id, data.signedUrl);
+            }
+          }
+        } catch (err) {
+          console.error(`Error loading image for ${item.filename}:`, err);
+        }
+      }
+    }
+
+    setThumbnailUrls(newThumbnailUrls);
+    setImageUrls(newImageUrls);
   }
 
   function getThumbnailPlaceholder(filetype: string | null): string {
@@ -251,6 +346,52 @@ export default function ContributionsPage() {
     if (["mp4", "mov", "avi"].includes(type)) return "🎬";
     if (["mp3", "wav", "aac"].includes(type)) return "🎵";
     return "📄";
+  }
+
+  // Get image files from asset history
+  function getImageFiles(history: AssetHistoryWithContributor[]): AssetHistoryWithContributor[] {
+    return history.filter(item => {
+      const filename = item.filename.toLowerCase();
+      const storagePath = item.storage_path.toLowerCase();
+      return ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].some(ext => 
+        filename.endsWith(`.${ext}`) || storagePath.endsWith(`.${ext}`)
+      );
+    });
+  }
+
+  async function handleDownloadFromPath(storagePath: string, filename: string) {
+    try {
+      // Get signed URL from API
+      const response = await fetch(`/api/download-asset?path=${encodeURIComponent(storagePath)}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Failed to generate download URL: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (!data.signedUrl) {
+        throw new Error("No signed URL returned");
+      }
+
+      // Download the file
+      const downloadResponse = await fetch(data.signedUrl);
+      if (!downloadResponse.ok) {
+        throw new Error(`Failed to download file: ${downloadResponse.statusText}`);
+      }
+
+      const blob = await downloadResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Error downloading file:", err);
+      alert(`Failed to download file: ${err instanceof Error ? err.message : "Unknown error"}`);
+    }
   }
 
   async function handleUpload(file: File, deliverable: DeliverableWithContributor) {
@@ -288,6 +429,10 @@ export default function ContributionsPage() {
       }
 
       await loadContributorDeliverables(selectedContributorId);
+      // Reload asset history for this deliverable
+      if (expandedDeliverables.has(deliverable.id)) {
+        await loadAssetHistory(deliverable.id);
+      }
       alert("File uploaded successfully!");
     } catch (err) {
       console.error("Error uploading file:", err);
@@ -354,27 +499,39 @@ export default function ContributionsPage() {
       if (dError) throw dError;
 
       await loadContributorDeliverables(selectedContributorId);
-      alert("Deliverable approved!");
+      // Status tag will update automatically via loadContributorDeliverables
     } catch (err) {
       console.error("Error approving deliverable:", err);
-      alert(`Failed to approve: ${err instanceof Error ? err.message : "Unknown error"}`);
+      // Silently fail - status tag will remain unchanged
     }
   }
 
   async function handleNeedsReview(deliverable: DeliverableWithContributor) {
     try {
-      const { error } = await supabase
+      // Update deliverables status to Needs Review
+      const { error: dError } = await supabase
         .from("deliverables")
         .update({ status: 'Needs Review' })
         .eq("id", deliverable.id);
 
-      if (error) throw error;
+      if (dError) throw dError;
+
+      // Update contributor_deliverables status back to Assigned so it moves to assigned section
+      const { error: cdError } = await supabase
+        .from("contributor_deliverables")
+        .update({ 
+          status: 'Assigned',
+          completed_at: null
+        })
+        .eq("id", deliverable.contributorDeliverable.id);
+
+      if (cdError) throw cdError;
 
       await loadContributorDeliverables(selectedContributorId);
-      alert("Marked as Needs Review");
+      // Status tag will update automatically via loadContributorDeliverables
     } catch (err) {
       console.error("Error updating status:", err);
-      alert(`Failed to update status: ${err instanceof Error ? err.message : "Unknown error"}`);
+      // Silently fail - status tag will remain unchanged
     }
   }
 
@@ -588,13 +745,17 @@ export default function ContributionsPage() {
                         expanded={expandedDeliverables.has(deliverable.id)}
                         onToggle={() => toggleDeliverable(deliverable.id)}
                         onUpload={(file) => handleUpload(file, deliverable)}
-                        onRemove={() => handleRemove(deliverable)}
                         onApprove={() => handleApprove(deliverable)}
                         onNeedsReview={() => handleNeedsReview(deliverable)}
                         assetUrl={assetUrls.get(deliverable.id)}
                         getThumbnailPlaceholder={getThumbnailPlaceholder}
                         uploading={uploading}
                         isCompleted={false}
+                        assetHistory={assetHistory.get(deliverable.id) || []}
+                        thumbnailUrls={thumbnailUrls}
+                        imageUrls={imageUrls}
+                        getImageFiles={getImageFiles}
+                        handleDownloadFromPath={handleDownloadFromPath}
                       />
                     ))}
                   </div>
@@ -615,13 +776,17 @@ export default function ContributionsPage() {
                         expanded={expandedDeliverables.has(deliverable.id)}
                         onToggle={() => toggleDeliverable(deliverable.id)}
                         onUpload={(file) => handleUpload(file, deliverable)}
-                        onRemove={() => handleRemove(deliverable)}
                         onApprove={() => handleApprove(deliverable)}
                         onNeedsReview={() => handleNeedsReview(deliverable)}
                         assetUrl={assetUrls.get(deliverable.id)}
                         getThumbnailPlaceholder={getThumbnailPlaceholder}
                         uploading={uploading}
                         isCompleted={true}
+                        assetHistory={assetHistory.get(deliverable.id) || []}
+                        thumbnailUrls={thumbnailUrls}
+                        imageUrls={imageUrls}
+                        getImageFiles={getImageFiles}
+                        handleDownloadFromPath={handleDownloadFromPath}
                       />
                     ))}
                   </div>
@@ -644,25 +809,33 @@ function DeliverableItem({
   expanded,
   onToggle,
   onUpload,
-  onRemove,
   onApprove,
   onNeedsReview,
   assetUrl,
   getThumbnailPlaceholder,
   uploading,
   isCompleted,
+  assetHistory,
+  thumbnailUrls,
+  imageUrls,
+  getImageFiles,
+  handleDownloadFromPath,
 }: {
   deliverable: DeliverableWithContributor;
   expanded: boolean;
   onToggle: () => void;
   onUpload: (file: File) => void;
-  onRemove: () => void;
   onApprove: () => void;
   onNeedsReview: () => void;
   assetUrl?: string;
   getThumbnailPlaceholder: (filetype: string | null) => string;
   uploading: boolean;
   isCompleted: boolean;
+  assetHistory: AssetHistoryWithContributor[];
+  thumbnailUrls: Map<string, string>;
+  imageUrls: Map<string, string>;
+  getImageFiles: (history: AssetHistoryWithContributor[]) => AssetHistoryWithContributor[];
+  handleDownloadFromPath: (storagePath: string, filename: string) => Promise<void>;
 }) {
   return (
     <div className="border border-[#e0e0e0] rounded-lg p-4">
@@ -673,9 +846,35 @@ function DeliverableItem({
         <span className={`inline-block transition-transform ${expanded ? 'rotate-90' : ''}`}>
           ▶
         </span>
-        <span className="font-medium text-sm">
-          {deliverable.deliverable_id}: {deliverable.filename}
+        <span className="font-medium text-sm flex-1">
+          {deliverable.deliverable_id}: {deliverable.description || deliverable.filename}
         </span>
+        {/* Status tag */}
+        {(() => {
+          // Determine status: prioritize deliverable.status if it's 'Approved' or 'Needs Review', otherwise use contributorDeliverable.status
+          const deliverableStatus = deliverable.status;
+          const contributorStatus = deliverable.contributorDeliverable.status;
+          
+          // Use deliverable.status if it's a review status, otherwise use contributor status
+          const status = (deliverableStatus === 'Approved' || deliverableStatus === 'Needs Review') 
+            ? deliverableStatus 
+            : contributorStatus;
+          
+          const statusColors = {
+            'Assigned': 'bg-gray-100 text-gray-800',
+            'Completed': 'bg-blue-100 text-blue-800',
+            'Approved': 'bg-green-100 text-green-800',
+            'Needs Review': 'bg-orange-100 text-orange-800',
+            'In Progress': 'bg-yellow-100 text-yellow-800',
+          };
+          const statusColor = statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800';
+          
+          return (
+            <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${statusColor}`}>
+              {status}
+            </span>
+          );
+        })()}
       </button>
 
       {expanded && (
@@ -692,23 +891,106 @@ function DeliverableItem({
             <div className="text-sm">{deliverable.description || "No description"}</div>
           </div>
 
-          {/* Asset Image */}
-          <div>
-            <label className="text-xs font-medium text-black/60 mb-2 block">Asset</label>
-            <div className="w-full h-48 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
-              {assetUrl ? (
-                <img
-                  src={assetUrl}
-                  alt={deliverable.filename}
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <span className="text-6xl">
+          {/* Asset History */}
+          {assetHistory.length > 0 && (
+            <>
+              {/* Image Gallery */}
+              {(() => {
+                const imageFiles = getImageFiles(assetHistory);
+                
+                if (imageFiles.length > 0) {
+                  return (
+                    <div>
+                      <label className="text-xs font-medium text-black/60 mb-2 block">
+                        Images ({imageFiles.length})
+                      </label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {imageFiles.map((imageItem) => {
+                          const thumbnailUrl = thumbnailUrls.get(imageItem.id);
+                          const imageUrl = imageUrls.get(imageItem.id);
+                          
+                          return (
+                            <div key={imageItem.id} className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                              {thumbnailUrl ? (
+                                <img
+                                  src={thumbnailUrl}
+                                  alt={imageItem.filename}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                  onClick={() => {
+                                    if (imageUrl) {
+                                      window.open(imageUrl, '_blank');
+                                    }
+                                  }}
+                                  onError={(e) => {
+                                    if (imageUrl) {
+                                      (e.target as HTMLImageElement).src = imageUrl;
+                                    }
+                                  }}
+                                />
+                              ) : imageUrl ? (
+                                <img
+                                  src={imageUrl}
+                                  alt={imageItem.filename}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                                  onClick={() => window.open(imageUrl, '_blank')}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-2xl">
+                                  {getThumbnailPlaceholder('image')}
+                                </div>
+                              )}
+                              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs px-2 py-1 truncate">
+                                {imageItem.filename}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
+              {/* Upload History */}
+              <div>
+                <label className="text-xs font-medium text-black/60 mb-2 block">Upload History</label>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {assetHistory.map((historyItem) => (
+                    <div key={historyItem.id} className="border border-[#e0e0e0] rounded p-2 text-xs">
+                      <div className="flex items-center justify-between mb-1">
+                        <button
+                          onClick={() => handleDownloadFromPath(historyItem.storage_path, historyItem.filename)}
+                          className="font-medium text-blue-600 hover:text-blue-800 hover:underline cursor-pointer text-left"
+                        >
+                          {historyItem.filename}
+                        </button>
+                        <span className="text-black/60">
+                          {new Date(historyItem.uploaded_at).toLocaleString()}
+                        </span>
+                      </div>
+                      {historyItem.contributor_name && (
+                        <div className="text-black/60">
+                          Uploaded by: {historyItem.contributor_name}
+                          {historyItem.model_used && ` (using ${historyItem.model_used})`}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+          {assetHistory.length === 0 && (
+            <div>
+              <label className="text-xs font-medium text-black/60 mb-2 block">Upload History</label>
+              <div className="w-full h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                <span className="text-4xl">
                   {getThumbnailPlaceholder(deliverable.filetype)}
                 </span>
-              )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2 pt-4 border-t border-[#e0e0e0]">
@@ -732,18 +1014,6 @@ function DeliverableItem({
             </label>
 
             <button
-              onClick={onRemove}
-              disabled={!deliverable.storage_path}
-              className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                deliverable.storage_path
-                  ? "bg-[#c9c9c9] hover:bg-[#b0b0b0]"
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              REMOVE
-            </button>
-
-            <button
               onClick={onApprove}
               className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                 isCompleted
@@ -756,12 +1026,7 @@ function DeliverableItem({
 
             <button
               onClick={onNeedsReview}
-              className={`px-4 py-2 rounded-lg text-sm transition-colors ${
-                isCompleted
-                  ? "bg-gray-200 text-gray-500"
-                  : "bg-orange-100 hover:bg-orange-200 text-orange-800"
-              }`}
-              disabled={isCompleted}
+              className="px-4 py-2 rounded-lg text-sm bg-orange-100 hover:bg-orange-200 text-orange-800 transition-colors"
             >
               NEEDS REVIEW
             </button>
