@@ -44,11 +44,11 @@ Generate a JSON object with the following exact structure (output ONLY valid JSO
 Ensure all image prompts maintain visual consistency across panels and include the character's description and style.`;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini", // gpt-4o-mini supports JSON mode and is more cost-effective
+    model: "gpt-4o-mini", // Cost-effective model
     messages: [
       {
         role: "system",
-        content: "You are a JSON generator. Always output valid JSON only, no markdown formatting, no code blocks.",
+        content: "You are a JSON generator. Always output valid JSON only, no markdown formatting, no code blocks, no explanatory text. Output ONLY the raw JSON object, nothing else.",
       },
       {
         role: "user",
@@ -56,7 +56,6 @@ Ensure all image prompts maintain visual consistency across panels and include t
       },
     ],
     temperature: 0.8,
-    response_format: { type: "json_object" },
   });
 
   const content = response.choices[0]?.message?.content;
@@ -64,10 +63,18 @@ Ensure all image prompts maintain visual consistency across panels and include t
     throw new Error('No response from OpenAI');
   }
 
+  // Try to parse JSON directly, or extract from markdown code blocks if needed
+  let jsonString = content.trim();
+  
+  // Remove markdown code blocks if present
+  if (jsonString.startsWith('```')) {
+    jsonString = jsonString.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '');
+  }
+  
   try {
-    return JSON.parse(content);
+    return JSON.parse(jsonString);
   } catch (e) {
-    throw new Error(`Failed to parse JSON: ${e}`);
+    throw new Error(`Failed to parse JSON: ${e}. Content: ${content.substring(0, 200)}`);
   }
 }
 
@@ -143,11 +150,11 @@ Generate a JSON object with this exact structure (output ONLY valid JSON, no mar
 Make the theme colors, prize/hazard names, and messages thematically consistent with the IP idea.`;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini", // gpt-4o-mini supports JSON mode and is more cost-effective
+    model: "gpt-4o-mini", // Cost-effective model
     messages: [
       {
         role: "system",
-        content: "You are a JSON generator. Always output valid JSON only, no markdown formatting, no code blocks.",
+        content: "You are a JSON generator. Always output valid JSON only, no markdown formatting, no code blocks, no explanatory text. Output ONLY the raw JSON object, nothing else.",
       },
       {
         role: "user",
@@ -155,7 +162,6 @@ Make the theme colors, prize/hazard names, and messages thematically consistent 
       },
     ],
     temperature: 0.7,
-    response_format: { type: "json_object" },
   });
 
   const content = response.choices[0]?.message?.content;
@@ -163,10 +169,18 @@ Make the theme colors, prize/hazard names, and messages thematically consistent 
     throw new Error('No response from OpenAI');
   }
 
+  // Try to parse JSON directly, or extract from markdown code blocks if needed
+  let jsonString = content.trim();
+  
+  // Remove markdown code blocks if present
+  if (jsonString.startsWith('```')) {
+    jsonString = jsonString.replace(/^```(?:json)?\n?/i, '').replace(/\n?```$/i, '');
+  }
+  
   try {
-    return JSON.parse(content);
+    return JSON.parse(jsonString);
   } catch (e) {
-    throw new Error(`Failed to parse JSON: ${e}`);
+    throw new Error(`Failed to parse JSON: ${e}. Content: ${content.substring(0, 200)}`);
   }
 }
 
