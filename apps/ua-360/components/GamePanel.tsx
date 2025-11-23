@@ -93,9 +93,14 @@ export default function GamePanel({ gameConfig, model3D }: GamePanelProps) {
     boardPlaneRef.current = board;
 
     // Load character model
+    // If URL is from Meshy CDN, proxy through our API to avoid CORS issues
+    const modelUrl = model3D.url.startsWith('https://assets.meshy.ai/')
+      ? `/api/proxy-model?url=${encodeURIComponent(model3D.url)}`
+      : model3D.url;
+    
     const loader = model3D.format === 'glb' ? new GLTFLoader() : new OBJLoader();
     loader.load(
-      model3D.url,
+      modelUrl,
       (object) => {
         let model: THREE.Object3D;
         if (model3D.format === 'glb') {

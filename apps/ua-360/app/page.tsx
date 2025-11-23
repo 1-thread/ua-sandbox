@@ -1,18 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UaInputScreen from '@/components/UaInputScreen';
 import IpEcosystemView from '@/components/IpEcosystemView';
 import { AppMode, GenerateIPResponse } from '@/lib/types';
+import { loadAssetsFromLocalStorage, saveAssetsToLocalStorage, clearAssetsFromLocalStorage } from '@/lib/localStorage';
 
 export default function Home() {
   const [mode, setMode] = useState<AppMode>('idle');
   const [result, setResult] = useState<GenerateIPResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [progressMessage, setProgressMessage] = useState<string>('');
+
+  // Check for existing assets on mount
+  useEffect(() => {
+    const savedAssets = loadAssetsFromLocalStorage();
+    if (savedAssets && savedAssets.storyConfig) {
+      // Auto-load results if assets exist
+      setResult(savedAssets);
+      setMode('ready');
+    }
+  }, []);
 
   const handleSubmit = async (idea: string) => {
     setMode('loading');
     setError(null);
+    setProgressMessage('Generating story...');
 
     try {
       const response = await fetch('/api/generate-ip', {
@@ -29,82 +42,72 @@ export default function Home() {
       }
 
       const data: GenerateIPResponse = await response.json();
+      // Save to localStorage and show results
+      saveAssetsToLocalStorage(data);
       setResult(data);
       setMode('ready');
+      setProgressMessage('');
     } catch (err: any) {
       console.error('Generation error:', err);
       setError(err.message || 'An error occurred');
-      setMode('error');
+      setProgressMessage('');
+      // Don't set mode to 'error' - keep showing input form
     }
   };
 
   const handleReset = () => {
+    clearAssetsFromLocalStorage();
     setMode('idle');
     setResult(null);
     setError(null);
+    setProgressMessage('');
   };
 
-  if (mode === 'idle' || mode === 'loading') {
-    return <UaInputScreen onSubmit={handleSubmit} isLoading={mode === 'loading'} />;
-  }
+  const handleResultUpdate = (updatedResult: GenerateIPResponse) => {
+    saveAssetsToLocalStorage(updatedResult);
+    setResult(updatedResult);
+  };
 
-  if (mode === 'error') {
-    return (
-      <div className="error-screen">
-        <div className="error-container">
-          <h1 className="error-title">Error</h1>
-          <p className="error-message">{error}</p>
-          <button onClick={handleReset} className="retry-button">
-            Try Again
-          </button>
-        </div>
-        <style jsx>{`
-          .error-screen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: white;
-          }
-          .error-container {
-            text-align: center;
-            max-width: 500px;
-            padding: 32px;
-          }
-          .error-title {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 0 0 16px 0;
-            color: #d32f2f;
-          }
-          .error-message {
-            font-size: 16px;
-            color: #666;
-            margin: 0 0 24px 0;
-          }
-          .retry-button {
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: 600;
-            background: #000;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-          }
-          .retry-button:hover {
-            background: #333;
-          }
-        `}</style>
+  return (
+    <div className="single-page-container">
+      {/* Input form always at top */}
+      <div className="input-section">
+        <UaInputScreen 
+          onSubmit={handleSubmit} 
+          isLoading={mode === 'loading'} 
+          progressMessage={progressMessage}
+          error={error}
+        />
       </div>
-    );
-  }
 
-  if (mode === 'ready' && result) {
-    return <IpEcosystemView result={result} onReset={handleReset} />;
-  }
+      {/* Results expand vertically below */}
+      {result && (
+        <div className="results-section">
+          <IpEcosystemView 
+            result={result} 
+            onReset={handleReset} 
+            onResultUpdate={handleResultUpdate} 
+          />
+        </div>
+      )}
 
-  return null;
+      <style jsx>{`
+        .single-page-container {
+          min-height: 100vh;
+          background: white;
+          display: flex;
+          flex-direction: column;
+        }
+        .input-section {
+          flex-shrink: 0;
+          border-bottom: 1px solid #e0e0e0;
+        }
+        .results-section {
+          flex: 1;
+          width: 100%;
+        }
+      `}</style>
+    </div>
+  );
 }
 

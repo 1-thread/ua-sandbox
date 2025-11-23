@@ -107,6 +107,7 @@ export interface GenerateIPResponse {
   comicPanels: ComicPanelImage[];
   characterRefImage: { url: string };
   model3D: Model3D;
+  originalIdea?: string; // Optional: saved for regeneration purposes
 }
 
 // Supabase types
